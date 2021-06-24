@@ -1,0 +1,92 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Library: Russian</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+    <link th:href="@{/css/style.css}" rel="stylesheet">
+    <!--    <link th:href="@{/css/checkbox.css}" rel="stylesheet">-->
+    <link th:href="@{/css/scrollbar.css}" rel="stylesheet">
+    <link th:href="@{/css/textbox.css}" rel="stylesheet">
+</head>
+<style>
+    input[type=text], select {
+  width: 100%;
+  padding: 12px 20px;
+  margin: 8px 0;
+  display: inline-block;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  box-sizing: border-box;
+}
+
+
+
+</style>
+<body>
+<div th:replace="fragments/header :: header"></div>
+<br/>
+<div>
+    <form action="#" th:action="@{/bookstoread/english/add}" th:object="${input}" method="post">
+        <table border="1px">
+            <tr>
+                <td>
+                    <label>Author</label>
+                    <input type="text" field="*{author}" name="author">
+                </td>
+                <td>
+                    <label>Name</label>
+                    <input type="text" field="*{name}" name="name">
+                </td>
+                <td>
+                    <label>Found</label>
+                    <input type="date" field="*{found}" name="found">
+                </td>
+                <td>
+                    <label>Found Description</label>
+                    <input type="text" field="*{foundDescription}" name="foundDescription">
+                </td>
+
+                <td>
+                    <input type="submit" value="add book">
+                </td>
+            </tr>
+        </table>
+    </form>
+</div>
+<br/>
+<div>
+    <table align="center" border="1">
+        <tr th:each="book : ${booksToRead}">
+            <td th:text="${book.id}"></td>
+            <td width="200" th:text="${book.author}"></td>
+            <td th:text="${book.name}"></td>
+            <td th:text="${book.found}"></td>
+            <td th:text="${book.foundDescription}" class="hidden" hidden></td>
+            <td>
+                <a th:href="@{'/bookstoread/english/finish/{id}'(id=${book.id})}">FINISH</a>
+            </td>
+            <td>
+                <a th:href="@{'/bookstoread/english/delete/{id}'(id=${book.id})}">DELETE</a>
+            </td>
+        </tr>
+    </table>
+</div>
+
+<script>
+    function show() { // показывает/скрывает доп. информацию
+        let hidden = document.getElementsByClassName('hidden');
+
+        if (hidden[0].hidden) {
+            for (let i = 0; i < hidden.length ; i++) {
+                hidden[i].hidden = false;
+            }
+        } else {
+            for (let i = 0; i < hidden.length ; i++) {
+                hidden[i].hidden = true;
+            }
+        }
+    }
+
+</script>
+</body>
+</html>

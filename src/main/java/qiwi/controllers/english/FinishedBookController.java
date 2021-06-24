@@ -4,33 +4,31 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import qiwi.controllers.input.FinishedBookInput;
 import qiwi.model.english.FinishedBook;
-import qiwi.service.FinishedBookEnglishServiceImpl;
-
-import java.sql.Date;
+import qiwi.service.english.FinishedBookServiceImpl;
 
 @Controller
 @RequestMapping("/finishedbooks/english")
 public class FinishedBookController {
     @Autowired
-    private FinishedBookEnglishServiceImpl service;
+    private FinishedBookServiceImpl service;
 
-    @PostMapping(path = "/add")
-    public
-//    @ResponseBody
-    String addBook(@RequestParam(defaultValue = "") String author, @RequestParam String name, @RequestParam Date start,
-                   @RequestParam Date end, @RequestParam(defaultValue = "") String start_info,
-                   @RequestParam(defaultValue = "") String end_info, @RequestParam Date found, @RequestParam String found_description) {
-
+    @PostMapping("/add")
+    public String addBook(@ModelAttribute("inputFinished") FinishedBookInput inputFinished, Model model) {
         FinishedBook book = new FinishedBook();
-        book.setAuthor(author);
-        book.setName(name);
-        book.setStart(start);
-        book.setEnd(end);
-        book.setStartDescription(start_info);
-        book.setEndDescription(end_info);
-        book.setFound(found);
-        book.setFoundDescription(found_description);
+
+        book.setId(service.findAll().size() + 1);
+        book.setAuthor(inputFinished.getAuthor());
+        book.setName(inputFinished.getName());
+        book.setStart(inputFinished.getStart());
+        book.setEnd(inputFinished.getEnd());
+        book.setStartDescription("");
+        book.setEndDescription("");
+        book.setFound(inputFinished.getFound());
+        book.setFoundDescription("");
+
+        service.addBook(book);
 
         return "redirect:/finishedbooks/english/";
     }
@@ -46,6 +44,6 @@ public class FinishedBookController {
     public String list(Model model) {
         model.addAttribute("books", service.findAll());
 
-        return "index";
+        return "finishedBooksEnglish";
     }
 }

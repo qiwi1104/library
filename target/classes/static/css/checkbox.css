@@ -1,5 +1,4 @@
 /*Checkboxes styles*/
-input[type="checkbox"] { display: none; }
 
 input[type="checkbox"] + label {
     display: block;
