@@ -1,5 +1,6 @@
 package qiwi.model;
 
+import javax.persistence.Column;
 import javax.persistence.Id;
 import javax.persistence.MappedSuperclass;
 import java.sql.Date;
@@ -8,19 +9,27 @@ import java.sql.Date;
 public class AdditionalDates {
     @Id
     private Integer id;
+    @Column(name = "finished_book_id")
+    private Integer finishedBookId;
     private Date start;
     private Date end;
 
-    public AdditionalDates() {}
+    public AdditionalDates() {
+    }
 
-    public AdditionalDates(Integer id, Date start, Date end) {
+    public AdditionalDates(Integer id, Integer finishedBookId, Date start, Date end) {
         this.id = id;
+        this.finishedBookId = finishedBookId;
         this.start = start;
         this.end = end;
     }
 
     public Integer getId() {
         return id;
+    }
+
+    public Integer getFinishedBookId() {
+        return finishedBookId;
     }
 
     public Date getStart() {
@@ -33,6 +42,10 @@ public class AdditionalDates {
 
     public void setId(Integer id) {
         this.id = id;
+    }
+
+    public void setFinishedBookId(Integer finishedBookId) {
+        this.finishedBookId = finishedBookId;
     }
 
     public void setStart(Date start) {

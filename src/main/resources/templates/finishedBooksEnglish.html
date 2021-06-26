@@ -89,7 +89,7 @@
 <!--            пусть пока будет так-->
             <td class="hidden" hidden>
                 <div th:each="additionalDate : ${additionalDates}" >
-                    <div th:if="${additionalDate.id} == ${book.id}">
+                    <div th:if="${additionalDate.finishedBookId} == ${book.id}">
                         <span th:text="${additionalDate.start}"></span>
                         <br/>
                         <span th:text="${additionalDate.end}"></span>

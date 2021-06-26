@@ -5,6 +5,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import qiwi.controllers.input.FinishedBookInput;
+import qiwi.model.english.AdditionalDates;
 import qiwi.model.english.FinishedBook;
 import qiwi.service.english.AdditionalDatesServiceImpl;
 import qiwi.service.english.FinishedBookServiceImpl;
@@ -17,10 +18,23 @@ public class FinishedBookController {
     @Autowired
     private AdditionalDatesServiceImpl additionalDatesService;
 
+    private boolean isInTable(FinishedBook book) {
+        for (FinishedBook finishedBook : service.findAll()) {
+            if (finishedBook.equals(book)) {
+                book.setId(finishedBook.getId());
+                book.setFound(finishedBook.getFound());
+                return true;
+            }
+        }
+
+        return false;
+    }
+
     @PostMapping("/add")
     public String add(@ModelAttribute("inputFinished") FinishedBookInput inputFinished) {
         FinishedBook book = new FinishedBook();
 
+        // ПЕРЕНЕСТИ МЕТОДЫ В ELSE ВЕТКУ
         book.setId(service.findAll().size() + 1);
         book.setAuthor(inputFinished.getAuthor());
         book.setName(inputFinished.getName());
@@ -31,7 +45,12 @@ public class FinishedBookController {
         book.setFound(inputFinished.getFound());
         book.setFoundDescription("");
 
-        service.addBook(book);
+        if (isInTable(book)) {
+            additionalDatesService.addDates(new AdditionalDates(additionalDatesService.findAll().size() + 1,
+                    book.getId(), book.getStart(), book.getEnd()));
+        } else {
+            service.addBook(book);
+        }
 
         return "redirect:/finishedbooks/english/";
     }
@@ -39,6 +58,7 @@ public class FinishedBookController {
     @GetMapping("/delete/{id}")
     public String delete(@PathVariable Integer id) {
         service.deleteBook(id);
+//        additionalDatesService.deleteDates(id);
 
         return "redirect:/finishedbooks/english/";
     }
