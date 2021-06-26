@@ -5,7 +5,7 @@ import java.sql.Date;
 
 @Entity
 @Table(name = "`additional_dates_english`")
-public class AdditionalDates extends qiwi.model.AdditionalDates {
+public class AdditionalDates extends qiwi.model.common.AdditionalDates {
     @ManyToOne
     @JoinColumn(name = "finished_book_id", insertable = false, updatable = false)
     private FinishedBook finishedBook;

@@ -9,7 +9,7 @@ import java.util.List;
 
 @Entity
 @Table(name = "`finished_books_english`")
-public class FinishedBook extends qiwi.model.FinishedBook {
+public class FinishedBook extends qiwi.model.common.book.FinishedBook {
     @OneToMany(mappedBy = "finishedBook", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<AdditionalDates> additionalDates;
 

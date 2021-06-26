@@ -26,7 +26,7 @@
 <div th:replace="fragments/header :: header"></div>
 <br/>
 <div>
-    <form action="#" th:action="@{/finishedbooks/english/add}" th:object="${inputFinished}" method="post">
+    <form action="#" th:action="@{/finishedbooks/english/add}" th:object="${finishedEnglishInput}" method="post">
         <table border="1px">
             <tr>
                 <td>
@@ -52,6 +52,45 @@
 
                 <td>
                     <input type="submit" value="add book">
+                </td>
+            </tr>
+        </table>
+    </form>
+    <br/>
+    <form action="#" th:action="@{'/finishedbooks/english/edit/{id}'}" th:object="${finishedEnglishInput}" method="post">
+        <table border="1px" class="hidden" hidden>
+            <tr>
+                <td>
+                    <label>#</label>
+                    <input type="number" field="*{id}" name="id">
+                </td>
+                <td>
+                    <label>Author</label>
+                    <input type="text" field="*{author}" name="author">
+                </td>
+                <td>
+                    <label>Name</label>
+                    <input type="text" field="*{name}" name="name">
+                </td>
+                <td>
+                    <label>Start</label>
+                    <input type="date" field="*{start}" name="start">
+                </td>
+                <td>
+                    <label>End</label>
+                    <input type="date" field="*{end}" name="end">
+                </td>
+                <td>
+                    <label>Found</label>
+                    <input type="date" field="*{found}" name="found">
+                </td>
+                <td>
+                    <label>Found Description</label>
+                    <input type="text" field="*{foundDescription}" name="foundDescription">
+                </td>
+
+                <td>
+                    <input type="submit" value="edit book">
                 </td>
             </tr>
         </table>

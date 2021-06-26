@@ -53,28 +53,59 @@
     </table>
 </form>
     <br/>
-<!--    <form action="#" th:action="@{/bookstoread/english/finish}" th:object="${finishBookEnglishInput}" method="post">-->
-<!--        <table border="1px" class="hidden" hidden>-->
-<!--            <tr>-->
-<!--                <td>-->
-<!--                    <label>Author</label>-->
-<!--                    <input type="number" field="*{id}" name="id">-->
-<!--                </td>-->
-<!--                <td>-->
-<!--                    <label>Name</label>-->
-<!--                    <input type="date" field="*{start}" name="start">-->
-<!--                </td>-->
-<!--                <td>-->
-<!--                    <label>Found</label>-->
-<!--                    <input type="date" field="*{end}" name="end">-->
-<!--                </td>-->
+    <form action="#" th:action="@{'/bookstoread/english/finish/{id}'}" th:object="${booksToReadEnglishInput}" method="post">
+        <table border="1px" class="hidden" hidden>
+            <tr>
+                <td>
+                    <label>#</label>
+                    <input type="number" field="*{id}" name="id">
+                </td>
+                <td>
+                    <label>Start</label>
+                    <input type="date" field="*{start}" name="start">
+                </td>
+                <td>
+                    <label>End</label>
+                    <input type="date" field="*{end}" name="end">
+                </td>
 
-<!--                <td>-->
-<!--                    <input type="submit" value="finish book">-->
-<!--                </td>-->
-<!--            </tr>-->
-<!--        </table>-->
-<!--    </form>-->
+                <td>
+                    <input type="submit" value="finish book">
+                </td>
+            </tr>
+        </table>
+    </form>
+    <br/>
+    <form action="#" th:action="@{'/bookstoread/english/edit/{id}'}" th:object="${booksToReadEnglishInput}" method="post">
+        <table border="1px" class="hidden" hidden>
+            <tr>
+                <td>
+                    <label>#</label>
+                    <input type="number" field="*{id}" name="id">
+                </td>
+                <td>
+                    <label>Author</label>
+                    <input type="text" field="*{author}" name="author">
+                </td>
+                <td>
+                    <label>Name</label>
+                    <input type="text" field="*{name}" name="name">
+                </td>
+                <td>
+                    <label>Found</label>
+                    <input type="date" field="*{found}" name="found">
+                </td>
+                <td>
+                    <label>Found Description</label>
+                    <input type="text" field="*{foundDescription}" name="foundDescription">
+                </td>
+
+                <td>
+                    <input type="submit" value="edit book">
+                </td>
+            </tr>
+        </table>
+    </form>
 </div>
 <br/>
 <div id="content-1">
@@ -95,12 +126,6 @@
 
             <td th:text="${book.foundDescription}" class="hidden" hidden></td>
 
-            <td>
-                <a th:href="@{'/bookstoread/english/edit/{id}'(id=${book.id})}">edit</a>
-            </td>
-            <td>
-                <a th:href="@{'/bookstoread/english/finish/{id}'(id=${book.id})}">finish</a>
-            </td>
             <td>
                 <a th:href="@{'/bookstoread/english/delete/{id}'(id=${book.id})}">delete</a>
             </td>
