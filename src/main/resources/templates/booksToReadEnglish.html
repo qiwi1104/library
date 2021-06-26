@@ -26,49 +26,83 @@
 <div th:replace="fragments/header :: header"></div>
 <br/>
 <div>
-    <form action="#" th:action="@{/bookstoread/english/add}" th:object="${input}" method="post">
-        <table border="1px">
-            <tr>
-                <td>
-                    <label>Author</label>
-                    <input type="text" field="*{author}" name="author">
-                </td>
-                <td>
-                    <label>Name</label>
-                    <input type="text" field="*{name}" name="name">
-                </td>
-                <td>
-                    <label>Found</label>
-                    <input type="date" field="*{found}" name="found">
-                </td>
-                <td>
-                    <label>Found Description</label>
-                    <input type="text" field="*{foundDescription}" name="foundDescription">
-                </td>
+    <form action="#" th:action="@{/bookstoread/english/add}" th:object="${booksToReadEnglishInput}" method="post">
+    <table border="1px">
+        <tr>
+            <td>
+                <label>Author</label>
+                <input type="text" field="*{author}" name="author">
+            </td>
+            <td>
+                <label>Name</label>
+                <input type="text" field="*{name}" name="name">
+            </td>
+            <td>
+                <label>Found</label>
+                <input type="date" field="*{found}" name="found">
+            </td>
+            <td>
+                <label>Found Description</label>
+                <input type="text" field="*{foundDescription}" name="foundDescription">
+            </td>
 
-                <td>
-                    <input type="submit" value="add book">
-                </td>
-            </tr>
-        </table>
-    </form>
+            <td>
+                <input type="submit" value="add book">
+            </td>
+        </tr>
+    </table>
+</form>
+    <br/>
+<!--    <form action="#" th:action="@{/bookstoread/english/finish}" th:object="${finishBookEnglishInput}" method="post">-->
+<!--        <table border="1px" class="hidden" hidden>-->
+<!--            <tr>-->
+<!--                <td>-->
+<!--                    <label>Author</label>-->
+<!--                    <input type="number" field="*{id}" name="id">-->
+<!--                </td>-->
+<!--                <td>-->
+<!--                    <label>Name</label>-->
+<!--                    <input type="date" field="*{start}" name="start">-->
+<!--                </td>-->
+<!--                <td>-->
+<!--                    <label>Found</label>-->
+<!--                    <input type="date" field="*{end}" name="end">-->
+<!--                </td>-->
+
+<!--                <td>-->
+<!--                    <input type="submit" value="finish book">-->
+<!--                </td>-->
+<!--            </tr>-->
+<!--        </table>-->
+<!--    </form>-->
 </div>
 <br/>
-<div>
+<div id="content-1">
     <table align="center" border="1">
+        <tr bgcolor="#cccccc">
+            <td>#</td>
+            <td>Author</td>
+            <td>Name</td>
+            <td>Found</td>
+            <td class="hidden" hidden>Found Description</td>
+        </tr>
+
         <tr th:each="book : ${booksToRead}">
             <td th:text="${book.id}"></td>
-            <td width="200" th:text="${book.author}"></td>
+            <td th:text="${book.author}"></td>
             <td th:text="${book.name}"></td>
             <td th:text="${book.found}"></td>
 
             <td th:text="${book.foundDescription}" class="hidden" hidden></td>
-            
+
             <td>
-                <a th:href="@{'/bookstoread/english/finish/{id}'(id=${book.id})}">FINISH</a>
+                <a th:href="@{'/bookstoread/english/edit/{id}'(id=${book.id})}">edit</a>
             </td>
             <td>
-                <a th:href="@{'/bookstoread/english/delete/{id}'(id=${book.id})}">DELETE</a>
+                <a th:href="@{'/bookstoread/english/finish/{id}'(id=${book.id})}">finish</a>
+            </td>
+            <td>
+                <a th:href="@{'/bookstoread/english/delete/{id}'(id=${book.id})}">delete</a>
             </td>
         </tr>
     </table>

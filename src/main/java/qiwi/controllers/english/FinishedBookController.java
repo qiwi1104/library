@@ -6,6 +6,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import qiwi.controllers.input.FinishedBookInput;
 import qiwi.model.english.FinishedBook;
+import qiwi.service.english.AdditionalDatesServiceImpl;
 import qiwi.service.english.FinishedBookServiceImpl;
 
 @Controller
@@ -13,9 +14,11 @@ import qiwi.service.english.FinishedBookServiceImpl;
 public class FinishedBookController {
     @Autowired
     private FinishedBookServiceImpl service;
+    @Autowired
+    private AdditionalDatesServiceImpl additionalDatesService;
 
     @PostMapping("/add")
-    public String addBook(@ModelAttribute("inputFinished") FinishedBookInput inputFinished, Model model) {
+    public String add(@ModelAttribute("inputFinished") FinishedBookInput inputFinished) {
         FinishedBook book = new FinishedBook();
 
         book.setId(service.findAll().size() + 1);
@@ -43,6 +46,7 @@ public class FinishedBookController {
     @GetMapping("/")
     public String list(Model model) {
         model.addAttribute("books", service.findAll());
+        model.addAttribute("additionalDates", additionalDatesService.findAll());
 
         return "finishedBooksEnglish";
     }

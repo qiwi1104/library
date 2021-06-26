@@ -107,4 +107,19 @@ public class FinishedBook {
     public void setFoundDescription(String foundDescription) {
         this.foundDescription = foundDescription;
     }
+
+    @Override
+    public boolean equals(Object o) {
+        if (o == this) {
+            return true;
+        }
+
+        if (o == null || o.getClass() != this.getClass()) {
+            return false;
+        }
+
+        FinishedBook book = (FinishedBook) o;
+
+        return name.equals(book.name) && author.equals(book.author);
+    }
 }

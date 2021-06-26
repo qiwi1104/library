@@ -4,7 +4,7 @@
     <title>Library: English</title>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
     <link th:href="@{/css/style.css}" rel="stylesheet">
-<!--    <link th:href="@{/css/checkbox.css}" rel="stylesheet">-->
+    <!--    <link th:href="@{/css/checkbox.css}" rel="stylesheet">-->
     <link th:href="@{/css/scrollbar.css}" rel="stylesheet">
     <link th:href="@{/css/textbox.css}" rel="stylesheet">
 </head>
@@ -18,6 +18,8 @@
   border-radius: 4px;
   box-sizing: border-box;
 }
+
+
 
 </style>
 <body>
@@ -56,21 +58,52 @@
     </form>
 </div>
 <br/>
-<div>
+<div id="content-1">
     <table align="center" border="1">
+        <tr bgcolor="#cccccc">
+            <td>#</td>
+            <td>Author</td>
+            <td>Name</td>
+            <td>
+                Start
+                <br/>
+                End
+            </td>
+            <td class="hidden" hidden>Additional Dates</td>
+            <td class="hidden" hidden>Found</td>
+            <td class="hidden" hidden>Found Description</td>
+            <td class="hidden" hidden>Start Description</td>
+            <td class="hidden" hidden>End Description</td>
+        </tr>
+
         <tr th:each="book : ${books}">
             <td th:text="${book.id}"></td>
             <td width="200" th:text="${book.author}"></td>
             <td th:text="${book.name}"></td>
-            <td th:text="${book.start}"></td>
-            <td th:text="${book.end}"></td>
+            <td>
+                <span th:text="${book.start}"></span>
+                <br/>
+                <span th:text="${book.end}"></span>
+            </td>
+
+<!--            пусть пока будет так-->
+            <td class="hidden" hidden>
+                <div th:each="additionalDate : ${additionalDates}" >
+                    <div th:if="${additionalDate.id} == ${book.id}">
+                        <span th:text="${additionalDate.start}"></span>
+                        <br/>
+                        <span th:text="${additionalDate.end}"></span>
+                    </div>
+                </div>
+            </td>
 
             <td th:text="${book.found}" class="hidden" hidden></td>
+            <td th:text="${book.foundDescription}" class="hidden" hidden></td>
             <td th:text="${book.startDescription}" class="hidden" hidden>
             <td th:text="${book.endDescription}" class="hidden" hidden>
 
             <td>
-                <a th:href="@{'/finishedbooks/english/delete/{id}'(id=${book.id})}">DELETE</a>
+                <a th:href="@{'/finishedbooks/english/delete/{id}'(id=${book.id})}">delete</a>
             </td>
         </tr>
     </table>
@@ -90,6 +123,8 @@
             }
         }
     }
+
+
 </script>
 </body>
 </html>
