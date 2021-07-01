@@ -20,7 +20,6 @@
 }
 
 
-
 </style>
 <body>
 <div th:replace="fragments/header :: header"></div>
@@ -57,8 +56,9 @@
         </table>
     </form>
     <br/>
-    <form action="#" th:action="@{'/finishedbooks/english/edit/{id}'}" th:object="${finishedEnglishInput}" method="post">
-        <table border="1px" class="hidden" hidden>
+    <form action="#" th:action="@{'/finishedbooks/english/edit/{id}'}" th:object="${finishedEnglishInput}"
+          method="post">
+        <table border="1px" class="hiddenPanel" hidden>
             <tr>
                 <td>
                     <label>#</label>
@@ -95,24 +95,43 @@
             </tr>
         </table>
     </form>
+    <br/>
+    <form action="#" th:action="@{'/finishedbooks/english/load'}" th:object="${finishedEnglishInput}" method="post">
+        <table border="1px" class="hiddenPanel" hidden>
+            <tr>
+                <td>
+                    <label>file</label>
+                    <input type="text" field="*{name}" name="name">
+                </td>
+
+                <td>
+                    <input type="submit" value="load table">
+                </td>
+            </tr>
+        </table>
+    </form>
 </div>
 <br/>
 <div id="content-1">
     <table align="center" border="1">
         <tr bgcolor="#cccccc">
-            <td>#</td>
+            <td><a th:href="@{'/finishedbooks/english/sort/{property}' (property = 'id')}">#</a></td>
             <td>Author</td>
             <td>Name</td>
             <td>
-                Start
+                <a th:href="@{'/finishedbooks/english/sort/{property}' (property = 'start')}">Start</a>
                 <br/>
-                End
+                <a th:href="@{'/finishedbooks/english/sort/{property}' (property = 'end')}">End</a>
             </td>
             <td class="hidden" hidden>Additional Dates</td>
-            <td class="hidden" hidden>Found</td>
+            <td class="hidden" hidden><a th:href="@{'/finishedbooks/english/sort/{property}' (property = 'found')}">Found</a>
+            </td>
             <td class="hidden" hidden>Found Description</td>
             <td class="hidden" hidden>Start Description</td>
             <td class="hidden" hidden>End Description</td>
+            <td>
+
+            </td>
         </tr>
 
         <tr th:each="book : ${books}">
@@ -125,9 +144,9 @@
                 <span th:text="${book.end}"></span>
             </td>
 
-<!--            пусть пока будет так-->
+            <!--            пусть пока будет так-->
             <td class="hidden" hidden>
-                <div th:each="additionalDate : ${additionalDates}" >
+                <div th:each="additionalDate : ${additionalDates}">
                     <div th:if="${additionalDate.finishedBookId} == ${book.id}">
                         <span th:text="${additionalDate.start}"></span>
                         <br/>
@@ -149,18 +168,56 @@
 </div>
 
 <script>
+
+    function setVisibility(what, bool) {
+        for (let i = 0; i < what.length ; i++) {
+            what[i].hidden = bool;
+        }
+    }
+
+    document.getElementById('stat').onclick = function() {
+        show();
+        
+        if(document.getElementById('stat').checked) {
+            localStorage.setItem('stat', "true");
+        } else {
+            localStorage.setItem('stat', "false");
+        }
+    }
+    
+    if (localStorage.getItem('stat') == "true") {
+        document.getElementById("stat").setAttribute('checked','checked');
+
+        let hidden = document.getElementsByClassName('hidden');
+        setVisibility(hidden, false);
+    }
+
+    document.getElementById('stat2').onclick = function() {
+        showPanels();
+        
+        if(document.getElementById('stat2').checked) {
+            localStorage.setItem('stat2', "true");
+        } else {
+            localStorage.setItem('stat2', "false");
+        }
+    }
+    
+    if (localStorage.getItem('stat2') == "true") {
+        document.getElementById("stat2").setAttribute('checked','checked');
+
+        let hidden = document.getElementsByClassName('hiddenPanel');
+        setVisibility(hidden, false);
+    }
+
+
     function show() { // показывает/скрывает доп. информацию
         let hidden = document.getElementsByClassName('hidden');
+        setVisibility(hidden, !hidden[0].hidden);
+    }
 
-        if (hidden[0].hidden) {
-            for (let i = 0; i < hidden.length ; i++) {
-                hidden[i].hidden = false;
-            }
-        } else {
-            for (let i = 0; i < hidden.length ; i++) {
-                hidden[i].hidden = true;
-            }
-        }
+    function showPanels() {
+    	let hiddenPanel = document.getElementsByClassName('hiddenPanel');
+        setVisibility(hiddenPanel, !hiddenPanel[0].hidden);
     }
 
 

@@ -1,14 +1,22 @@
 package qiwi.controllers.english;
 
+import org.json.JSONArray;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import qiwi.IO;
+import qiwi.TimeFormat;
 import qiwi.model.common.Input;
 import qiwi.model.english.BookToRead;
 import qiwi.model.english.FinishedBook;
 import qiwi.service.english.BookToReadServiceImpl;
 import qiwi.service.english.FinishedBookServiceImpl;
+
+import java.io.IOException;
+import java.sql.Date;
+import java.util.ArrayList;
+import java.util.List;
 
 @Controller
 @RequestMapping("/bookstoread/english")
@@ -17,6 +25,65 @@ public class BookToReadController {
     private BookToReadServiceImpl service;
     @Autowired
     private FinishedBookServiceImpl finishedBookService;
+
+    private String sortDateMethod = "ASC";
+    private String sortProperty = "found";
+
+    private List<BookToRead> filterAndSort() {
+        List<BookToRead> books = null;
+
+        switch (sortDateMethod) {
+            case "ASC":
+                switch (sortProperty) {
+                    case "id":
+                        books = service.findAllByOrderByIdAsc();
+                        break;
+                    case "found":
+                        books = service.findAllByOrderByFoundAsc();
+                        break;
+                }
+                break;
+            case "DESC":
+                switch (sortProperty) {
+                    case "id":
+                        books = service.findAllByOrderByIdDesc();
+                        break;
+                    case "found":
+                        books = service.findAllByOrderByFoundDesc();
+                        break;
+                }
+                break;
+        }
+        return books;
+    }
+
+    private List<BookToRead> fillListWith(JSONArray source) {
+        List<BookToRead> destination = new ArrayList<>();
+
+        for (int i = 0; i < source.length(); i++) {
+            BookToRead bookToAdd = new BookToRead();
+
+            bookToAdd.setId(i + 1);
+            bookToAdd.setAuthor(source.getJSONObject(i).get("author").toString());
+            bookToAdd.setName(source.getJSONObject(i).get("name").toString());
+
+            try {
+                String date = TimeFormat.formatTime("M/d/yy", "yyyy-M-d", source.getJSONObject(i).get("found").toString());
+
+                bookToAdd.setFound(Date.valueOf(date));
+            } catch (Exception e) {
+                bookToAdd.setFound(Date.valueOf("1970-1-1"));
+            }
+
+            bookToAdd.setFoundDescription(source.getJSONObject(i).get("found_description").toString());
+
+
+            destination.add(bookToAdd);
+        }
+
+
+        return destination;
+    }
 
     @PostMapping("/add")
     public String add(@ModelAttribute("booksToReadEnglishInput") Input input) {
@@ -80,9 +147,32 @@ public class BookToReadController {
         return "redirect:/bookstoread/english/";
     }
 
+    @GetMapping("/sort/{property}")
+    public String sort(@PathVariable String property) {
+        sortDateMethod = sortDateMethod.equals("ASC") ? "DESC" : "ASC";
+        sortProperty = property;
+
+        return "redirect:/bookstoread/english/";
+    }
+
+    @PostMapping("/load")
+    public String load(@ModelAttribute("booksToReadEnglishInput") Input input) throws IOException {
+        service.clearAll();
+        List<BookToRead> bookToReadList;
+
+        JSONArray jsonArray = IO.readJSONFile(input.getName());
+        bookToReadList = fillListWith(jsonArray);
+
+        service.addAll(bookToReadList);
+
+        return "redirect:/bookstoread/english/";
+    }
+
     @GetMapping("/")
     public String list(Model model) {
-        model.addAttribute("booksToRead", service.findAll());
+        List<BookToRead> bookList = filterAndSort();
+
+        model.addAttribute("booksToRead", bookList);
 
         return "booksToReadEnglish";
     }
