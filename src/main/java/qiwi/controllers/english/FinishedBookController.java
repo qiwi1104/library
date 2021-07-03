@@ -7,6 +7,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import qiwi.IO;
 import qiwi.TimeFormat;
+import qiwi.controllers.CommonActions;
 import qiwi.model.english.AdditionalDates;
 import qiwi.model.english.FinishedBook;
 import qiwi.model.common.Input;
@@ -29,18 +30,6 @@ public class FinishedBookController {
 
     private String sortDateMethod = "ASC";
     private String sortProperty = "start";
-
-    private boolean isInTable(FinishedBook book) {
-        for (FinishedBook finishedBook : service.findAll()) {
-            if (finishedBook.equals(book)) {
-                book.setId(finishedBook.getId());
-                book.setFound(finishedBook.getFound());
-                return true;
-            }
-        }
-
-        return false;
-    }
 
     private List<FinishedBook> filterAndSort() {
         List<FinishedBook> books = null;
@@ -118,7 +107,6 @@ public class FinishedBookController {
                 bookToAdd.setEndDescription(source.getJSONObject(i).get("end_description").toString());
             }
 
-
             try {
                 String date = TimeFormat.formatTime("M/d/yy", "yyyy-M-d", source.getJSONObject(i).get("found").toString());
                 bookToAdd.setFound(Date.valueOf(date));
@@ -130,7 +118,6 @@ public class FinishedBookController {
 
             destination.add(bookToAdd);
         }
-
 
         return destination;
     }
@@ -166,19 +153,13 @@ public class FinishedBookController {
         FinishedBook book = new FinishedBook();
 
         book.setId(service.findAll().size() + 1);
-        book.setAuthor(inputFinished.getAuthor());
-        book.setName(inputFinished.getName());
-        book.setStart(inputFinished.getStart());
-        book.setEnd(inputFinished.getEnd());
+        CommonActions.setBookAttributesFromInput(book, inputFinished, "addFirst");
 
-        if (isInTable(book)) {
+        if (CommonActions.isInTable(book, service.findAll())) {
             additionalDatesService.addDates(new AdditionalDates(additionalDatesService.findAll().size() + 1,
                     book.getId(), book.getStart(), book.getEnd()));
         } else {
-            book.setStartDescription("");
-            book.setEndDescription("");
-            book.setFound(inputFinished.getFound());
-            book.setFoundDescription("");
+            CommonActions.setBookAttributesFromInput(book, inputFinished, "addSecond");
 
             service.addBook(book);
         }
@@ -190,38 +171,7 @@ public class FinishedBookController {
     public String edit(@ModelAttribute("finishedEnglishInput") Input inputFinished) {
         FinishedBook book = service.getBookById(inputFinished.getId());
 
-        if (inputFinished.getAuthor().length() != 0) {
-            book.setAuthor(inputFinished.getAuthor());
-        }
-
-        if (inputFinished.getName().length() != 0) {
-            book.setName(inputFinished.getName());
-        }
-
-        if (inputFinished.getStart().toString().length() != 0) {
-            book.setStart(inputFinished.getStart());
-        }
-
-        if (inputFinished.getEnd().toString().length() != 0) {
-            book.setEnd(inputFinished.getEnd());
-        }
-
-        if (inputFinished.getStartDescription().length() != 0) {
-            book.setStartDescription(inputFinished.getStartDescription());
-        }
-
-        if (inputFinished.getEndDescription().length() != 0) {
-            book.setEndDescription(inputFinished.getEndDescription());
-        }
-
-        if (inputFinished.getFound().toString().length() != 0) {
-//            book.setFound(inputFinished.getFound()); пока что так
-        }
-
-        if (inputFinished.getFoundDescription().length() != 0) {
-            book.setFoundDescription(inputFinished.getFoundDescription());
-        }
-
+        CommonActions.setBookAttributesFromInput(book, inputFinished, "edit");
 
         service.addBook(book);
 

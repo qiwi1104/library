@@ -7,6 +7,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import qiwi.IO;
 import qiwi.TimeFormat;
+import qiwi.controllers.CommonActions;
 import qiwi.model.common.Input;
 import qiwi.model.russian.BookToReadRussian;
 import qiwi.model.russian.FinishedBookRussian;
@@ -57,7 +58,7 @@ public class BookToReadRussianController {
         return books;
     }
 
-    private List<BookToReadRussian> fillListWith(JSONArray source) {
+    private List<BookToReadRussian> fillList(JSONArray source) {
         List<BookToReadRussian> destination = new ArrayList<>();
 
         for (int i = 0; i < source.length(); i++) {
@@ -77,10 +78,8 @@ public class BookToReadRussianController {
 
             bookToAdd.setFoundDescription(source.getJSONObject(i).get("found_description").toString());
 
-
             destination.add(bookToAdd);
         }
-
 
         return destination;
     }
@@ -90,10 +89,8 @@ public class BookToReadRussianController {
         BookToReadRussian book = new BookToReadRussian();
 
         book.setId(service.findAll().size() + 1);
-        book.setAuthor(input.getAuthor());
-        book.setName(input.getName());
-        book.setFound(input.getFound());
-        book.setFoundDescription(input.getFoundDescription());
+        CommonActions.setBookAttributesFromInput(book, input, "addFirst");
+        CommonActions.setBookAttributesFromInput(book, input, "addSecond");
 
         service.addBook(book);
 
@@ -104,22 +101,7 @@ public class BookToReadRussianController {
     public String edit(@ModelAttribute("booksToReadRussianInput") Input input) {
         BookToReadRussian book = service.getBookById(input.getId());
 
-        if (input.getAuthor().length() != 0) {
-            book.setAuthor(input.getAuthor());
-        }
-
-        if (input.getName().length() != 0) {
-            book.setName(input.getName());
-        }
-
-        if (input.getFound().toString().length() != 0) {
-//            book.setFound(input.getFound()); пока что так
-        }
-
-        if (input.getFoundDescription().length() != 0) {
-            book.setFoundDescription(input.getFoundDescription());
-        }
-
+        CommonActions.setBookAttributesFromInput(book, input, "edit");
 
         service.addBook(book);
 
@@ -161,7 +143,7 @@ public class BookToReadRussianController {
         List<BookToReadRussian> bookToReadList;
 
         JSONArray jsonArray = IO.readJSONFile(input.getName());
-        bookToReadList = fillListWith(jsonArray);
+        bookToReadList = fillList(jsonArray);
 
         service.addAll(bookToReadList);
 
