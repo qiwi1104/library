@@ -108,7 +108,7 @@
     </form>
 </div>
 <br/>
-<div id="content-1">
+<div>
     <table align="center" border="1">
         <tr bgcolor="#cccccc">
             <td><a th:href="@{'/finishedbooks/english/sort/{property}' (property = 'id')}">#</a></td>
@@ -119,19 +119,18 @@
                 <br/>
                 <a th:href="@{'/finishedbooks/english/sort/{property}' (property = 'end')}">End</a>
             </td>
-            <td class="hidden" hidden>Additional Dates</td>
+            <td class="hidden" th:each="additionalDate : ${additionalDates}" hidden>Additional Dates</td>
             <td class="hidden" hidden>Start Description</td>
             <td class="hidden" hidden>End Description</td>
             <td class="hidden" hidden>
                 <a th:href="@{'/finishedbooks/english/sort/{property}' (property = 'found')}">Found</a>
             </td>
             <td class="hidden" hidden>Found Description</td>
-            <td></td>
         </tr>
 
         <tr th:each="book : ${books}">
             <td th:text="${book.id}"></td>
-            <td width="200" th:text="${book.author}"></td>
+            <td th:text="${book.author}"></td>
             <td th:text="${book.name}"></td>
             <td>
                 <span th:text="${book.start}"></span>
@@ -139,14 +138,11 @@
                 <span th:text="${book.end}"></span>
             </td>
 
-            <!--            пусть пока будет так-->
-            <td class="hidden" hidden>
-                <div th:each="additionalDate : ${additionalDates}">
-                    <div th:if="${additionalDate.finishedBookId} == ${book.id}">
-                        <span th:text="${additionalDate.start}"></span>
-                        <br/>
-                        <span th:text="${additionalDate.end}"></span>
-                    </div>
+            <td th:each="additionalDate : ${additionalDates}">
+                <div th:if="${additionalDate.finishedBookId} == ${book.id}">
+                    <span th:text="${additionalDate.start}"></span>
+                    <br/>
+                    <span th:text="${additionalDate.end}"></span>
                 </div>
             </td>
 
