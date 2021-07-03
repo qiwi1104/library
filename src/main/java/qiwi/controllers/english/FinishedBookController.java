@@ -1,7 +1,6 @@
 package qiwi.controllers.english;
 
 import org.json.JSONArray;
-import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -9,7 +8,6 @@ import org.springframework.web.bind.annotation.*;
 import qiwi.IO;
 import qiwi.TimeFormat;
 import qiwi.model.english.AdditionalDates;
-import qiwi.model.english.BookToRead;
 import qiwi.model.english.FinishedBook;
 import qiwi.model.common.Input;
 import qiwi.service.english.AdditionalDatesServiceImpl;
@@ -78,34 +76,48 @@ public class FinishedBookController {
         return books;
     }
 
-    private List<FinishedBook> fillListWith(JSONArray source) throws ParseException {
+    private List<FinishedBook> fillList(JSONArray source) {
         List<FinishedBook> destination = new ArrayList<>();
 
         for (int i = 0; i < source.length(); i++) {
             FinishedBook bookToAdd = new FinishedBook();
 
-            bookToAdd.setId(service.findAll().size() + 1);
+            bookToAdd.setId(i + 1);
             bookToAdd.setAuthor(source.getJSONObject(i).get("author").toString());
             bookToAdd.setName(source.getJSONObject(i).get("name").toString());
 
+            boolean error = false;
             try {
                 String date = TimeFormat.formatTime("M/d/yy", "yyyy-M-d",
                         source.getJSONObject(i).getJSONArray("dates").get(0).toString());
+
                 bookToAdd.setStart(Date.valueOf(date));
             } catch (Exception e) {
+                bookToAdd.setStartDescription(source.getJSONObject(i).getJSONArray("dates").get(0).toString()
+                        + "\n" + source.getJSONObject(i).get("start_description").toString());
+
                 bookToAdd.setStart(Date.valueOf("1970-1-1"));
+                error = true;
             }
 
             try {
                 String date = TimeFormat.formatTime("M/d/yy", "yyyy-M-d",
                         source.getJSONObject(i).getJSONArray("dates").get(1).toString());
+
                 bookToAdd.setEnd(Date.valueOf(date));
             } catch (Exception e) {
+                bookToAdd.setEndDescription(source.getJSONObject(i).getJSONArray("dates").get(1).toString()
+                        + "\n" + source.getJSONObject(i).get("end_description").toString());
+
                 bookToAdd.setEnd(Date.valueOf("1970-1-1"));
+                error = true;
             }
 
-            bookToAdd.setStartDescription(source.getJSONObject(i).get("start_description").toString());
-            bookToAdd.setEndDescription(source.getJSONObject(i).get("end_description").toString());
+            if (!error) {
+                bookToAdd.setStartDescription(source.getJSONObject(i).get("start_description").toString());
+                bookToAdd.setEndDescription(source.getJSONObject(i).get("end_description").toString());
+            }
+
 
             try {
                 String date = TimeFormat.formatTime("M/d/yy", "yyyy-M-d", source.getJSONObject(i).get("found").toString());
@@ -116,30 +128,37 @@ public class FinishedBookController {
 
             bookToAdd.setFoundDescription(source.getJSONObject(i).get("found_description").toString());
 
-//            if (source.getJSONObject(i).getJSONObject("additional_dates").getJSONArray("start").length() != 0) {
-//                AdditionalDates additionalDates = new AdditionalDates();
-//
-//                additionalDates.setId(additionalDatesService.findAll().size() + 1);
-//                additionalDates.setFinishedBookId(bookToAdd.getId());
-//                for (int j = 0; j < source.getJSONObject(i).getJSONObject("additional_dates").getJSONArray("start").length(); j++) {
-//                    String date = TimeFormat.formatTime("M/d/yy", "yyyy-M-d",
-//                            source.getJSONObject(i).getJSONObject("additional_dates").getJSONArray("start").get(j).toString());
-//
-//                    String date2 = TimeFormat.formatTime("M/d/yy", "yyyy-M-d",
-//                            source.getJSONObject(i).getJSONObject("additional_dates").getJSONArray("end").get(j).toString());
-//
-//                    additionalDates.setStart(Date.valueOf(date));
-//                    additionalDates.setEnd(Date.valueOf(date2));
-//                    additionalDatesService.addDates(additionalDates);
-//                }
-//
-//            }
-
             destination.add(bookToAdd);
         }
 
 
         return destination;
+    }
+
+    private void fillAdditionalDatesTable(JSONArray source) throws ParseException {
+        for (int i = 0; i < source.length(); i++) {
+            if (source.getJSONObject(i).getJSONObject("additional_dates").getJSONArray("start").length() != 0) {
+                for (FinishedBook finishedBook : service.findAll()) {
+                    if (finishedBook.getName().equals(source.getJSONObject(i).get("name"))) {
+                        AdditionalDates additionalDates = new AdditionalDates();
+
+                        additionalDates.setId(additionalDatesService.findAll().size() + 1);
+                        additionalDates.setFinishedBookId(finishedBook.getId());
+                        for (int j = 0; j < source.getJSONObject(i).getJSONObject("additional_dates").getJSONArray("start").length(); j++) {
+                            String date = TimeFormat.formatTime("M/d/yy", "yyyy-M-d",
+                                    source.getJSONObject(i).getJSONObject("additional_dates").getJSONArray("start").get(j).toString());
+
+                            String date2 = TimeFormat.formatTime("M/d/yy", "yyyy-M-d",
+                                    source.getJSONObject(i).getJSONObject("additional_dates").getJSONArray("end").get(j).toString());
+
+                            additionalDates.setStart(Date.valueOf(date));
+                            additionalDates.setEnd(Date.valueOf(date2));
+                            additionalDatesService.addDates(additionalDates);
+                        }
+                    }
+                }
+            }
+        }
     }
 
     @PostMapping("/add")
@@ -187,6 +206,14 @@ public class FinishedBookController {
             book.setEnd(inputFinished.getEnd());
         }
 
+        if (inputFinished.getStartDescription().length() != 0) {
+            book.setStartDescription(inputFinished.getStartDescription());
+        }
+
+        if (inputFinished.getEndDescription().length() != 0) {
+            book.setEndDescription(inputFinished.getEndDescription());
+        }
+
         if (inputFinished.getFound().toString().length() != 0) {
 //            book.setFound(inputFinished.getFound()); пока что так
         }
@@ -198,7 +225,7 @@ public class FinishedBookController {
 
         service.addBook(book);
 
-        return "redirect:/bookstoread/english/";
+        return "redirect:/finishedbooks/english/";
     }
 
     @GetMapping("/delete/{id}")
@@ -219,12 +246,13 @@ public class FinishedBookController {
     @PostMapping("/load")
     public String load(@ModelAttribute("finishedEnglishInput") Input input) throws IOException, ParseException {
         service.clearAll();
-        List<FinishedBook> bookToReadList;
+        List<FinishedBook> finishedBooks;
 
-        JSONArray jsonArray = IO.readJSONFile(input.getName());
-        bookToReadList = fillListWith(jsonArray);
+        JSONArray jsonBooks = IO.readJSONFile(input.getName());
+        finishedBooks = fillList(jsonBooks);
 
-        service.addAll(bookToReadList);
+        service.addAll(finishedBooks);
+        fillAdditionalDatesTable(jsonBooks); // добавляет доп. даты в свою таблицу
 
         return "redirect:/finishedbooks/english/";
     }

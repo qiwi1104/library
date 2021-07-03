@@ -12,5 +12,7 @@ public class Input {
     private Date found;
     private Date start;
     private Date end;
+    private String startDescription = "";
+    private String endDescription = "";
     private String foundDescription;
 }

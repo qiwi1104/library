@@ -3,57 +3,45 @@
 <head>
     <title>Library: English</title>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
-    <link th:href="@{/css/style.css}" rel="stylesheet">
-    <!--    <link th:href="@{/css/checkbox.css}" rel="stylesheet">-->
     <link th:href="@{/css/scrollbar.css}" rel="stylesheet">
-    <link th:href="@{/css/textbox.css}" rel="stylesheet">
+    <link th:href="@{/css/style.css}" rel="stylesheet">
 </head>
-<style>
-    input[type=text], select {
-  width: 100%;
-  padding: 12px 20px;
-  margin: 8px 0;
-  display: inline-block;
-  border: 1px solid #ccc;
-  border-radius: 4px;
-  box-sizing: border-box;
-}
-
-
-
-</style>
 <body>
 <div th:replace="fragments/header :: header"></div>
 <br/>
 <div>
     <form action="#" th:action="@{/bookstoread/english/add}" th:object="${booksToReadEnglishInput}" method="post">
-    <table border="1px">
-        <tr>
-            <td>
-                <label>Author</label>
-                <input type="text" field="*{author}" name="author">
-            </td>
-            <td>
-                <label>Name</label>
-                <input type="text" field="*{name}" name="name">
-            </td>
-            <td>
-                <label>Found</label>
-                <input type="date" field="*{found}" name="found">
-            </td>
-            <td>
-                <label>Found Description</label>
-                <input type="text" field="*{foundDescription}" name="foundDescription">
-            </td>
-
-            <td>
-                <input type="submit" value="add book">
-            </td>
-        </tr>
-    </table>
-</form>
+        <table border="1px">
+            <tr>
+                <td>
+                    <label>Author</label>
+                    <input type="text" field="*{author}" name="author">
+                </td>
+                <td>
+                    <label>Name</label>
+                    <input type="text" field="*{name}" name="name">
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <label>Found</label>
+                    <input type="date" field="*{found}" name="found">
+                </td>
+                <td>
+                    <label>Found Description</label>
+                    <input type="text" field="*{foundDescription}" name="foundDescription">
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <input type="submit" value="add book">
+                </td>
+            </tr>
+        </table>
+    </form>
     <br/>
-    <form action="#" th:action="@{'/bookstoread/english/finish/{id}'}" th:object="${booksToReadEnglishInput}" method="post">
+    <form action="#" th:action="@{'/bookstoread/english/finish/{id}'}" th:object="${booksToReadEnglishInput}"
+          method="post">
         <table border="1px" class="hiddenPanel" hidden>
             <tr>
                 <td>
@@ -76,13 +64,16 @@
         </table>
     </form>
     <br/>
-    <form action="#" th:action="@{'/bookstoread/english/edit/{id}'}" th:object="${booksToReadEnglishInput}" method="post">
+    <form action="#" th:action="@{'/bookstoread/english/edit/{id}'}" th:object="${booksToReadEnglishInput}"
+          method="post">
         <table border="1px" class="hiddenPanel" hidden>
             <tr>
                 <td>
                     <label>#</label>
                     <input type="number" field="*{id}" name="id">
                 </td>
+            </tr>
+            <tr>
                 <td>
                     <label>Author</label>
                     <input type="text" field="*{author}" name="author">
@@ -91,6 +82,8 @@
                     <label>Name</label>
                     <input type="text" field="*{name}" name="name">
                 </td>
+            </tr>
+            <tr>
                 <td>
                     <label>Found</label>
                     <input type="date" field="*{found}" name="found">
@@ -99,7 +92,8 @@
                     <label>Found Description</label>
                     <input type="text" field="*{foundDescription}" name="foundDescription">
                 </td>
-
+            </tr>
+            <tr>
                 <td>
                     <input type="submit" value="edit book">
                 </td>

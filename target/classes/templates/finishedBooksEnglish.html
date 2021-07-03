@@ -3,24 +3,9 @@
 <head>
     <title>Library: English</title>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
-    <link th:href="@{/css/style.css}" rel="stylesheet">
-    <!--    <link th:href="@{/css/checkbox.css}" rel="stylesheet">-->
     <link th:href="@{/css/scrollbar.css}" rel="stylesheet">
-    <link th:href="@{/css/textbox.css}" rel="stylesheet">
+    <link th:href="@{/css/style.css}" rel="stylesheet">
 </head>
-<style>
-    input[type=text], select {
-  width: 100%;
-  padding: 12px 20px;
-  margin: 8px 0;
-  display: inline-block;
-  border: 1px solid #ccc;
-  border-radius: 4px;
-  box-sizing: border-box;
-}
-
-
-</style>
 <body>
 <div th:replace="fragments/header :: header"></div>
 <br/>
@@ -36,6 +21,8 @@
                     <label>Name</label>
                     <input type="text" field="*{name}" name="name">
                 </td>
+            </tr>
+            <tr>
                 <td>
                     <label>Start</label>
                     <input type="date" field="*{start}" name="start">
@@ -44,11 +31,14 @@
                     <label>End</label>
                     <input type="date" field="*{end}" name="end">
                 </td>
+            </tr>
+            <tr>
                 <td>
                     <label>Found</label>
                     <input type="date" field="*{found}" name="found">
                 </td>
-
+            </tr>
+            <tr>
                 <td>
                     <input type="submit" value="add book">
                 </td>
@@ -64,6 +54,8 @@
                     <label>#</label>
                     <input type="number" field="*{id}" name="id">
                 </td>
+            </tr>
+            <tr>
                 <td>
                     <label>Author</label>
                     <input type="text" field="*{author}" name="author">
@@ -72,14 +64,28 @@
                     <label>Name</label>
                     <input type="text" field="*{name}" name="name">
                 </td>
+            </tr>
+            <tr>
                 <td>
                     <label>Start</label>
                     <input type="date" field="*{start}" name="start">
+                <td>
+                    <label>Start Description</label>
+                    <input type="text" field="*{startDescription}" name="startDescription">
                 </td>
+                </td>
+            </tr>
+            <tr>
                 <td>
                     <label>End</label>
                     <input type="date" field="*{end}" name="end">
                 </td>
+                <td>
+                    <label>End Description</label>
+                    <input type="text" field="*{endDescription}" name="endDescription">
+                </td>
+            </tr>
+            <tr>
                 <td>
                     <label>Found</label>
                     <input type="date" field="*{found}" name="found">
@@ -88,7 +94,8 @@
                     <label>Found Description</label>
                     <input type="text" field="*{foundDescription}" name="foundDescription">
                 </td>
-
+            </tr>
+            <tr>
                 <td>
                     <input type="submit" value="edit book">
                 </td>
@@ -113,14 +120,13 @@
                 <a th:href="@{'/finishedbooks/english/sort/{property}' (property = 'end')}">End</a>
             </td>
             <td class="hidden" hidden>Additional Dates</td>
-            <td class="hidden" hidden><a th:href="@{'/finishedbooks/english/sort/{property}' (property = 'found')}">Found</a>
-            </td>
-            <td class="hidden" hidden>Found Description</td>
             <td class="hidden" hidden>Start Description</td>
             <td class="hidden" hidden>End Description</td>
-            <td>
-
+            <td class="hidden" hidden>
+                <a th:href="@{'/finishedbooks/english/sort/{property}' (property = 'found')}">Found</a>
             </td>
+            <td class="hidden" hidden>Found Description</td>
+            <td></td>
         </tr>
 
         <tr th:each="book : ${books}">
@@ -144,10 +150,11 @@
                 </div>
             </td>
 
+            <td th:text="${book.startDescription}" class="hidden" hidden></td>
+            <td th:text="${book.endDescription}" class="hidden" hidden></td>
+
             <td th:text="${book.found}" class="hidden" hidden></td>
             <td th:text="${book.foundDescription}" class="hidden" hidden></td>
-            <td th:text="${book.startDescription}" class="hidden" hidden>
-            <td th:text="${book.endDescription}" class="hidden" hidden>
 
             <td>
                 <a th:href="@{'/finishedbooks/english/delete/{id}'(id=${book.id})}">delete</a>
