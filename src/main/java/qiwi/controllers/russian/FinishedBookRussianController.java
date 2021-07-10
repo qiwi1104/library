@@ -155,7 +155,7 @@ public class FinishedBookRussianController {
         book.setId(service.findAll().size() + 1);
         CommonActions.setBookAttributesFromInput(book, inputFinished, "addFirst");
 
-        if (CommonActions.isInTable(book, service.findAll())) {
+        if (service.isInTable(book)) {
             additionalDatesService.addDates(new AdditionalDatesRussian(additionalDatesService.findAll().size() + 1,
                     book.getId(), book.getStart(), book.getEnd()));
         } else {
@@ -203,6 +203,16 @@ public class FinishedBookRussianController {
 
         service.addAll(finishedBooks);
         fillAdditionalDatesTable(jsonBooks); // добавляет доп. даты в свою таблицу
+
+        return "redirect:/finishedbooks/russian/";
+    }
+
+    @PostMapping("/save")
+    public String save(@ModelAttribute("finishedRussianInput") Input input) {
+        List<FinishedBookRussian> bookToReadList = service.findAll();
+        List<AdditionalDatesRussian> additionalDatesList = additionalDatesService.findAll();
+
+        CommonActions.saveTableToJSON(bookToReadList, additionalDatesList, input.getName());
 
         return "redirect:/finishedbooks/russian/";
     }

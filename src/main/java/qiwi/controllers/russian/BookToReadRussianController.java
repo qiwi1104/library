@@ -73,6 +73,9 @@ public class BookToReadRussianController {
 
                 bookToAdd.setFound(Date.valueOf(date));
             } catch (Exception e) {
+                bookToAdd.setFoundDescription(source.getJSONObject(i).get("found").toString()
+                        + "\n" + source.getJSONObject(i).get("found_description").toString());
+
                 bookToAdd.setFound(Date.valueOf("1970-1-1"));
             }
 
@@ -146,6 +149,15 @@ public class BookToReadRussianController {
         bookToReadList = fillList(jsonArray);
 
         service.addAll(bookToReadList);
+
+        return "redirect:/bookstoread/russian/";
+    }
+
+    @PostMapping("/save")
+    public String save(@ModelAttribute("booksToReadRussianInput") Input input) {
+        List<BookToReadRussian> bookToReadList = service.findAll();
+
+        CommonActions.saveTableToJSON(bookToReadList, input.getName());
 
         return "redirect:/bookstoread/russian/";
     }

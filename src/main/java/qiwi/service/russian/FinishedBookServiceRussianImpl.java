@@ -67,4 +67,16 @@ public class FinishedBookServiceRussianImpl implements BookService<FinishedBookR
     public List<FinishedBookRussian> findAll() {
         return finishedBookRussianRepository.findAll();
     }
+
+    public boolean isInTable(FinishedBookRussian book) {
+        for (FinishedBookRussian finishedBook : finishedBookRussianRepository.findAll()) {
+            if (finishedBook.equals(book)) {
+                book.setId(finishedBook.getId());
+                book.setFound(finishedBook.getFound());
+                return true;
+            }
+        }
+
+        return false;
+    }
 }

@@ -8,9 +8,9 @@ import org.springframework.web.bind.annotation.*;
 import qiwi.IO;
 import qiwi.TimeFormat;
 import qiwi.controllers.CommonActions;
+import qiwi.model.common.Input;
 import qiwi.model.english.AdditionalDates;
 import qiwi.model.english.FinishedBook;
-import qiwi.model.common.Input;
 import qiwi.service.english.AdditionalDatesServiceImpl;
 import qiwi.service.english.FinishedBookServiceImpl;
 
@@ -155,7 +155,7 @@ public class FinishedBookController {
         book.setId(service.findAll().size() + 1);
         CommonActions.setBookAttributesFromInput(book, inputFinished, "addFirst");
 
-        if (CommonActions.isInTable(book, service.findAll())) {
+        if (service.isInTable(book)) {
             additionalDatesService.addDates(new AdditionalDates(additionalDatesService.findAll().size() + 1,
                     book.getId(), book.getStart(), book.getEnd()));
         } else {
@@ -203,6 +203,16 @@ public class FinishedBookController {
 
         service.addAll(finishedBooks);
         fillAdditionalDatesTable(jsonBooks); // добавляет доп. даты в свою таблицу
+
+        return "redirect:/finishedbooks/english/";
+    }
+
+    @PostMapping("/save")
+    public String save(@ModelAttribute("finishedEnglishInput") Input input) {
+        List<FinishedBook> bookToReadList = service.findAll();
+        List<AdditionalDates> additionalDatesList = additionalDatesService.findAll();
+
+        CommonActions.saveTableToJSON(bookToReadList, additionalDatesList, input.getName());
 
         return "redirect:/finishedbooks/english/";
     }

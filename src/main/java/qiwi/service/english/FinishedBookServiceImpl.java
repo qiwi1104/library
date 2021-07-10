@@ -67,4 +67,16 @@ public class FinishedBookServiceImpl implements BookService<FinishedBook> {
     public List<FinishedBook> findAll() {
         return finishedBookRepository.findAll();
     }
+
+    public boolean isInTable(FinishedBook book) {
+        for (FinishedBook finishedBook : finishedBookRepository.findAll()) {
+            if (finishedBook.equals(book)) {
+                book.setId(finishedBook.getId());
+                book.setFound(finishedBook.getFound());
+                return true;
+            }
+        }
+
+        return false;
+    }
 }

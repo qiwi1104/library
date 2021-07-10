@@ -104,6 +104,10 @@
     <form action="#" th:action="@{'/bookstoread/russian/load'}" th:object="${booksToReadRussianInput}" method="post">
         <table th:replace="fragments/loadPanel :: loadPanel"></table>
     </form>
+    <br/>
+    <form action="#" th:action="@{'/bookstoread/russian/save'}" th:object="${booksToReadRussianInput}" method="post">
+        <table th:replace="fragments/savePanel :: savePanel"></table>
+    </form>
 </div>
 <br/>
 <div id="content-1">
