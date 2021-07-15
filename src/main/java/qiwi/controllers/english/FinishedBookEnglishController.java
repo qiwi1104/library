@@ -1,4 +1,4 @@
-package qiwi.controllers.russian;
+package qiwi.controllers.english;
 
 import org.json.JSONArray;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -9,10 +9,10 @@ import qiwi.IO;
 import qiwi.TimeFormat;
 import qiwi.controllers.CommonActions;
 import qiwi.model.common.Input;
-import qiwi.model.russian.AdditionalDatesRussian;
-import qiwi.model.russian.FinishedBookRussian;
-import qiwi.service.russian.AdditionalDatesServiceRussianImpl;
-import qiwi.service.russian.FinishedBookServiceRussianImpl;
+import qiwi.model.english.AdditionalDatesEnglish;
+import qiwi.model.english.FinishedBookEnglish;
+import qiwi.service.english.AdditionalDatesEnglishServiceImpl;
+import qiwi.service.english.FinishedBookEnglishServiceImpl;
 
 import java.io.IOException;
 import java.sql.Date;
@@ -21,18 +21,18 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Controller
-@RequestMapping("/finishedbooks/russian")
-public class FinishedBookRussianController {
+@RequestMapping("/finishedbooks/english")
+public class FinishedBookEnglishController {
     @Autowired
-    private FinishedBookServiceRussianImpl service;
+    private FinishedBookEnglishServiceImpl service;
     @Autowired
-    private AdditionalDatesServiceRussianImpl additionalDatesService;
+    private AdditionalDatesEnglishServiceImpl additionalDatesService;
 
     private String sortDateMethod = "ASC";
     private String sortProperty = "start";
 
-    private List<FinishedBookRussian> filterAndSort() {
-        List<FinishedBookRussian> books = null;
+    private List<FinishedBookEnglish> filterAndSort() {
+        List<FinishedBookEnglish> books = null;
 
         switch (sortDateMethod) {
             case "ASC":
@@ -65,11 +65,11 @@ public class FinishedBookRussianController {
         return books;
     }
 
-    private List<FinishedBookRussian> fillList(JSONArray source) {
-        List<FinishedBookRussian> destination = new ArrayList<>();
+    private List<FinishedBookEnglish> fillList(JSONArray source) {
+        List<FinishedBookEnglish> destination = new ArrayList<>();
 
         for (int i = 0; i < source.length(); i++) {
-            FinishedBookRussian bookToAdd = new FinishedBookRussian();
+            FinishedBookEnglish bookToAdd = new FinishedBookEnglish();
 
             bookToAdd.setId(i + 1);
             bookToAdd.setAuthor(source.getJSONObject(i).get("author").toString());
@@ -81,8 +81,8 @@ public class FinishedBookRussianController {
 
                 bookToAdd.setStart(Date.valueOf(date));
             } catch (Exception e) {
-//                bookToAdd.setStartDescription(source.getJSONObject(i).getJSONArray("dates").get(0).toString()
-//                        + "\n" + source.getJSONObject(i).get("start_description").toString());
+                bookToAdd.setDescription("start: " + source.getJSONObject(i).getJSONArray("dates").get(0).toString()
+                        + "\n" + source.getJSONObject(i).get("start_description").toString());
 
                 bookToAdd.setStart(Date.valueOf("1970-1-1"));
             }
@@ -93,8 +93,8 @@ public class FinishedBookRussianController {
 
                 bookToAdd.setEnd(Date.valueOf(date));
             } catch (Exception e) {
-//                bookToAdd.setEndDescription(source.getJSONObject(i).getJSONArray("dates").get(1).toString()
-//                        + "\n" + source.getJSONObject(i).get("end_description").toString());
+                bookToAdd.setDescription("end: " + source.getJSONObject(i).getJSONArray("dates").get(1).toString()
+                        + "\n" + source.getJSONObject(i).get("end_description").toString());
 
                 bookToAdd.setEnd(Date.valueOf("1970-1-1"));
             }
@@ -117,9 +117,9 @@ public class FinishedBookRussianController {
     private void fillAdditionalDatesTable(JSONArray source) throws ParseException {
         for (int i = 0; i < source.length(); i++) {
             if (source.getJSONObject(i).getJSONObject("additional_dates").getJSONArray("start").length() != 0) {
-                for (FinishedBookRussian finishedBook : service.findAll()) {
+                for (FinishedBookEnglish finishedBook : service.findAll()) {
                     if (finishedBook.getName().equals(source.getJSONObject(i).get("name"))) {
-                        AdditionalDatesRussian additionalDates = new AdditionalDatesRussian();
+                        AdditionalDatesEnglish additionalDates = new AdditionalDatesEnglish();
 
                         additionalDates.setId(additionalDatesService.findAll().size() + 1);
                         additionalDates.setFinishedBookId(finishedBook.getId());
@@ -141,14 +141,14 @@ public class FinishedBookRussianController {
     }
 
     @PostMapping("/add")
-    public String add(@ModelAttribute("finishedRussianInput") Input inputFinished) {
-        FinishedBookRussian book = new FinishedBookRussian();
+    public String add(@ModelAttribute("finishedEnglishInput") Input inputFinished) {
+        FinishedBookEnglish book = new FinishedBookEnglish();
 
         book.setId(service.findAll().size() + 1);
         CommonActions.setBookAttributesFromInput(book, inputFinished, "addFirst");
 
         if (service.isInTable(book)) {
-            additionalDatesService.addDates(new AdditionalDatesRussian(additionalDatesService.findAll().size() + 1,
+            additionalDatesService.addDates(new AdditionalDatesEnglish(additionalDatesService.findAll().size() + 1,
                     book.getId(), book.getStart(), book.getEnd()));
         } else {
             CommonActions.setBookAttributesFromInput(book, inputFinished, "addSecond");
@@ -156,25 +156,25 @@ public class FinishedBookRussianController {
             service.addBook(book);
         }
 
-        return "redirect:/finishedbooks/russian/";
+        return "redirect:/finishedbooks/english/";
     }
 
     @PostMapping("/edit/{id}")
-    public String edit(@ModelAttribute("finishedRussianInput") Input inputFinished) {
-        FinishedBookRussian book = service.getBookById(inputFinished.getId());
+    public String edit(@ModelAttribute("finishedEnglishInput") Input inputFinished) {
+        FinishedBookEnglish book = service.getBookById(inputFinished.getId());
 
         CommonActions.setBookAttributesFromInput(book, inputFinished, "edit");
 
         service.addBook(book);
 
-        return "redirect:/finishedbooks/russian/";
+        return "redirect:/finishedbooks/english/";
     }
 
     @GetMapping("/delete/{id}")
     public String delete(@PathVariable Integer id) {
         service.deleteBook(id);
 
-        return "redirect:/finishedbooks/russian/";
+        return "redirect:/finishedbooks/english/";
     }
 
     @GetMapping("/sort/{property}")
@@ -182,13 +182,13 @@ public class FinishedBookRussianController {
         sortDateMethod = sortDateMethod.equals("ASC") ? "DESC" : "ASC";
         sortProperty = property;
 
-        return "redirect:/finishedbooks/russian/";
+        return "redirect:/finishedbooks/english/";
     }
 
     @PostMapping("/load")
-    public String load(@ModelAttribute("finishedRussianInput") Input input) throws IOException, ParseException {
+    public String load(@ModelAttribute("finishedEnglishInput") Input input) throws IOException, ParseException {
         service.clearAll();
-        List<FinishedBookRussian> finishedBooks;
+        List<FinishedBookEnglish> finishedBooks;
 
         JSONArray jsonBooks = IO.readJSONFile(input.getName());
         finishedBooks = fillList(jsonBooks);
@@ -196,26 +196,26 @@ public class FinishedBookRussianController {
         service.addAll(finishedBooks);
         fillAdditionalDatesTable(jsonBooks); // добавляет доп. даты в свою таблицу
 
-        return "redirect:/finishedbooks/russian/";
+        return "redirect:/finishedbooks/english/";
     }
 
     @PostMapping("/save")
-    public String save(@ModelAttribute("finishedRussianInput") Input input) {
-        List<FinishedBookRussian> bookToReadList = service.findAll();
-        List<AdditionalDatesRussian> additionalDatesList = additionalDatesService.findAll();
+    public String save(@ModelAttribute("finishedEnglishInput") Input input) {
+        List<FinishedBookEnglish> bookToReadList = service.findAll();
+        List<AdditionalDatesEnglish> additionalDatesList = additionalDatesService.findAll();
 
         CommonActions.saveTableToJSON(bookToReadList, additionalDatesList, input.getName());
 
-        return "redirect:/finishedbooks/russian/";
+        return "redirect:/finishedbooks/english/";
     }
 
     @GetMapping("/")
     public String list(Model model) {
-        List<FinishedBookRussian> bookList = filterAndSort();
+        List<FinishedBookEnglish> bookList = filterAndSort();
 
         model.addAttribute("books", bookList);
         model.addAttribute("additionalDates", additionalDatesService.findAll());
 
-        return "finishedBooksRussian";
+        return "finishedBooksEnglish";
     }
 }

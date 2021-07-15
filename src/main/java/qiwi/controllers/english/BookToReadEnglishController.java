@@ -1,4 +1,4 @@
-package qiwi.controllers.russian;
+package qiwi.controllers.english;
 
 import org.json.JSONArray;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -9,10 +9,10 @@ import qiwi.IO;
 import qiwi.TimeFormat;
 import qiwi.controllers.CommonActions;
 import qiwi.model.common.Input;
-import qiwi.model.russian.BookToReadRussian;
-import qiwi.model.russian.FinishedBookRussian;
-import qiwi.service.russian.BookToReadServiceRussianImpl;
-import qiwi.service.russian.FinishedBookServiceRussianImpl;
+import qiwi.model.english.BookToReadEnglish;
+import qiwi.model.english.FinishedBookEnglish;
+import qiwi.service.english.BookToReadEnglishServiceImpl;
+import qiwi.service.english.FinishedBookEnglishServiceImpl;
 
 import java.io.IOException;
 import java.sql.Date;
@@ -20,18 +20,18 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Controller
-@RequestMapping("/bookstoread/russian")
-public class BookToReadRussianController {
+@RequestMapping("/bookstoread/english")
+public class BookToReadEnglishController {
     @Autowired
-    private BookToReadServiceRussianImpl service;
+    private BookToReadEnglishServiceImpl service;
     @Autowired
-    private FinishedBookServiceRussianImpl finishedBookService;
+    private FinishedBookEnglishServiceImpl finishedBookService;
 
     private String sortDateMethod = "ASC";
     private String sortProperty = "found";
 
-    private List<BookToReadRussian> filterAndSort() {
-        List<BookToReadRussian> books = null;
+    private List<BookToReadEnglish> filterAndSort() {
+        List<BookToReadEnglish> books = null;
 
         switch (sortDateMethod) {
             case "ASC":
@@ -58,11 +58,11 @@ public class BookToReadRussianController {
         return books;
     }
 
-    private List<BookToReadRussian> fillList(JSONArray source) {
-        List<BookToReadRussian> destination = new ArrayList<>();
+    private List<BookToReadEnglish> fillList(JSONArray source) {
+        List<BookToReadEnglish> destination = new ArrayList<>();
 
         for (int i = 0; i < source.length(); i++) {
-            BookToReadRussian bookToAdd = new BookToReadRussian();
+            BookToReadEnglish bookToAdd = new BookToReadEnglish();
 
             bookToAdd.setId(i + 1);
             bookToAdd.setAuthor(source.getJSONObject(i).get("author").toString());
@@ -88,8 +88,8 @@ public class BookToReadRussianController {
     }
 
     @PostMapping("/add")
-    public String add(@ModelAttribute("booksToReadRussianInput") Input input) {
-        BookToReadRussian book = new BookToReadRussian();
+    public String add(@ModelAttribute("booksToReadEnglishInput") Input input) {
+        BookToReadEnglish book = new BookToReadEnglish();
 
         book.setId(service.findAll().size() + 1);
         CommonActions.setBookAttributesFromInput(book, input, "addFirst");
@@ -97,39 +97,39 @@ public class BookToReadRussianController {
 
         service.addBook(book);
 
-        return "redirect:/bookstoread/russian/";
+        return "redirect:/bookstoread/english/";
     }
 
     @PostMapping("/edit/{id}")
-    public String edit(@ModelAttribute("booksToReadRussianInput") Input input) {
-        BookToReadRussian book = service.getBookById(input.getId());
+    public String edit(@ModelAttribute("booksToReadEnglishInput") Input input) {
+        BookToReadEnglish book = service.getBookById(input.getId());
 
         CommonActions.setBookAttributesFromInput(book, input, "edit");
 
         service.addBook(book);
 
-        return "redirect:/bookstoread/russian/";
+        return "redirect:/bookstoread/english/";
     }
 
     @GetMapping("/delete/{id}")
     public String delete(@PathVariable Integer id) {
         service.deleteBook(id);
 
-        return "redirect:/bookstoread/russian/";
+        return "redirect:/bookstoread/english/";
     }
 
     @PostMapping("/finish/{id}")
-    public String finish(@ModelAttribute("booksToReadRussianInput") Input input) {
-        BookToReadRussian bookToRead = service.getBookById(input.getId());
+    public String finish(@ModelAttribute("booksToReadEnglishInput") Input input) {
+        BookToReadEnglish bookToRead = service.getBookById(input.getId());
 
-        FinishedBookRussian book = new FinishedBookRussian(bookToRead.getAuthor(), bookToRead.getName(), input.getStart(), input.getEnd(),
+        FinishedBookEnglish book = new FinishedBookEnglish(bookToRead.getAuthor(), bookToRead.getName(), input.getStart(), input.getEnd(),
                 bookToRead.getFound(), bookToRead.getDescription());
         book.setId(finishedBookService.findAll().size() + 1);
 
         finishedBookService.addBook(book);
         service.deleteBook(bookToRead.getId());
 
-        return "redirect:/bookstoread/russian/";
+        return "redirect:/bookstoread/english/";
     }
 
     @GetMapping("/sort/{property}")
@@ -137,37 +137,37 @@ public class BookToReadRussianController {
         sortDateMethod = sortDateMethod.equals("ASC") ? "DESC" : "ASC";
         sortProperty = property;
 
-        return "redirect:/bookstoread/russian/";
+        return "redirect:/bookstoread/english/";
     }
 
     @PostMapping("/load")
-    public String load(@ModelAttribute("booksToReadRussianInput") Input input) throws IOException {
+    public String load(@ModelAttribute("booksToReadEnglishInput") Input input) throws IOException {
         service.clearAll();
-        List<BookToReadRussian> bookToReadList;
+        List<BookToReadEnglish> bookToReadList;
 
         JSONArray jsonArray = IO.readJSONFile(input.getName());
         bookToReadList = fillList(jsonArray);
 
         service.addAll(bookToReadList);
 
-        return "redirect:/bookstoread/russian/";
+        return "redirect:/bookstoread/english/";
     }
 
     @PostMapping("/save")
-    public String save(@ModelAttribute("booksToReadRussianInput") Input input) {
-        List<BookToReadRussian> bookToReadList = service.findAll();
+    public String save(@ModelAttribute("booksToReadEnglishInput") Input input) {
+        List<BookToReadEnglish> bookToReadList = service.findAll();
 
         CommonActions.saveTableToJSON(bookToReadList, input.getName());
 
-        return "redirect:/bookstoread/russian/";
+        return "redirect:/bookstoread/english/";
     }
 
     @GetMapping("/")
     public String list(Model model) {
-        List<BookToReadRussian> bookList = filterAndSort();
+        List<BookToReadEnglish> bookList = filterAndSort();
 
         model.addAttribute("booksToRead", bookList);
 
-        return "booksToReadRussian";
+        return "booksToReadEnglish";
     }
 }

@@ -30,14 +30,6 @@ public abstract class CommonActions {
                     if (input.getEnd().toString().length() != 0) {
                         fb.setEnd(input.getEnd());
                     }
-
-                    if (input.getStartDescription().length() != 0) {
-                        fb.setStartDescription(input.getStartDescription());
-                    }
-
-                    if (input.getEndDescription().length() != 0) {
-                        fb.setEndDescription(input.getEndDescription());
-                    }
                 }
 
                 if (input.getAuthor().length() != 0) {
@@ -52,8 +44,8 @@ public abstract class CommonActions {
                     book.setFound(input.getFound());
                 }
 
-                if (input.getFoundDescription().length() != 0) {
-                    book.setFoundDescription(input.getFoundDescription());
+                if (input.getDescription().length() != 0) {
+                    book.setDescription(input.getDescription());
                 }
                 break;
             case "addFirst": // first потому что используется в первый раз (до isInTable)
@@ -69,17 +61,9 @@ public abstract class CommonActions {
                 break;
             case "addSecond":
                 book.setFound(input.getFound());
-                book.setFoundDescription(input.getFoundDescription());
-
-                if (book instanceof FinishedBook) {
-                    FinishedBook fb = (FinishedBook) book;
-
-                    fb.setStartDescription(input.getStartDescription());
-                    fb.setEndDescription(input.getEndDescription());
-                }
+                book.setDescription(input.getDescription());
                 break;
         }
-
     }
 
     private static <T extends Book> void fillJSONArray(JSONArray jsonArray, List<T> booksList) {
@@ -98,7 +82,7 @@ public abstract class CommonActions {
                 }
 
                 jsonBook.put("found", found);
-                jsonBook.put("found_description", book.getFoundDescription());
+                jsonBook.put("description", book.getDescription());
 
                 jsonArray.put(jsonBook);
             }
@@ -150,9 +134,6 @@ public abstract class CommonActions {
                 additionalDatesJSON.put("end", additionalDatesEndJSON);
                 jsonBook.put("additional_dates", additionalDatesJSON);
 
-                jsonBook.put("start_description", finishedBook.getStartDescription());
-                jsonBook.put("end_description", finishedBook.getEndDescription());
-
                 String found = "";
 
                 try {
@@ -162,7 +143,7 @@ public abstract class CommonActions {
                 }
 
                 jsonBook.put("found", found);
-                jsonBook.put("found_description", finishedBook.getFoundDescription());
+                jsonBook.put("description", finishedBook.getDescription());
 
                 jsonArray.put(jsonBook);
             }
@@ -176,7 +157,7 @@ public abstract class CommonActions {
         fillJSONArray(jsonArray, booksList);
 
         String path = filePath.split(".json")[0];
-        path += new SimpleDateFormat("yyyy-MM-dd HH-mm-ss").format(new Date());
+        path += " " + new SimpleDateFormat("yyyy-MM-dd HH-mm-ss").format(new Date());
         filePath = path + ".json";
         try {
             IO.writeJSONToFile(jsonArray, filePath);
@@ -190,7 +171,7 @@ public abstract class CommonActions {
         fillJSONArray(jsonArray, booksList, additionalDates);
 
         String path = filePath.split(".json")[0];
-        path += new SimpleDateFormat("yyyy-MM-dd HH-mm-ss").format(new Date());
+        path += " " + new SimpleDateFormat("yyyy-MM-dd HH-mm-ss").format(new Date());
         filePath = path + ".json";
         try {
             IO.writeJSONToFile(jsonArray, filePath);

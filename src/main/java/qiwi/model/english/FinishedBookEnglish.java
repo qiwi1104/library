@@ -1,4 +1,4 @@
-package qiwi.model.russian;
+package qiwi.model.english;
 
 import qiwi.model.common.book.FinishedBook;
 
@@ -10,16 +10,16 @@ import java.sql.Date;
 import java.util.List;
 
 @Entity
-@Table(name = "`finished_books_russian`")
-public class FinishedBookRussian extends FinishedBook {
+@Table(name = "`finished_books_english`")
+public class FinishedBookEnglish extends FinishedBook {
     @OneToMany(mappedBy = "finishedBook", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<AdditionalDatesRussian> additionalDates;
+    private List<AdditionalDatesEnglish> additionalDates;
 
-    public FinishedBookRussian() {
+    public FinishedBookEnglish() {
         super();
     }
 
-    public FinishedBookRussian(String author, String name, Date start, Date end, Date found, String foundDescription) {
+    public FinishedBookEnglish(String author, String name, Date start, Date end, Date found, String foundDescription) {
         super(author, name, start, end, found, foundDescription);
     }
 }

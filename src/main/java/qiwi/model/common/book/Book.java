@@ -10,8 +10,7 @@ public class Book {
     protected String author;
     protected String name;
     protected Date found;
-    @Column(name = "found_description")
-    protected String foundDescription;
+    protected String description;
 
     public Integer getId() {
         return id;
@@ -29,8 +28,8 @@ public class Book {
         return found;
     }
 
-    public String getFoundDescription() {
-        return foundDescription;
+    public String getDescription() {
+        return description;
     }
 
     public void setId(Integer id) {
@@ -49,7 +48,7 @@ public class Book {
         this.found = found;
     }
 
-    public void setFoundDescription(String foundDescription) {
-        this.foundDescription = foundDescription;
+    public void setDescription(String description) {
+        this.description = description;
     }
 }

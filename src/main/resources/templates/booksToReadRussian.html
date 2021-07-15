@@ -29,7 +29,7 @@
                 </td>
                 <td>
                     <label>Found Description</label>
-                    <input type="text" field="*{foundDescription}" name="foundDescription">
+                    <input type="text" field="*{description}" name="description">
                 </td>
             </tr>
             <tr>
@@ -89,8 +89,8 @@
                     <input type="date" field="*{found}" name="found">
                 </td>
                 <td>
-                    <label>Found Description</label>
-                    <input type="text" field="*{foundDescription}" name="foundDescription">
+                    <label>Description</label>
+                    <input type="text" field="*{description}" name="description">
                 </td>
             </tr>
             <tr>
@@ -117,7 +117,7 @@
             <td>Author</td>
             <td>Name</td>
             <td><a th:href="@{'/bookstoread/russian/sort/{property}' (property = 'found')}">Found</a></td>
-            <td class="hidden" hidden>Found Description</td>
+            <td class="hidden" hidden>Description</td>
         </tr>
 
         <tr th:each="book : ${booksToRead}">
@@ -126,7 +126,7 @@
             <td th:text="${book.name}"></td>
             <td th:text="${book.found}"></td>
 
-            <td th:text="${book.foundDescription}" class="hidden" hidden></td>
+            <td th:text="${book.description}" class="hidden" hidden></td>
 
             <td>
                 <a th:href="@{'/bookstoread/russian/delete/{id}'(id=${book.id})}">delete</a>

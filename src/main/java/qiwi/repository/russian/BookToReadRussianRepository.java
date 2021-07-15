@@ -1,11 +1,11 @@
 package qiwi.repository.russian;
 
-import org.springframework.data.jpa.repository.JpaRepository;
 import qiwi.model.russian.BookToReadRussian;
+import qiwi.repository.common.BookToReadRepository;
 
 import java.util.List;
 
-public interface BookToReadRussianRepository extends JpaRepository<BookToReadRussian, Integer> {
+public interface BookToReadRussianRepository extends BookToReadRepository<BookToReadRussian> {
     List<BookToReadRussian> findAllByOrderByIdAsc();
     List<BookToReadRussian> findAllByOrderByIdDesc();
 

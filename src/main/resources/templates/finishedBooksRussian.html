@@ -69,20 +69,12 @@
                 <td>
                     <label>Start</label>
                     <input type="date" field="*{start}" name="start">
-                <td>
-                    <label>Start Description</label>
-                    <input type="text" field="*{startDescription}" name="startDescription">
-                </td>
                 </td>
             </tr>
             <tr>
                 <td>
                     <label>End</label>
                     <input type="date" field="*{end}" name="end">
-                </td>
-                <td>
-                    <label>End Description</label>
-                    <input type="text" field="*{endDescription}" name="endDescription">
                 </td>
             </tr>
             <tr>
@@ -92,7 +84,7 @@
                 </td>
                 <td>
                     <label>Found Description</label>
-                    <input type="text" field="*{foundDescription}" name="foundDescription">
+                    <input type="text" field="*{description}" name="description">
                 </td>
             </tr>
             <tr>
@@ -124,12 +116,10 @@
                 <a th:href="@{'/finishedbooks/russian/sort/{property}' (property = 'end')}">End</a>
             </td>
             <td class="hidden" th:each="additionalDate : ${additionalDates}" hidden>Additional Dates</td>
-            <td class="hidden" hidden>Start Description</td>
-            <td class="hidden" hidden>End Description</td>
             <td class="hidden" hidden>
                 <a th:href="@{'/finishedbooks/russian/sort/{property}' (property = 'found')}">Found</a>
             </td>
-            <td class="hidden" hidden>Found Description</td>
+            <td class="hidden" hidden>Description</td>
         </tr>
 
         <tr th:each="book : ${books}">
@@ -142,19 +132,16 @@
                 <span th:text="${book.end}"></span>
             </td>
 
-            <td th:each="additionalDate : ${additionalDates}">
-                <div th:if="${additionalDate.finishedBookId} == ${book.id}">
+            <div th:each="additionalDate : ${additionalDates}">
+                <td th:if="${additionalDate.finishedBookId} == ${book.id}">
                     <span th:text="${additionalDate.start}"></span>
                     <br/>
                     <span th:text="${additionalDate.end}"></span>
-                </div>
-            </td>
-
-            <td th:text="${book.startDescription}" class="hidden" hidden></td>
-            <td th:text="${book.endDescription}" class="hidden" hidden></td>
+                </td>
+            </div>
 
             <td th:text="${book.found}" class="hidden" hidden></td>
-            <td th:text="${book.foundDescription}" class="hidden" hidden></td>
+            <td th:text="${book.description}" class="hidden" hidden></td>
 
             <td>
                 <a th:href="@{'/finishedbooks/russian/delete/{id}'(id=${book.id})}">delete</a>

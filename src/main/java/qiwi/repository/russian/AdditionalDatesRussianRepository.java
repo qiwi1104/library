@@ -1,7 +1,7 @@
 package qiwi.repository.russian;
 
-import org.springframework.data.jpa.repository.JpaRepository;
 import qiwi.model.russian.AdditionalDatesRussian;
+import qiwi.repository.common.AdditionalDatesRepository;
 
-public interface AdditionalDatesRussianRepository extends JpaRepository<AdditionalDatesRussian, Integer> {
+public interface AdditionalDatesRussianRepository extends AdditionalDatesRepository<AdditionalDatesRussian> {
 }
