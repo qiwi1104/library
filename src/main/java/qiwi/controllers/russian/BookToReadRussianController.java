@@ -157,7 +157,7 @@ public class BookToReadRussianController {
     public String save(@ModelAttribute("booksToReadRussianInput") Input input) {
         List<BookToReadRussian> bookToReadList = service.findAll();
 
-        CommonActions.saveTableToJSON(bookToReadList, input.getName());
+        CommonActions.saveTableToJSON(bookToReadList, input.getName(), "Russian");
 
         return "redirect:/bookstoread/russian/";
     }

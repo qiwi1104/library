@@ -3,17 +3,15 @@ package qiwi.service.common;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import qiwi.model.common.AdditionalDates;
-import qiwi.model.russian.AdditionalDatesRussian;
 import qiwi.repository.common.AdditionalDatesRepository;
-import qiwi.repository.russian.AdditionalDatesRussianRepository;
 import qiwi.service.AdditionalDatesService;
 
 import java.util.List;
 
 @Service
-public abstract class AdditionalDatesServiceImpl<T extends AdditionalDates, E extends AdditionalDatesRepository<T>> implements AdditionalDatesService<T> {
+public abstract class AdditionalDatesServiceImpl<T extends AdditionalDates, S extends AdditionalDatesRepository<T>> implements AdditionalDatesService<T> {
     @Autowired
-    private E additionalDatesRepository;
+    private S additionalDatesRepository;
 
     @Override
     public void addDates(T additionalDates) {

@@ -15,7 +15,6 @@ import qiwi.service.english.BookToReadEnglishServiceImpl;
 import qiwi.service.english.FinishedBookEnglishServiceImpl;
 
 import java.io.IOException;
-import java.sql.Date;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -71,12 +70,9 @@ public class BookToReadEnglishController {
             try {
                 String date = TimeFormat.formatTime("M/d/yy", "yyyy-M-d", source.getJSONObject(i).get("found").toString());
 
-                bookToAdd.setFound(Date.valueOf(date));
+                bookToAdd.setFound(java.sql.Date.valueOf(date));
             } catch (Exception e) {
-                bookToAdd.setDescription(source.getJSONObject(i).get("found").toString()
-                        + "\n" + source.getJSONObject(i).get("description").toString());
-
-                bookToAdd.setFound(Date.valueOf("1970-1-1"));
+                bookToAdd.setFound(java.sql.Date.valueOf("1970-1-1"));
             }
 
             bookToAdd.setDescription(source.getJSONObject(i).get("description").toString());
@@ -157,7 +153,7 @@ public class BookToReadEnglishController {
     public String save(@ModelAttribute("booksToReadEnglishInput") Input input) {
         List<BookToReadEnglish> bookToReadList = service.findAll();
 
-        CommonActions.saveTableToJSON(bookToReadList, input.getName());
+        CommonActions.saveTableToJSON(bookToReadList, input.getName(), "English");
 
         return "redirect:/bookstoread/english/";
     }

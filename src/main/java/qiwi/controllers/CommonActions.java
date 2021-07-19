@@ -7,8 +7,8 @@ import qiwi.TimeFormat;
 import qiwi.model.common.AdditionalDates;
 import qiwi.model.common.Input;
 import qiwi.model.common.book.Book;
-import qiwi.model.common.book.FinishedBook;
 import qiwi.model.common.book.BookToRead;
+import qiwi.model.common.book.FinishedBook;
 
 import java.io.IOException;
 import java.text.ParseException;
@@ -91,7 +91,7 @@ public abstract class CommonActions {
         }
     }
 
-    private static <T extends Book, E extends AdditionalDates> void fillJSONArray(JSONArray jsonArray, List<T> booksList, List<E> additionalDates) {
+    private static <T extends Book, S extends AdditionalDates> void fillJSONArray(JSONArray jsonArray, List<T> booksList, List<S> additionalDates) {
         if (booksList.get(0) instanceof FinishedBook) {
             for (T book : booksList) {
                 FinishedBook finishedBook = (FinishedBook) book;
@@ -119,11 +119,11 @@ public abstract class CommonActions {
                 JSONArray additionalDatesStartJSON = new JSONArray();
                 JSONArray additionalDatesEndJSON = new JSONArray();
 
-                for (AdditionalDates additionalDates1 : additionalDates) {
-                    if (additionalDates1.getFinishedBookId().equals(finishedBook.getId())) {
+                for (AdditionalDates additionalDate : additionalDates) {
+                    if (additionalDate.getFinishedBookId().equals(finishedBook.getId())) {
                         try {
-                            additionalDatesStartJSON.put(TimeFormat.formatTime("yyyy-M-d", "M/d/yy", additionalDates1.getStart().toString()));
-                            additionalDatesEndJSON.put(TimeFormat.formatTime("yyyy-M-d", "M/d/yy", additionalDates1.getEnd().toString()));
+                            additionalDatesStartJSON.put(TimeFormat.formatTime("yyyy-M-d", "M/d/yy", additionalDate.getStart().toString()));
+                            additionalDatesEndJSON.put(TimeFormat.formatTime("yyyy-M-d", "M/d/yy", additionalDate.getEnd().toString()));
                         } catch (ParseException e) {
                             e.printStackTrace();
                         }
@@ -152,13 +152,8 @@ public abstract class CommonActions {
         }
     }
 
-    public static <T extends Book> void saveTableToJSON(List<T> booksList, String filePath) {
-        JSONArray jsonArray = new JSONArray();
-        fillJSONArray(jsonArray, booksList);
-
-        String path = filePath.split(".json")[0];
-        path += " " + new SimpleDateFormat("yyyy-MM-dd HH-mm-ss").format(new Date());
-        filePath = path + ".json";
+    private static <T extends Book> void writeToFile(String filePath, String language, JSONArray jsonArray) {
+        filePath += language + " " + new SimpleDateFormat("yyyy-MM-dd HH-mm-ss").format(new Date()) + ".json";
         try {
             IO.writeJSONToFile(jsonArray, filePath);
         } catch (IOException e) {
@@ -166,17 +161,15 @@ public abstract class CommonActions {
         }
     }
 
-    public static <T extends Book, E extends AdditionalDates> void saveTableToJSON(List<T> booksList, List<E> additionalDates, String filePath) {
+    public static <T extends Book> void saveTableToJSON(List<T> booksList, String filePath, String language) {
+        JSONArray jsonArray = new JSONArray();
+        fillJSONArray(jsonArray, booksList);
+        writeToFile(filePath, language, jsonArray);
+    }
+
+    public static <T extends Book, S extends AdditionalDates> void saveTableToJSON(List<T> booksList, List<S> additionalDates, String filePath, String language) {
         JSONArray jsonArray = new JSONArray();
         fillJSONArray(jsonArray, booksList, additionalDates);
-
-        String path = filePath.split(".json")[0];
-        path += " " + new SimpleDateFormat("yyyy-MM-dd HH-mm-ss").format(new Date());
-        filePath = path + ".json";
-        try {
-            IO.writeJSONToFile(jsonArray, filePath);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        writeToFile(filePath, language, jsonArray);
     }
 }

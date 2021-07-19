@@ -204,7 +204,7 @@ public class FinishedBookEnglishController {
         List<FinishedBookEnglish> bookToReadList = service.findAll();
         List<AdditionalDatesEnglish> additionalDatesList = additionalDatesService.findAll();
 
-        CommonActions.saveTableToJSON(bookToReadList, additionalDatesList, input.getName());
+        CommonActions.saveTableToJSON(bookToReadList, additionalDatesList, input.getName(), "English");
 
         return "redirect:/finishedbooks/english/";
     }

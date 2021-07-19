@@ -10,9 +10,9 @@ import qiwi.service.BookService;
 import java.util.List;
 
 @Service
-public abstract class BookToReadServiceImpl<T extends BookToRead, E extends BookToReadRepository<T>> implements BookService<T> {
+public abstract class BookToReadServiceImpl<T extends BookToRead, S extends BookToReadRepository<T>> implements BookService<T> {
     @Autowired
-    private E repository;
+    private S repository;
 
     public List<T> findAllByOrderByIdAsc() {
         return repository.findAll(Sort.by(Sort.Direction.ASC, "id"));
