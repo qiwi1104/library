@@ -37,6 +37,10 @@
                     <label>Found</label>
                     <input type="date" field="*{found}" name="found">
                 </td>
+                <td>
+                    <label>Description</label>
+                    <input type="text" field="*{description}" name="description">
+                </td>
             </tr>
             <tr>
                 <td>
@@ -127,20 +131,20 @@
             <td th:text="${book.author}"></td>
             <td th:text="${book.name}"></td>
             <td>
-                <span th:text="${book.start}"></span>
+                <span th:text="${#dates.format(book.start, 'M/d/yy')}"></span>
                 <br/>
-                <span th:text="${book.end}"></span>
+                <span th:text="${#dates.format(book.end, 'M/d/yy')}"></span>
             </td>
 
             <div th:each="additionalDate : ${additionalDates}">
                 <td th:if="${additionalDate.finishedBookId} == ${book.id}">
-                    <span th:text="${additionalDate.start}"></span>
+                    <span th:text="${#dates.format(additionalDate.start, 'M/d/yy')}"></span>
                     <br/>
-                    <span th:text="${additionalDate.end}"></span>
+                    <span th:text="${#dates.format(additionalDate.end, 'M/d/yy')}"></span>
                 </td>
             </div>
 
-            <td th:text="${book.found}" class="hidden" hidden></td>
+            <td th:text="${#dates.format(book.found, 'M/d/yy')}" class="hidden" hidden></td>
             <td th:text="${book.description}" class="hidden" hidden></td>
 
             <td>
