@@ -1,0 +1,159 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Library: English</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+    <link th:href="@{/css/scrollbar.css}" rel="stylesheet">
+    <link th:href="@{/css/style.css}" rel="stylesheet">
+</head>
+<body>
+<div th:replace="fragments/header :: header"></div>
+<br/>
+<div>
+    <form action="#" th:action="@{/finishedbooks/english/add}" th:object="${finishedEnglishInput}" method="post">
+        <table border="1px">
+            <tr>
+                <td>
+                    <label>Author</label>
+                    <input type="text" field="*{author}" name="author">
+                </td>
+                <td>
+                    <label>Name</label>
+                    <input type="text" field="*{name}" name="name">
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <label>Start</label>
+                    <input type="date" field="*{start}" name="start">
+                </td>
+                <td>
+                    <label>End</label>
+                    <input type="date" field="*{end}" name="end">
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <label>Found</label>
+                    <input type="date" field="*{found}" name="found">
+                </td>
+                <td>
+                    <label>Description</label>
+                    <input type="text" field="*{description}" name="description">
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <input type="submit" value="add book">
+                </td>
+            </tr>
+        </table>
+    </form>
+    <br/>
+    <form action="#" th:action="@{'/finishedbooks/english/edit/{id}'}" th:object="${finishedEnglishInput}"
+          method="post">
+        <table border="1px" class="hiddenPanel" hidden>
+            <tr>
+                <td>
+                    <label>#</label>
+                    <input type="number" field="*{id}" name="id">
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <label>Author</label>
+                    <input type="text" field="*{author}" name="author">
+                </td>
+                <td>
+                    <label>Name</label>
+                    <input type="text" field="*{name}" name="name">
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <label>Start</label>
+                    <input type="date" field="*{start}" name="start">
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <label>End</label>
+                    <input type="date" field="*{end}" name="end">
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <label>Found</label>
+                    <input type="date" field="*{found}" name="found">
+                </td>
+                <td>
+                    <label>Description</label>
+                    <input type="text" field="*{description}" name="description">
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <input type="submit" value="edit book">
+                </td>
+            </tr>
+        </table>
+    </form>
+    <br/>
+    <form action="#" th:action="@{'/finishedbooks/english/load'}" th:object="${finishedEnglishInput}" method="post">
+        <table th:replace="fragments/loadPanel :: loadPanel"></table>
+    </form>
+    <br/>
+    <form action="#" th:action="@{'/finishedbooks/english/save'}" th:object="${finishedEnglishInput}" method="post">
+        <table th:replace="fragments/savePanel :: savePanel"></table>
+    </form>
+</div>
+<br/>
+<div>
+    <table align="center" border="1">
+        <tr bgcolor="#cccccc">
+            <td><a th:href="@{'/finishedbooks/english/sort/{property}' (property = 'id')}">#</a></td>
+            <td>Author</td>
+            <td>Name</td>
+            <td>
+                <a th:href="@{'/finishedbooks/english/sort/{property}' (property = 'start')}">Start</a>
+                <br/>
+                <a th:href="@{'/finishedbooks/english/sort/{property}' (property = 'end')}">End</a>
+            </td>
+            <td class="hidden" th:each="additionalDate : ${additionalDates}" hidden>Additional Dates</td>
+            <td class="hidden" hidden>
+                <a th:href="@{'/finishedbooks/english/sort/{property}' (property = 'found')}">Found</a>
+            </td>
+            <td class="hidden" hidden>Description</td>
+        </tr>
+
+        <tr th:each="book : ${books}">
+            <td th:text="${book.id}"></td>
+            <td th:text="${book.author}"></td>
+            <td th:text="${book.name}"></td>
+            <td>
+                <span th:text="${#dates.format(book.start, 'M/d/yy')}"></span>
+                <br/>
+                <span th:text="${#dates.format(book.end, 'M/d/yy')}"></span>
+            </td>
+
+            <div th:each="additionalDate : ${additionalDates}">
+                <td th:if="${additionalDate.finishedBookId} == ${book.id}">
+                    <span th:text="${#dates.format(additionalDate.start, 'M/d/yy')}"></span>
+                    <br/>
+                    <span th:text="${#dates.format(additionalDate.end, 'M/d/yy')}"></span>
+                </td>
+            </div>
+
+            <td th:text="${#dates.format(book.found, 'M/d/yy')}" class="hidden" hidden></td>
+            <td th:text="${book.description}" class="hidden" hidden></td>
+
+            <td>
+                <a th:href="@{'/finishedbooks/english/delete/{id}'(id=${book.id})}">delete</a>
+            </td>
+        </tr>
+    </table>
+</div>
+
+<script th:src="@{/js/src/visibilityHandler.js}"></script>
+</body>
+</html>

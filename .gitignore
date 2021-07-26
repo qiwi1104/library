@@ -1,0 +1,8 @@
+```
+*.class
+target/
+*.iml
+.idea/
+*.txt
+*.xml
+```
