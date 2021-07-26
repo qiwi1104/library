@@ -1,10 +1,11 @@
 package qiwi.model.common.book;
 
-import javax.persistence.*;
+import javax.persistence.Id;
+import javax.persistence.MappedSuperclass;
 import java.sql.Date;
 
 @MappedSuperclass
-public class Book {
+public abstract class Book {
     @Id
     protected Integer id;
     protected String author;
