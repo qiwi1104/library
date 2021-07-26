@@ -90,7 +90,7 @@ public abstract class CommonActions {
             System.out.println("Something went wrong :(");
         }
     }
-
+//d
     private static <T extends Book, S extends AdditionalDates> void fillJSONArray(JSONArray jsonArray, List<T> booksList, List<S> additionalDates) {
         if (booksList.get(0) instanceof FinishedBook) {
             for (T book : booksList) {
