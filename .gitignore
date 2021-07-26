@@ -4,5 +4,4 @@ target/
 *.iml
 .idea/
 *.txt
-*.xml
 ```
