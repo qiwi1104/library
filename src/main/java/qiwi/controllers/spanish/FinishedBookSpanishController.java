@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.*;
 import qiwi.IO;
 import qiwi.TimeFormat;
 import qiwi.controllers.CommonActions;
-import qiwi.controllers.enums.Sort;
+import qiwi.controllers.common.FinishedBookController;
 import qiwi.controllers.enums.SortBy;
 import qiwi.model.common.Input;
 import qiwi.model.spanish.AdditionalDatesSpanish;
@@ -24,52 +24,14 @@ import java.util.List;
 
 import static qiwi.controllers.enums.Sort.ASC;
 import static qiwi.controllers.enums.Sort.DESC;
-import static qiwi.controllers.enums.SortBy.START;
 
 @Controller
 @RequestMapping("/finishedbooks/spanish")
-public class FinishedBookSpanishController {
+public class FinishedBookSpanishController extends FinishedBookController<FinishedBookSpanish, FinishedBookSpanishServiceImpl> {
     @Autowired
     private FinishedBookSpanishServiceImpl service;
     @Autowired
     private AdditionalDatesSpanishServiceImpl additionalDatesService;
-
-    private Sort sortDateMethod = ASC;
-    private SortBy sortProperty = START;
-
-    private List<FinishedBookSpanish> filterAndSort() {
-        List<FinishedBookSpanish> books = null;
-
-        switch (sortDateMethod) {
-            case ASC:
-                switch (sortProperty) {
-                    case ID:
-                        books = service.findAllByOrderByIdAsc();
-                        break;
-                    case START:
-                        books = service.findAllByOrderByStartAsc();
-                        break;
-                    case END:
-                        books = service.findAllByOrderByEndAsc();
-                        break;
-                }
-                break;
-            case DESC:
-                switch (sortProperty) {
-                    case ID:
-                        books = service.findAllByOrderByIdDesc();
-                        break;
-                    case START:
-                        books = service.findAllByOrderByStartDesc();
-                        break;
-                    case END:
-                        books = service.findAllByOrderByEndDesc();
-                        break;
-                }
-                break;
-        }
-        return books;
-    }
 
     private List<FinishedBookSpanish> fillList(JSONArray source) {
         List<FinishedBookSpanish> destination = new ArrayList<>();
@@ -151,13 +113,13 @@ public class FinishedBookSpanishController {
         FinishedBookSpanish book = new FinishedBookSpanish();
 
         book.setId(service.findAll().size() + 1);
-        CommonActions.setBookAttributesFromInput(book, inputFinished, "addFirst");
+        setBookAttributesFromInput(book, inputFinished, "addFirst");
 
         if (service.isInTable(book)) {
             additionalDatesService.addDates(new AdditionalDatesSpanish(additionalDatesService.findAll().size() + 1,
                     book.getId(), book.getStart(), book.getEnd()));
         } else {
-            CommonActions.setBookAttributesFromInput(book, inputFinished, "addSecond");
+            setBookAttributesFromInput(book, inputFinished, "addSecond");
 
             service.addBook(book);
         }
@@ -169,7 +131,7 @@ public class FinishedBookSpanishController {
     public String edit(@ModelAttribute("finishedSpanishInput") Input inputFinished) {
         FinishedBookSpanish book = service.getBookById(inputFinished.getId());
 
-        CommonActions.setBookAttributesFromInput(book, inputFinished, "edit");
+        setBookAttributesFromInput(book, inputFinished, "edit");
 
         service.addBook(book);
 
@@ -217,7 +179,7 @@ public class FinishedBookSpanishController {
 
     @GetMapping("/")
     public String list(Model model) {
-        List<FinishedBookSpanish> bookList = filterAndSort();
+        List<FinishedBookSpanish> bookList = filterAndSort(service);
 
         model.addAttribute("books", bookList);
         model.addAttribute("additionalDates", additionalDatesService.findAll());

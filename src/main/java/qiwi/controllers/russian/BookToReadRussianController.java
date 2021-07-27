@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.*;
 import qiwi.IO;
 import qiwi.TimeFormat;
 import qiwi.controllers.CommonActions;
-import qiwi.controllers.enums.Sort;
+import qiwi.controllers.common.BookToReadController;
 import qiwi.controllers.enums.SortBy;
 import qiwi.model.common.Input;
 import qiwi.model.russian.BookToReadRussian;
@@ -23,46 +23,14 @@ import java.util.List;
 
 import static qiwi.controllers.enums.Sort.ASC;
 import static qiwi.controllers.enums.Sort.DESC;
-import static qiwi.controllers.enums.SortBy.FOUND;
 
 @Controller
 @RequestMapping("/bookstoread/russian")
-public class BookToReadRussianController {
+public class BookToReadRussianController extends BookToReadController<BookToReadRussian, BookToReadServiceRussianImpl> {
     @Autowired
     private BookToReadServiceRussianImpl service;
     @Autowired
     private FinishedBookServiceRussianImpl finishedBookService;
-
-    private Sort sortDateMethod = ASC;
-    private SortBy sortProperty = FOUND;
-
-    private List<BookToReadRussian> filterAndSort() {
-        List<BookToReadRussian> books = null;
-
-        switch (sortDateMethod) {
-            case ASC:
-                switch (sortProperty) {
-                    case ID:
-                        books = service.findAllByOrderByIdAsc();
-                        break;
-                    case FOUND:
-                        books = service.findAllByOrderByFoundAsc();
-                        break;
-                }
-                break;
-            case DESC:
-                switch (sortProperty) {
-                    case ID:
-                        books = service.findAllByOrderByIdDesc();
-                        break;
-                    case FOUND:
-                        books = service.findAllByOrderByFoundDesc();
-                        break;
-                }
-                break;
-        }
-        return books;
-    }
 
     private List<BookToReadRussian> fillList(JSONArray source) {
         List<BookToReadRussian> destination = new ArrayList<>();
@@ -98,8 +66,8 @@ public class BookToReadRussianController {
         BookToReadRussian book = new BookToReadRussian();
 
         book.setId(service.findAll().size() + 1);
-        CommonActions.setBookAttributesFromInput(book, input, "addFirst");
-        CommonActions.setBookAttributesFromInput(book, input, "addSecond");
+        setBookAttributesFromInput(book, input, "addFirst");
+        setBookAttributesFromInput(book, input, "addSecond");
 
         service.addBook(book);
 
@@ -110,7 +78,7 @@ public class BookToReadRussianController {
     public String edit(@ModelAttribute("booksToReadRussianInput") Input input) {
         BookToReadRussian book = service.getBookById(input.getId());
 
-        CommonActions.setBookAttributesFromInput(book, input, "edit");
+        setBookAttributesFromInput(book, input, "edit");
 
         service.addBook(book);
 
@@ -170,7 +138,7 @@ public class BookToReadRussianController {
 
     @GetMapping("/")
     public String list(Model model) {
-        List<BookToReadRussian> bookList = filterAndSort();
+        List<BookToReadRussian> bookList = filterAndSort(service);
 
         model.addAttribute("booksToRead", bookList);
 
