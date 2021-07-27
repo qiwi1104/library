@@ -8,6 +8,8 @@ import org.springframework.web.bind.annotation.*;
 import qiwi.IO;
 import qiwi.TimeFormat;
 import qiwi.controllers.CommonActions;
+import qiwi.controllers.enums.Sort;
+import qiwi.controllers.enums.SortBy;
 import qiwi.model.common.Input;
 import qiwi.model.russian.AdditionalDatesRussian;
 import qiwi.model.russian.FinishedBookRussian;
@@ -20,6 +22,10 @@ import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.List;
 
+import static qiwi.controllers.enums.Sort.ASC;
+import static qiwi.controllers.enums.Sort.DESC;
+import static qiwi.controllers.enums.SortBy.START;
+
 @Controller
 @RequestMapping("/finishedbooks/russian")
 public class FinishedBookRussianController {
@@ -28,35 +34,35 @@ public class FinishedBookRussianController {
     @Autowired
     private AdditionalDatesServiceRussianImpl additionalDatesService;
 
-    private String sortDateMethod = "ASC";
-    private String sortProperty = "start";
+    private Sort sortDateMethod = ASC;
+    private SortBy sortProperty = START;
 
     private List<FinishedBookRussian> filterAndSort() {
         List<FinishedBookRussian> books = null;
 
         switch (sortDateMethod) {
-            case "ASC":
+            case ASC:
                 switch (sortProperty) {
-                    case "id":
+                    case ID:
                         books = service.findAllByOrderByIdAsc();
                         break;
-                    case "start":
+                    case START:
                         books = service.findAllByOrderByStartAsc();
                         break;
-                    case "end":
+                    case END:
                         books = service.findAllByOrderByEndAsc();
                         break;
                 }
                 break;
-            case "DESC":
+            case DESC:
                 switch (sortProperty) {
-                    case "id":
+                    case ID:
                         books = service.findAllByOrderByIdDesc();
                         break;
-                    case "start":
+                    case START:
                         books = service.findAllByOrderByStartDesc();
                         break;
-                    case "end":
+                    case END:
                         books = service.findAllByOrderByEndDesc();
                         break;
                 }
@@ -179,8 +185,8 @@ public class FinishedBookRussianController {
 
     @GetMapping("/sort/{property}")
     public String sort(@PathVariable String property) {
-        sortDateMethod = sortDateMethod.equals("ASC") ? "DESC" : "ASC";
-        sortProperty = property;
+        sortDateMethod = sortDateMethod.equals(ASC) ? DESC : ASC;
+        sortProperty = SortBy.valueOf(property.toUpperCase());
 
         return "redirect:/finishedbooks/russian/";
     }

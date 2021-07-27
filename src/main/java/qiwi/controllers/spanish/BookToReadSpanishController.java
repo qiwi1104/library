@@ -8,6 +8,8 @@ import org.springframework.web.bind.annotation.*;
 import qiwi.IO;
 import qiwi.TimeFormat;
 import qiwi.controllers.CommonActions;
+import qiwi.controllers.enums.Sort;
+import qiwi.controllers.enums.SortBy;
 import qiwi.model.common.Input;
 import qiwi.model.spanish.BookToReadSpanish;
 import qiwi.model.spanish.FinishedBookSpanish;
@@ -19,6 +21,10 @@ import java.sql.Date;
 import java.util.ArrayList;
 import java.util.List;
 
+import static qiwi.controllers.enums.Sort.ASC;
+import static qiwi.controllers.enums.Sort.DESC;
+import static qiwi.controllers.enums.SortBy.FOUND;
+
 @Controller
 @RequestMapping("/bookstoread/spanish")
 public class BookToReadSpanishController {
@@ -27,29 +33,29 @@ public class BookToReadSpanishController {
     @Autowired
     private FinishedBookSpanishServiceImpl finishedBookService;
 
-    private String sortDateMethod = "ASC";
-    private String sortProperty = "found";
+    private Sort sortDateMethod = ASC;
+    private SortBy sortProperty = FOUND;
 
     private List<BookToReadSpanish> filterAndSort() {
         List<BookToReadSpanish> books = null;
 
         switch (sortDateMethod) {
-            case "ASC":
+            case ASC:
                 switch (sortProperty) {
-                    case "id":
+                    case ID:
                         books = service.findAllByOrderByIdAsc();
                         break;
-                    case "found":
+                    case FOUND:
                         books = service.findAllByOrderByFoundAsc();
                         break;
                 }
                 break;
-            case "DESC":
+            case DESC:
                 switch (sortProperty) {
-                    case "id":
+                    case ID:
                         books = service.findAllByOrderByIdDesc();
                         break;
-                    case "found":
+                    case FOUND:
                         books = service.findAllByOrderByFoundDesc();
                         break;
                 }
@@ -134,8 +140,8 @@ public class BookToReadSpanishController {
 
     @GetMapping("/sort/{property}")
     public String sort(@PathVariable String property) {
-        sortDateMethod = sortDateMethod.equals("ASC") ? "DESC" : "ASC";
-        sortProperty = property;
+        sortDateMethod = sortDateMethod.equals(ASC) ? DESC : ASC;
+        sortProperty = SortBy.valueOf(property.toUpperCase());
 
         return "redirect:/bookstoread/spanish/";
     }
