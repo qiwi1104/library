@@ -123,8 +123,8 @@
         <tr th:each="book : ${booksToRead}">
             <td th:text="${book.id}"></td>
             <td th:text="${book.author}"></td>
+            <td th:text="${book.name}"></td>
             <td th:text="${#dates.format(book.found, 'M/d/yy')}"></td>
-            <td th:text="${book.found}"></td>
 
             <td th:text="${book.description}" class="hidden" hidden></td>
 

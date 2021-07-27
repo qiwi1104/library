@@ -9,6 +9,7 @@ import qiwi.IO;
 import qiwi.TimeFormat;
 import qiwi.controllers.CommonActions;
 import qiwi.controllers.common.FinishedBookController;
+import qiwi.controllers.enums.Language;
 import qiwi.controllers.enums.SortBy;
 import qiwi.model.common.Input;
 import qiwi.model.spanish.AdditionalDatesSpanish;
@@ -172,7 +173,7 @@ public class FinishedBookSpanishController extends FinishedBookController<Finish
         List<FinishedBookSpanish> bookToReadList = service.findAll();
         List<AdditionalDatesSpanish> additionalDatesList = additionalDatesService.findAll();
 
-        CommonActions.saveTableToJSON(bookToReadList, additionalDatesList, input.getName(), "Spanish");
+        CommonActions.saveTableToJSON(bookToReadList, additionalDatesList, input.getName(), Language.SPANISH);
 
         return "redirect:/finishedbooks/spanish/";
     }

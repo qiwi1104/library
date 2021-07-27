@@ -4,6 +4,7 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 import qiwi.IO;
 import qiwi.TimeFormat;
+import qiwi.controllers.enums.Language;
 import qiwi.model.common.AdditionalDates;
 import qiwi.model.common.book.Book;
 import qiwi.model.common.book.BookToRead;
@@ -103,7 +104,7 @@ public abstract class CommonActions {
         }
     }
 
-    private static <T extends Book> void writeToFile(String filePath, String language, JSONArray jsonArray) {
+    private static <T extends Book> void writeToFile(String filePath, Language language, JSONArray jsonArray) {
         filePath += language + " " + new SimpleDateFormat("yyyy-MM-dd HH-mm-ss").format(new Date()) + ".json";
         try {
             IO.writeJSONToFile(jsonArray, filePath);
@@ -112,13 +113,13 @@ public abstract class CommonActions {
         }
     }
 
-    public static <T extends Book> void saveTableToJSON(List<T> booksList, String filePath, String language) {
+    public static <T extends Book> void saveTableToJSON(List<T> booksList, String filePath, Language language) {
         JSONArray jsonArray = new JSONArray();
         fillJSONArray(jsonArray, booksList);
         writeToFile(filePath, language, jsonArray);
     }
 
-    public static <T extends Book, S extends AdditionalDates> void saveTableToJSON(List<T> booksList, List<S> additionalDates, String filePath, String language) {
+    public static <T extends Book, S extends AdditionalDates> void saveTableToJSON(List<T> booksList, List<S> additionalDates, String filePath, Language language) {
         JSONArray jsonArray = new JSONArray();
         fillJSONArray(jsonArray, booksList, additionalDates);
         writeToFile(filePath, language, jsonArray);
