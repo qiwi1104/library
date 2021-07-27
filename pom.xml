@@ -9,8 +9,8 @@
         <version>2.4.3</version>
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
-    <groupId>org.example</groupId>
-    <artifactId>spring</artifactId>
+    <groupId>org.qiwi</groupId>
+    <artifactId>library</artifactId>
     <version>1.0</version>
     <properties>
         <maven.compiler.source>1.8</maven.compiler.source>
