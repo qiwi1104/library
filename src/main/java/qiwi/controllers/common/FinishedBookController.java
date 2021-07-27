@@ -5,10 +5,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.ui.Model;
 import qiwi.IO;
 import qiwi.TimeFormat;
-import qiwi.controllers.CommonActions;
 import qiwi.controllers.enums.Language;
-import qiwi.controllers.enums.SortType;
 import qiwi.controllers.enums.SortBy;
+import qiwi.controllers.enums.SortType;
 import qiwi.model.common.AdditionalDates;
 import qiwi.model.common.Input;
 import qiwi.model.common.book.FinishedBook;
@@ -28,9 +27,10 @@ import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.List;
 
+import static qiwi.controllers.enums.Context.*;
+import static qiwi.controllers.enums.SortBy.START;
 import static qiwi.controllers.enums.SortType.ASC;
 import static qiwi.controllers.enums.SortType.DESC;
-import static qiwi.controllers.enums.SortBy.START;
 
 public abstract class FinishedBookController<
         T extends FinishedBook,
@@ -181,7 +181,7 @@ public abstract class FinishedBookController<
 
     protected void add(Input inputFinished, T book, U additionalDates) {
         book.setId(service.findAll().size() + 1);
-        setBookAttributesFromInput(book, inputFinished, "addFirst");
+        setBookAttributesFromInput(book, inputFinished, ADD_FIRST);
 
         if (service.isInTable(book)) {
             additionalDates.setId(additionalDatesService.findAll().size() + 1);
@@ -191,14 +191,14 @@ public abstract class FinishedBookController<
 
             additionalDatesService.addDates(additionalDates);
         } else {
-            setBookAttributesFromInput(book, inputFinished, "addSecond");
+            setBookAttributesFromInput(book, inputFinished, ADD_SECOND);
 
             service.addBook(book);
         }
     }
 
     protected void edit(Input inputFinished, T book) {
-        setBookAttributesFromInput(book, inputFinished, "edit");
+        setBookAttributesFromInput(book, inputFinished, EDIT);
         service.addBook(book);
     }
 
@@ -222,7 +222,7 @@ public abstract class FinishedBookController<
         List<T> bookToReadList = service.findAll();
         List<U> additionalDatesList = additionalDatesService.findAll();
 
-        CommonActions.saveTableToJSON(bookToReadList, additionalDatesList, input.getName(), language);
+        saveTableToJSON(bookToReadList, additionalDatesList, input.getName(), language);
     }
 
     protected void list(Model model, List<T> bookList) {

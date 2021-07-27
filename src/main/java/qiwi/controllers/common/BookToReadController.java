@@ -5,10 +5,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.ui.Model;
 import qiwi.IO;
 import qiwi.TimeFormat;
-import qiwi.controllers.CommonActions;
 import qiwi.controllers.enums.Language;
-import qiwi.controllers.enums.SortType;
 import qiwi.controllers.enums.SortBy;
+import qiwi.controllers.enums.SortType;
 import qiwi.model.common.Input;
 import qiwi.model.common.book.BookToRead;
 import qiwi.model.common.book.FinishedBook;
@@ -23,9 +22,10 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
+import static qiwi.controllers.enums.Context.*;
+import static qiwi.controllers.enums.SortBy.FOUND;
 import static qiwi.controllers.enums.SortType.ASC;
 import static qiwi.controllers.enums.SortType.DESC;
-import static qiwi.controllers.enums.SortBy.FOUND;
 
 public abstract class BookToReadController<
         T extends BookToRead,
@@ -111,14 +111,14 @@ public abstract class BookToReadController<
 
     protected void add(Input input, T book) {
         book.setId(service.findAll().size() + 1);
-        setBookAttributesFromInput(book, input, "addFirst");
-        setBookAttributesFromInput(book, input, "addSecond");
+        setBookAttributesFromInput(book, input, ADD_FIRST);
+        setBookAttributesFromInput(book, input, ADD_SECOND);
 
         service.addBook(book);
     }
 
     protected void edit(Input input, T book) {
-        setBookAttributesFromInput(book, input, "edit");
+        setBookAttributesFromInput(book, input, EDIT);
         service.addBook(book);
     }
 
@@ -155,7 +155,7 @@ public abstract class BookToReadController<
     protected void save(Input input, Language language) {
         List<T> bookToReadList = service.findAll();
 
-        CommonActions.saveTableToJSON(bookToReadList, input.getName(), language);
+        saveTableToJSON(bookToReadList, input.getName(), language);
     }
 
     protected void list(Model model, List<T> bookList) {
