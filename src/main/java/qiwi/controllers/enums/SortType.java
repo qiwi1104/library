@@ -1,5 +1,5 @@
 package qiwi.controllers.enums;
 
-public enum Sort {
+public enum SortType {
     ASC, DESC
 }

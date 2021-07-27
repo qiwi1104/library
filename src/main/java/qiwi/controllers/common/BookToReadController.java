@@ -7,7 +7,7 @@ import qiwi.IO;
 import qiwi.TimeFormat;
 import qiwi.controllers.CommonActions;
 import qiwi.controllers.enums.Language;
-import qiwi.controllers.enums.Sort;
+import qiwi.controllers.enums.SortType;
 import qiwi.controllers.enums.SortBy;
 import qiwi.model.common.Input;
 import qiwi.model.common.book.BookToRead;
@@ -23,8 +23,8 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-import static qiwi.controllers.enums.Sort.ASC;
-import static qiwi.controllers.enums.Sort.DESC;
+import static qiwi.controllers.enums.SortType.ASC;
+import static qiwi.controllers.enums.SortType.DESC;
 import static qiwi.controllers.enums.SortBy.FOUND;
 
 public abstract class BookToReadController<
@@ -37,7 +37,7 @@ public abstract class BookToReadController<
     @Autowired
     protected V finishedBookService;
 
-    protected Sort sortDateMethod = ASC;
+    protected SortType sortDateMethod = ASC;
     protected SortBy sortProperty = FOUND;
 
     @Override
@@ -69,7 +69,7 @@ public abstract class BookToReadController<
         return books;
     }
 
-    protected List<T> fillList(JSONArray source, Language language) {
+    private List<T> fillList(JSONArray source, Language language) {
         List<T> destination = new ArrayList<>();
 
         for (int i = 0; i < source.length(); i++) {
@@ -109,7 +109,7 @@ public abstract class BookToReadController<
         return destination;
     }
 
-    public void add(Input input, T book) {
+    protected void add(Input input, T book) {
         book.setId(service.findAll().size() + 1);
         setBookAttributesFromInput(book, input, "addFirst");
         setBookAttributesFromInput(book, input, "addSecond");
@@ -117,12 +117,12 @@ public abstract class BookToReadController<
         service.addBook(book);
     }
 
-    public void edit(Input input, T book) {
+    protected void edit(Input input, T book) {
         setBookAttributesFromInput(book, input, "edit");
         service.addBook(book);
     }
 
-    public void finish(Input input, U finishedBook) {
+    protected void finish(Input input, U finishedBook) {
         T bookToRead = service.getBookById(input.getId());
 
         finishedBook.setId(finishedBookService.findAll().size() + 1);
@@ -137,12 +137,12 @@ public abstract class BookToReadController<
         service.deleteBook(bookToRead.getId());
     }
 
-    public void sort(SortBy sortProperty) {
+    protected void sort(SortBy sortProperty) {
         sortDateMethod = sortDateMethod.equals(ASC) ? DESC : ASC;
         this.sortProperty = sortProperty;
     }
 
-    public void load(Input input, Language language) throws IOException {
+    protected void load(Input input, Language language) throws IOException {
         service.clearAll();
         List<T> bookToReadList;
 
@@ -152,13 +152,13 @@ public abstract class BookToReadController<
         service.addAll(bookToReadList);
     }
 
-    public void save(Input input, Language language) {
+    protected void save(Input input, Language language) {
         List<T> bookToReadList = service.findAll();
 
         CommonActions.saveTableToJSON(bookToReadList, input.getName(), language);
     }
 
-    public void list(Model model, List<T> bookList) {
+    protected void list(Model model, List<T> bookList) {
         bookList = filterAndSort();
 
         model.addAttribute("booksToRead", bookList);

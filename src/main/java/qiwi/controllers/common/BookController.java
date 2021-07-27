@@ -1,5 +1,6 @@
 package qiwi.controllers.common;
 
+import qiwi.controllers.enums.Context;
 import qiwi.model.common.Input;
 import qiwi.model.common.book.Book;
 import qiwi.model.common.book.FinishedBook;
@@ -7,9 +8,9 @@ import qiwi.model.common.book.FinishedBook;
 import java.util.List;
 
 public abstract class BookController {
-    public <T extends Book> void setBookAttributesFromInput(T book, Input input, String context) {
+    protected <T extends Book> void setBookAttributesFromInput(T book, Input input, Context context) {
         switch (context) {
-            case "edit":
+            case EDIT:
                 if (book instanceof FinishedBook) {
                     FinishedBook fb = (FinishedBook) book;
 
@@ -38,7 +39,7 @@ public abstract class BookController {
                     book.setDescription(input.getDescription());
                 }
                 break;
-            case "addFirst": // first потому что используется в первый раз (до isInTable)
+            case ADD_FIRST: // first потому что используется в первый раз (до isInTable)
                 book.setAuthor(input.getAuthor());
                 book.setName(input.getName());
 
@@ -49,7 +50,7 @@ public abstract class BookController {
                     fb.setEnd(input.getEnd());
                 }
                 break;
-            case "addSecond":
+            case ADD_SECOND:
                 book.setFound(input.getFound());
                 book.setDescription(input.getDescription());
                 break;

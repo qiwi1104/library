@@ -7,7 +7,7 @@ import qiwi.IO;
 import qiwi.TimeFormat;
 import qiwi.controllers.CommonActions;
 import qiwi.controllers.enums.Language;
-import qiwi.controllers.enums.Sort;
+import qiwi.controllers.enums.SortType;
 import qiwi.controllers.enums.SortBy;
 import qiwi.model.common.AdditionalDates;
 import qiwi.model.common.Input;
@@ -28,8 +28,8 @@ import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.List;
 
-import static qiwi.controllers.enums.Sort.ASC;
-import static qiwi.controllers.enums.Sort.DESC;
+import static qiwi.controllers.enums.SortType.ASC;
+import static qiwi.controllers.enums.SortType.DESC;
 import static qiwi.controllers.enums.SortBy.START;
 
 public abstract class FinishedBookController<
@@ -42,7 +42,7 @@ public abstract class FinishedBookController<
     @Autowired
     protected V additionalDatesService;
 
-    protected Sort sortDateMethod = ASC;
+    protected SortType sortDateMethod = ASC;
     protected SortBy sortProperty = START;
 
     private void fillAdditionalDatesTable(JSONArray source, Language language) throws ParseException {
