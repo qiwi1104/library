@@ -27,7 +27,7 @@ import static qiwi.controllers.enums.Sort.ASC;
 import static qiwi.controllers.enums.Sort.DESC;
 import static qiwi.controllers.enums.SortBy.FOUND;
 
-public class BookToReadController<
+public abstract class BookToReadController<
         T extends BookToRead,
         S extends BookToReadServiceImpl<T, ?>,
         U extends FinishedBook,
@@ -40,6 +40,7 @@ public class BookToReadController<
     protected Sort sortDateMethod = ASC;
     protected SortBy sortProperty = FOUND;
 
+    @Override
     protected List<T> filterAndSort() {
         List<T> books = null;
 
@@ -125,13 +126,13 @@ public class BookToReadController<
         T bookToRead = service.getBookById(input.getId());
 
         finishedBook.setId(finishedBookService.findAll().size() + 1);
-        finishedBook.setAuthor(input.getAuthor());
-        finishedBook.setName(input.getName());
+        finishedBook.setAuthor(bookToRead.getAuthor());
+        finishedBook.setName(bookToRead.getName());
         finishedBook.setStart(input.getStart());
         finishedBook.setEnd(input.getEnd());
-        finishedBook.setFound(input.getFound());
-        finishedBook.setDescription(input.getDescription());
-        
+        finishedBook.setFound(bookToRead.getFound());
+        finishedBook.setDescription(bookToRead.getDescription());
+
         finishedBookService.addBook(finishedBook);
         service.deleteBook(bookToRead.getId());
     }

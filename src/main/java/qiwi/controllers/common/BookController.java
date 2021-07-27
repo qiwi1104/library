@@ -4,7 +4,9 @@ import qiwi.model.common.Input;
 import qiwi.model.common.book.Book;
 import qiwi.model.common.book.FinishedBook;
 
-public class BookController {
+import java.util.List;
+
+public abstract class BookController {
     public <T extends Book> void setBookAttributesFromInput(T book, Input input, String context) {
         switch (context) {
             case "edit":
@@ -53,4 +55,6 @@ public class BookController {
                 break;
         }
     }
+
+    protected abstract <T extends Book> List<T> filterAndSort();
 }
