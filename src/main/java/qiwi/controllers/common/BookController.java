@@ -106,7 +106,14 @@ public abstract class BookController {
     }
 
     private void writeToFile(String filePath, Language language, JSONArray jsonArray) {
-        filePath += language + " " + new SimpleDateFormat("yyyy-MM-dd HH-mm-ss").format(new Date()) + ".json";
+        if (!filePath.endsWith("\\")) {
+            filePath += "\\";
+        }
+
+        String languageStr = language.toString().toLowerCase();
+        languageStr = languageStr.substring(0, 1).toUpperCase() + languageStr.substring(1);
+
+        filePath += languageStr + " " + new SimpleDateFormat("yyyy-MM-dd HH-mm-ss").format(new Date()) + ".json";
         try {
             IO.writeJSONToFile(jsonArray, filePath);
         } catch (IOException e) {
