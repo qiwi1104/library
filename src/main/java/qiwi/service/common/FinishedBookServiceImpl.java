@@ -38,6 +38,10 @@ public abstract class FinishedBookServiceImpl<T extends FinishedBook, S extends 
         return repository.findAll(Sort.by(Sort.Direction.DESC, "end"));
     }
 
+    public List<T> findAllByOrderByFoundByIdAsc() {return repository.findAll(Sort.by(Sort.Direction.ASC, "found", "id"));}
+
+    public List<T> findAllByOrderByFoundByIdDesc() {return repository.findAll(Sort.by(Sort.Direction.DESC, "found", "id"));}
+
     @Override
     public void addBook(T book) {
         repository.save(book);

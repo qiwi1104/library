@@ -51,7 +51,7 @@ public abstract class BookToReadController<
                         books = service.findAllByOrderByIdAsc();
                         break;
                     case FOUND:
-                        books = service.findAllByOrderByFoundAsc();
+                        books = service.findAllByOrderByFoundByIdAsc();
                         break;
                 }
                 break;
@@ -61,7 +61,7 @@ public abstract class BookToReadController<
                         books = service.findAllByOrderByIdDesc();
                         break;
                     case FOUND:
-                        books = service.findAllByOrderByFoundDesc();
+                        books = service.findAllByOrderByFoundByIdDesc();
                         break;
                 }
                 break;

@@ -22,13 +22,9 @@ public abstract class BookToReadServiceImpl<T extends BookToRead, S extends Book
         return repository.findAll(Sort.by(Sort.Direction.DESC, "id"));
     }
 
-    public List<T> findAllByOrderByFoundAsc() {
-        return repository.findAll(Sort.by(Sort.Direction.ASC, "found"));
-    }
+    public List<T> findAllByOrderByFoundByIdAsc() {return repository.findAll(Sort.by(Sort.Direction.ASC, "found", "id"));}
 
-    public List<T> findAllByOrderByFoundDesc() {
-        return repository.findAll(Sort.by(Sort.Direction.DESC, "found"));
-    }
+    public List<T> findAllByOrderByFoundByIdDesc() {return repository.findAll(Sort.by(Sort.Direction.DESC, "found", "id"));}
 
     @Override
     public void addBook(T book) {

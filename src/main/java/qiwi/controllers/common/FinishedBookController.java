@@ -160,6 +160,9 @@ public abstract class FinishedBookController<
                     case END:
                         books = service.findAllByOrderByEndAsc();
                         break;
+                    case FOUND:
+                        books = service.findAllByOrderByFoundByIdAsc();
+                        break;
                 }
                 break;
             case DESC:
@@ -172,6 +175,9 @@ public abstract class FinishedBookController<
                         break;
                     case END:
                         books = service.findAllByOrderByEndDesc();
+                        break;
+                    case FOUND:
+                        books = service.findAllByOrderByFoundByIdDesc();
                         break;
                 }
                 break;
