@@ -2,12 +2,11 @@
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
-    <link th:href="@{/css/scrollbar.css}" rel="stylesheet">
-    <link th:href="@{/css/panels.css}" rel="stylesheet">
+    <link th:replace="fragments/css :: css">
 </head>
 <body>
 <div th:fragment="header">
-    <div>
+    <div class="panel">
         <span onclick="actionsHandler(this.id)" id="add" class="underline">add</span>
         <span onclick="actionsHandler(this.id)" id="finish" class="underline">finish</span>
         <span onclick="actionsHandler(this.id)" id="edit" class="underline">edit</span>
@@ -15,24 +14,24 @@
         <span onclick="actionsHandler(this.id)" id="save" class="underline">save</span>
     </div>
 
-    Finished Books:
-    <a th:href="@{/finishedbooks/english/}">English</a>
-    <a th:href="@{/finishedbooks/russian/}">Russian</a>
-    <a th:href="@{/finishedbooks/spanish/}">Spanish</a>
+    <div class="panel">
+        Finished Books:
+        <a th:href="@{/finishedbooks/english/}" id="finishedbooks-english" class="underline">English</a>
+        <a th:href="@{/finishedbooks/russian/}" id="finishedbooks-russian" class="underline">Russian</a>
+        <a th:href="@{/finishedbooks/spanish/}" id="finishedbooks-spanish" class="underline">Spanish</a>
+    </div>
 
-    <br/>
-
-    Books To Read:
-    <a th:href="@{/bookstoread/english/}">English</a>
-    <a th:href="@{/bookstoread/russian/}">Russian</a>
-    <a th:href="@{/bookstoread/spanish/}">Spanish</a>
-
-    <br/>
+    <div class="panel">
+        Books To Read:
+        <a th:href="@{/bookstoread/english/}" id="bookstoread-english" class="underline">English</a>
+        <a th:href="@{/bookstoread/russian/}" id="bookstoread-russian" class="underline">Russian</a>
+        <a th:href="@{/bookstoread/spanish/}" id="bookstoread-spanish" class="underline">Spanish</a>
+    </div>
 
     <input type="checkbox" onclick="show()" id="stat">
     <label>show hidden properties</label>
-
-    <br/>
+    
+    <script th:src="@{/js/src/selectLibrary.js}"></script>
 </div>
 </body>
 </html>
