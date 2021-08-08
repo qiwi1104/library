@@ -6,11 +6,11 @@ function setUnderline() {
 	} else if (document.URL.includes("bookstoread/spanish")) {
 		document.getElementById("bookstoread-spanish").className = "underlineSelected";
 	} else if (document.URL.includes("finishedbooks/english")) {
-		document.getElementById("finishedbook-english").className = "underlineSelected";
+		document.getElementById("finishedbooks-english").className = "underlineSelected";
 	} else if (document.URL.includes("finishedbooks/russian")) {
-		document.getElementById("finishedbook-russian").className = "underlineSelected";
+		document.getElementById("finishedbooks-russian").className = "underlineSelected";
 	} else if (document.URL.includes("finishedbooks/spanish")) {
-		document.getElementById("finishedbook-spanish").className = "underlineSelected";
+		document.getElementById("finishedbooks-spanish").className = "underlineSelected";
 	}
 }
 
