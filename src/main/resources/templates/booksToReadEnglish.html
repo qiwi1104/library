@@ -11,7 +11,7 @@
 <br/>
 <div>
     <form action="#" th:action="@{/bookstoread/english/add}" th:object="${booksToReadEnglishInput}" method="post">
-        <table border="1px">
+        <table border="1px" class="hiddenPanel" id="add">
             <tr>
                 <td>
                     <label>Author</label>
@@ -39,10 +39,10 @@
             </tr>
         </table>
     </form>
-    <br/>
+<!--    <br/>-->
     <form action="#" th:action="@{'/bookstoread/english/finish/{id}'}" th:object="${booksToReadEnglishInput}"
           method="post">
-        <table border="1px" class="hiddenPanel" hidden>
+        <table border="1px" class="hiddenPanel" hidden id="finish">
             <tr>
                 <td>
                     <label>#</label>
@@ -63,10 +63,10 @@
             </tr>
         </table>
     </form>
-    <br/>
+<!--    <br/>-->
     <form action="#" th:action="@{'/bookstoread/english/edit/{id}'}" th:object="${booksToReadEnglishInput}"
           method="post">
-        <table border="1px" class="hiddenPanel" hidden>
+        <table border="1px" class="hiddenPanel" hidden id="edit">
             <tr>
                 <td>
                     <label>#</label>
@@ -100,11 +100,11 @@
             </tr>
         </table>
     </form>
-    <br/>
+<!--    <br/>-->
     <form action="#" th:action="@{'/bookstoread/english/load'}" th:object="${booksToReadEnglishInput}" method="post">
         <table th:replace="fragments/loadPanel :: loadPanel"></table>
     </form>
-    <br/>
+<!--    <br/>-->
     <form action="#" th:action="@{'/bookstoread/english/save'}" th:object="${booksToReadEnglishInput}" method="post">
         <table th:replace="fragments/savePanel :: savePanel"></table>
     </form>
@@ -135,6 +135,6 @@
     </table>
 </div>
 
-<script th:src="@{/js/src/visibilityHandler.js}"></script>
+<div th:replace="fragments/scripts :: scripts"></div>
 </body>
 </html>

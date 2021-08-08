@@ -3,9 +3,18 @@
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
     <link th:href="@{/css/scrollbar.css}" rel="stylesheet">
+    <link th:href="@{/css/panels.css}" rel="stylesheet">
 </head>
 <body>
-<div th:fragment="header">
+<div th:fragment="header" class="panels">
+    <div class="panel__content">
+        <span onclick="actionsHandler(this.id)" id="add">add</span>
+        <span onclick="actionsHandler(this.id)" id="finish">finish</span>
+        <span onclick="actionsHandler(this.id)" id="edit">edit</span>
+        <span onclick="actionsHandler(this.id)" id="load">load</span>
+        <span onclick="actionsHandler(this.id)" id="save">save</span>
+    </div>
+
     Finished Books:
     <a th:href="@{/finishedbooks/english/}">English</a>
     <a th:href="@{/finishedbooks/russian/}">Russian</a>
@@ -24,9 +33,6 @@
     <label>show hidden properties</label>
 
     <br/>
-
-    <input type="checkbox" onclick="showPanels()" id="stat2">
-    <label>show hidden panels</label>
 </div>
 </body>
 </html>

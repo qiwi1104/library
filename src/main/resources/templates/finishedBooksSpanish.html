@@ -11,7 +11,7 @@
 <br/>
 <div>
     <form action="#" th:action="@{/finishedbooks/spanish/add}" th:object="${finishedSpanishInput}" method="post">
-        <table border="1px">
+        <table border="1px" class="hiddenPanel" id="add">
             <tr>
                 <td>
                     <label>Author</label>
@@ -52,7 +52,7 @@
     <br/>
     <form action="#" th:action="@{'/finishedbooks/spanish/edit/{id}'}" th:object="${finishedSpanishInput}"
           method="post">
-        <table border="1px" class="hiddenPanel" hidden>
+        <table border="1px" class="hiddenPanel" hidden id="edit">
             <tr>
                 <td>
                     <label>#</label>
@@ -154,6 +154,6 @@
     </table>
 </div>
 
-<script th:src="@{/js/src/visibilityHandler.js}"></script>
+<div th:replace="fragments/scripts :: scripts"></div>
 </body>
 </html>

@@ -1,0 +1,30 @@
+.panel {
+display: flex;
+align-items: center;
+justify-content: center;
+flex-direction: column;
+position: absolute;
+top: 0;
+bottom: 0;
+left: 0;
+right: 0;
+overflow: auto;
+z-index: 999;
+color: #000;
+box-sizing: border-box;
+background-color: #ECEFF1; }
+
+
+/* panel content (only for animation delay after open) */
+.panel__content {
+opacity: 0;
+will-change: margin-top;
+transition: all 700ms;
+transition-delay: 600ms;
+padding: 100px 200px;
+margin-top: -5%; }
+
+/* Panel content animation after open */
+.panel:target .panel__content {
+opacity: 1;
+margin-top: 0; }

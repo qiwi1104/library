@@ -5,13 +5,14 @@
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
     <link th:href="@{/css/scrollbar.css}" rel="stylesheet">
     <link th:href="@{/css/style.css}" rel="stylesheet">
+    <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.4.2/jquery.min.js"></script>
 </head>
 <body>
 <div th:replace="fragments/header :: header"></div>
 <br/>
 <div>
     <form action="#" th:action="@{/finishedbooks/english/add}" th:object="${finishedEnglishInput}" method="post">
-        <table border="1px">
+        <table border="1px" class="hiddenPanel" id="add">
             <tr>
                 <td>
                     <label>Author</label>
@@ -52,7 +53,7 @@
     <br/>
     <form action="#" th:action="@{'/finishedbooks/english/edit/{id}'}" th:object="${finishedEnglishInput}"
           method="post">
-        <table border="1px" class="hiddenPanel" hidden>
+        <table border="1px" class="hiddenPanel" hidden id="edit">
             <tr>
                 <td>
                     <label>#</label>
@@ -154,6 +155,6 @@
     </table>
 </div>
 
-<script th:src="@{/js/src/visibilityHandler.js}"></script>
+<div th:replace="fragments/scripts :: scripts"></div>
 </body>
 </html>
