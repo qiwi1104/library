@@ -1,30 +1,37 @@
-.panel {
-display: flex;
-align-items: center;
-justify-content: center;
-flex-direction: column;
-position: absolute;
-top: 0;
-bottom: 0;
-left: 0;
-right: 0;
-overflow: auto;
-z-index: 999;
-color: #000;
-box-sizing: border-box;
-background-color: #ECEFF1; }
+    .underline {
+       text-decoration: none; 
+       position: relative;
+       margin-bottom: 10px;
+     }   
+
+    .underline:after {
+        position: absolute;
+        content: '';
+        height: 2px;
+		  /* adjust this to move up and down. you may have to adjust the line height of the paragraph if you move it down a lot. */
+        bottom: -4px;
+       /******
+       optional values below
+       ******/
+
+        /* center - (optional) use with adjusting width   */
+        margin: 0 auto;
+		  left: 0;
+        right: 0;
+		  width: 100%;
+		  background: green;
+
+		  /* optional animation */
+		  -o-transition:.5s;
+  		  -ms-transition:.5s;
+        -moz-transition:.5s;
+        -webkit-transition:.5s;
+        transition:.5s;
+    }
 
 
-/* panel content (only for animation delay after open) */
-.panel__content {
-opacity: 0;
-will-change: margin-top;
-transition: all 700ms;
-transition-delay: 600ms;
-padding: 100px 200px;
-margin-top: -5%; }
-
-/* Panel content animation after open */
-.panel:target .panel__content {
-opacity: 1;
-margin-top: 0; }
+	 /* optional hover classes used with anmiation */
+	  .underline:hover:after {
+		  width: 110%;
+		  background: orange;
+    }

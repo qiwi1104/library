@@ -6,13 +6,13 @@
     <link th:href="@{/css/panels.css}" rel="stylesheet">
 </head>
 <body>
-<div th:fragment="header" class="panels">
-    <div class="panel__content">
-        <span onclick="actionsHandler(this.id)" id="add">add</span>
-        <span onclick="actionsHandler(this.id)" id="finish">finish</span>
-        <span onclick="actionsHandler(this.id)" id="edit">edit</span>
-        <span onclick="actionsHandler(this.id)" id="load">load</span>
-        <span onclick="actionsHandler(this.id)" id="save">save</span>
+<div th:fragment="header">
+    <div>
+        <span onclick="actionsHandler(this.id)" id="add" class="underline">add</span>
+        <span onclick="actionsHandler(this.id)" id="finish" class="underline">finish</span>
+        <span onclick="actionsHandler(this.id)" id="edit" class="underline">edit</span>
+        <span onclick="actionsHandler(this.id)" id="load" class="underline">load</span>
+        <span onclick="actionsHandler(this.id)" id="save" class="underline">save</span>
     </div>
 
     Finished Books:
