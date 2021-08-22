@@ -142,8 +142,12 @@ public abstract class BookToReadController<
 //    }
 
     protected void edit(Input input, T book) {
-        setBookAttributesFromInput(book, input, EDIT);
-        service.addBook(book);
+        if (!input.getFound().equals(book.getFound())) {
+            System.out.println("Dates don't match, check for any errors.");
+        } else {
+            setBookAttributesFromInput(book, input, EDIT);
+            service.addBook(book);
+        }
     }
 
     protected void finish(Input input, U finishedBook) {

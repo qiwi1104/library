@@ -204,8 +204,14 @@ public abstract class FinishedBookController<
     }
 
     protected void edit(Input inputFinished, T book) {
-        setBookAttributesFromInput(book, inputFinished, EDIT);
-        service.addBook(book);
+        if (!inputFinished.getStart().equals(book.getStart()) ||
+                !inputFinished.getEnd().equals(book.getEnd()) ||
+                !inputFinished.getFound().equals(book.getFound())) {
+            System.out.println("Dates don't match, check for any errors.");
+        } else {
+            setBookAttributesFromInput(book, inputFinished, EDIT);
+            service.addBook(book);
+        }
     }
 
     protected void sort(SortBy sortProperty) {
