@@ -119,7 +119,7 @@
             <td class="hidden" hidden>Description</td>
         </tr>
 
-        <tr th:each="book : ${booksToRead}">
+        <tr th:each="book : ${booksToRead}" class="list">
             <td th:text="${book.id}"></td>
             <td th:text="${book.author}"></td>
             <td th:text="${book.name}"></td>
