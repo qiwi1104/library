@@ -3,6 +3,7 @@ package qiwi.controllers.common;
 import org.json.JSONArray;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import qiwi.IO;
 import qiwi.TimeFormat;
 import qiwi.controllers.enums.Language;
@@ -114,8 +115,31 @@ public abstract class BookToReadController<
         setBookAttributesFromInput(book, input, ADD_FIRST);
         setBookAttributesFromInput(book, input, ADD_SECOND);
 
-        service.addBook(book);
+        boolean exists = false;
+        for (T bookToRead : service.findAll()) {
+            if (bookToRead.equals(book)) {
+                System.out.println("This book already exists!");
+                exists = true;
+                break;
+            }
+        }
+
+        if (!exists) {
+            service.addBook(book);
+        }
     }
+
+//    protected void add(Input input, BindingResult result, T book) {
+//        if (result.hasErrors()) {
+//            System.out.println("errors");
+//        } else {
+//            book.setId(service.findAll().size() + 1);
+//            setBookAttributesFromInput(book, input, ADD_FIRST);
+//            setBookAttributesFromInput(book, input, ADD_SECOND);
+//
+//            service.addBook(book);
+//        }
+//    }
 
     protected void edit(Input input, T book) {
         setBookAttributesFromInput(book, input, EDIT);
