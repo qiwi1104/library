@@ -20,6 +20,7 @@ import qiwi.service.common.BookToReadServiceImpl;
 import qiwi.service.common.FinishedBookServiceImpl;
 
 import java.io.IOException;
+import java.sql.Date;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -129,21 +130,16 @@ public abstract class BookToReadController<
         }
     }
 
-//    protected void add(Input input, BindingResult result, T book) {
-//        if (result.hasErrors()) {
-//            System.out.println("errors");
-//        } else {
-//            book.setId(service.findAll().size() + 1);
-//            setBookAttributesFromInput(book, input, ADD_FIRST);
-//            setBookAttributesFromInput(book, input, ADD_SECOND);
-//
-//            service.addBook(book);
-//        }
-//    }
-
-    protected void edit(Input input, T book) {
-        if (!input.getFound().equals(book.getFound())) {
-            System.out.println("Dates don't match, check for any errors.");
+    protected void edit(Input input, BindingResult result, T book) {
+        if (result.hasErrors()) {
+            if (!input.getFound().equals(Date.valueOf("1970-1-1"))) { // дата введена, но отличная от той, что есть сейчас
+                System.out.println("Dates don't match, check for any errors.");
+            } else { // дата не введена
+                Date found = book.getFound();
+                setBookAttributesFromInput(book, input, EDIT);
+                book.setFound(found);
+                service.addBook(book);
+            }
         } else {
             setBookAttributesFromInput(book, input, EDIT);
             service.addBook(book);

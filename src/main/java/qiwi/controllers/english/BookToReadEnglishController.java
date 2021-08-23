@@ -2,6 +2,7 @@ package qiwi.controllers.english;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import qiwi.controllers.common.BookToReadController;
 import qiwi.controllers.enums.Language;
@@ -30,8 +31,8 @@ public class BookToReadEnglishController extends BookToReadController<
     }
 
     @PostMapping("/edit/{id}")
-    public String edit(@ModelAttribute("booksToReadEnglishInput") Input input) {
-        super.edit(input, service.getBookById(input.getId()));
+    public String edit(@ModelAttribute("booksToReadEnglishInput") Input input, BindingResult result) {
+        super.edit(input, result, service.getBookById(input.getId()));
         return "redirect:/bookstoread/english/";
     }
 
