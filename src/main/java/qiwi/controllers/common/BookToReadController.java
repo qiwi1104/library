@@ -133,11 +133,10 @@ public abstract class BookToReadController<
     protected void edit(Input input, BindingResult result, T book) {
         if (result.hasErrors()) {
             if (!input.getFound().equals(Date.valueOf("1970-1-1"))) { // дата введена, но отличная от той, что есть сейчас
-                System.out.println("Dates don't match, check for any errors.");
+                // HERE MUST BE A POP UP WINDOW TO CONFIRM CHANGING DATES
+                System.out.println("Dates don't match, check for any errors."); // temporary solution
             } else { // дата не введена
-                Date found = book.getFound();
                 setBookAttributesFromInput(book, input, EDIT);
-                book.setFound(found);
                 service.addBook(book);
             }
         } else {

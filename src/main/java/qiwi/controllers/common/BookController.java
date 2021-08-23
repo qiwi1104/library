@@ -139,11 +139,11 @@ public abstract class BookController {
                 if (book instanceof FinishedBook) {
                     FinishedBook fb = (FinishedBook) book;
 
-                    if (input.getStart().toString().length() != 0) {
+                    if (!input.getStart().equals(java.sql.Date.valueOf("1970-1-1"))) { // дата введена, т.е. ее надо менять
                         fb.setStart(input.getStart());
                     }
 
-                    if (input.getEnd().toString().length() != 0) {
+                    if (!input.getEnd().equals(java.sql.Date.valueOf("1970-1-1"))) { // дата введена, т.е. ее надо менять
                         fb.setEnd(input.getEnd());
                     }
                 }
@@ -156,7 +156,7 @@ public abstract class BookController {
                     book.setName(input.getName());
                 }
 
-                if (input.getFound().toString().length() != 0) {
+                if (!input.getFound().equals(java.sql.Date.valueOf("1970-1-1"))) { // дата введена, т.е. ее надо менять
                     book.setFound(input.getFound());
                 }
 

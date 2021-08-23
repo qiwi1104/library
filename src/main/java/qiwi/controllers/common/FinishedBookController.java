@@ -3,6 +3,7 @@ package qiwi.controllers.common;
 import org.json.JSONArray;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import qiwi.IO;
 import qiwi.TimeFormat;
 import qiwi.controllers.enums.Language;
@@ -203,11 +204,17 @@ public abstract class FinishedBookController<
         }
     }
 
-    protected void edit(Input inputFinished, T book) {
-        if (!inputFinished.getStart().equals(book.getStart()) ||
-                !inputFinished.getEnd().equals(book.getEnd()) ||
-                !inputFinished.getFound().equals(book.getFound())) {
-            System.out.println("Dates don't match, check for any errors.");
+    protected void edit(Input inputFinished, BindingResult result, T book) {
+        if (result.hasErrors()) {
+            if (!inputFinished.getStart().equals(Date.valueOf("1970-1-1")) ||
+                    !inputFinished.getEnd().equals(Date.valueOf("1970-1-1")) ||
+                    !inputFinished.getFound().equals(Date.valueOf("1970-1-1"))) { // даты введены, но отличные от тех, что есть сейчас
+                // HERE MUST BE A POP UP WINDOW TO CONFIRM CHANGING DATES
+                System.out.println("Dates don't match, check for any errors."); // temporary solution
+            } else { // дата не введена
+                setBookAttributesFromInput(book, inputFinished, EDIT);
+                service.addBook(book);
+            }
         } else {
             setBookAttributesFromInput(book, inputFinished, EDIT);
             service.addBook(book);
