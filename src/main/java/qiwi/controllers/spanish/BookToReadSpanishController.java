@@ -13,7 +13,6 @@ import qiwi.model.spanish.FinishedBookSpanish;
 import qiwi.service.spanish.BookToReadSpanishServiceImpl;
 import qiwi.service.spanish.FinishedBookSpanishServiceImpl;
 
-import java.io.IOException;
 import java.util.ArrayList;
 
 @Controller
@@ -55,7 +54,7 @@ public class BookToReadSpanishController extends BookToReadController<
     }
 
     @PostMapping("/load")
-    public String load(@ModelAttribute("booksToReadSpanishInput") Input input) throws IOException {
+    public String load(@ModelAttribute("booksToReadSpanishInput") Input input) {
         super.load(input, Language.SPANISH);
         return "redirect:/bookstoread/spanish/";
     }

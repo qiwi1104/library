@@ -21,9 +21,7 @@ import qiwi.repository.common.AdditionalDatesRepository;
 import qiwi.service.common.AdditionalDatesServiceImpl;
 import qiwi.service.common.FinishedBookServiceImpl;
 
-import java.io.IOException;
 import java.sql.Date;
-import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -45,7 +43,7 @@ public abstract class FinishedBookController<
     protected SortType sortDateMethod = ASC;
     protected SortBy sortProperty = START;
 
-    private void fillAdditionalDatesTable(JSONArray source, Language language) throws ParseException {
+    private void fillAdditionalDatesTable(JSONArray source, Language language) {
         for (int i = 0; i < source.length(); i++) {
             if (source.getJSONObject(i).getJSONObject("additional_dates").getJSONArray("start").length() != 0) {
                 for (T finishedBook : service.findAll()) {
@@ -115,7 +113,6 @@ public abstract class FinishedBookController<
 
                 bookToAdd.setStart(Date.valueOf(date));
             } catch (Exception e) {
-
                 bookToAdd.setStart(Date.valueOf("1970-1-1"));
             }
 
@@ -125,7 +122,6 @@ public abstract class FinishedBookController<
 
                 bookToAdd.setEnd(Date.valueOf(date));
             } catch (Exception e) {
-
                 bookToAdd.setEnd(Date.valueOf("1970-1-1"));
             }
 
@@ -213,7 +209,7 @@ public abstract class FinishedBookController<
         this.sortProperty = sortProperty;
     }
 
-    protected void load(Input input, Language language) throws IOException, ParseException {
+    protected void load(Input input, Language language) {
         service.clearAll();
         List<T> finishedBooks;
 

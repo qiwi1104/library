@@ -18,7 +18,6 @@ import qiwi.repository.common.FinishedBookRepository;
 import qiwi.service.common.BookToReadServiceImpl;
 import qiwi.service.common.FinishedBookServiceImpl;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -153,7 +152,7 @@ public abstract class BookToReadController<
         this.sortProperty = sortProperty;
     }
 
-    protected void load(Input input, Language language) throws IOException {
+    protected void load(Input input, Language language) {
         service.clearAll();
         List<T> bookToReadList;
 

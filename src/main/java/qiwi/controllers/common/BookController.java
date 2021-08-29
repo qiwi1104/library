@@ -11,8 +11,6 @@ import qiwi.model.common.book.Book;
 import qiwi.model.common.book.BookToRead;
 import qiwi.model.common.book.FinishedBook;
 
-import java.io.IOException;
-import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
@@ -28,11 +26,7 @@ public abstract class BookController {
             languageStr = languageStr.substring(0, 1).toUpperCase() + languageStr.substring(1);
 
             filePath += languageStr + " " + new SimpleDateFormat("yyyy-MM-dd HH-mm-ss").format(new Date()) + ".json";
-            try {
-                qiwi.IO.writeJSONToFile(jsonArray, filePath);
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
+            qiwi.IO.writeJSONToFile(jsonArray, filePath);
         }
     }
 
@@ -46,11 +40,7 @@ public abstract class BookController {
                     jsonBook.put("name", book.getName());
                     String found = "";
 
-                    try {
-                        found = TimeFormat.formatTime("yyyy-M-d", "M/d/yy", book.getFound().toString());
-                    } catch (ParseException e) {
-                        e.printStackTrace();
-                    }
+                    found = TimeFormat.formatTime("yyyy-M-d", "M/d/yy", book.getFound().toString());
 
                     jsonBook.put("found", found);
                     jsonBook.put("description", book.getDescription());
@@ -76,12 +66,8 @@ public abstract class BookController {
                     String start = "";
                     String end = "";
 
-                    try {
-                        start = TimeFormat.formatTime("yyyy-M-d", "M/d/yy", finishedBook.getStart().toString());
-                        end = TimeFormat.formatTime("yyyy-M-d", "M/d/yy", finishedBook.getEnd().toString());
-                    } catch (ParseException e) {
-                        e.printStackTrace();
-                    }
+                    start = TimeFormat.formatTime("yyyy-M-d", "M/d/yy", finishedBook.getStart().toString());
+                    end = TimeFormat.formatTime("yyyy-M-d", "M/d/yy", finishedBook.getEnd().toString());
 
                     dates.put(start);
                     dates.put(end);
@@ -93,12 +79,8 @@ public abstract class BookController {
 
                     for (AdditionalDates additionalDate : additionalDates) {
                         if (additionalDate.getFinishedBookId().equals(finishedBook.getId())) {
-                            try {
-                                additionalDatesStartJSON.put(TimeFormat.formatTime("yyyy-M-d", "M/d/yy", additionalDate.getStart().toString()));
-                                additionalDatesEndJSON.put(TimeFormat.formatTime("yyyy-M-d", "M/d/yy", additionalDate.getEnd().toString()));
-                            } catch (ParseException e) {
-                                e.printStackTrace();
-                            }
+                            additionalDatesStartJSON.put(TimeFormat.formatTime("yyyy-M-d", "M/d/yy", additionalDate.getStart().toString()));
+                            additionalDatesEndJSON.put(TimeFormat.formatTime("yyyy-M-d", "M/d/yy", additionalDate.getEnd().toString()));
                         }
                     }
 
@@ -108,11 +90,7 @@ public abstract class BookController {
 
                     String found = "";
 
-                    try {
-                        found = TimeFormat.formatTime("yyyy-M-d", "M/d/yy", finishedBook.getFound().toString());
-                    } catch (ParseException e) {
-                        e.printStackTrace();
-                    }
+                    found = TimeFormat.formatTime("yyyy-M-d", "M/d/yy", finishedBook.getFound().toString());
 
                     jsonBook.put("found", found);
                     jsonBook.put("description", finishedBook.getDescription());

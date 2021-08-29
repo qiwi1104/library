@@ -13,8 +13,6 @@ import qiwi.model.russian.FinishedBookRussian;
 import qiwi.service.russian.AdditionalDatesServiceRussianImpl;
 import qiwi.service.russian.FinishedBookServiceRussianImpl;
 
-import java.io.IOException;
-import java.text.ParseException;
 import java.util.ArrayList;
 
 @Controller
@@ -49,7 +47,7 @@ public class FinishedBookRussianController extends FinishedBookController<
     }
 
     @PostMapping("/load")
-    public String load(@ModelAttribute("finishedRussianInput") Input input) throws IOException, ParseException {
+    public String load(@ModelAttribute("finishedRussianInput") Input input) {
         super.load(input, Language.RUSSIAN);
         return "redirect:/finishedbooks/russian/";
     }

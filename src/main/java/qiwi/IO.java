@@ -9,19 +9,32 @@ import java.nio.charset.StandardCharsets;
 import java.util.Scanner;
 
 public class IO {
-    public static JSONArray readJSONFile(String where) throws IOException {
-        Scanner scan = new Scanner(new File(where), StandardCharsets.UTF_8);
-        String str = "";
-        while (scan.hasNext()) {
-            str += scan.nextLine();
+    public static JSONArray readJSONFile(String where) {
+        Scanner scan;
+        StringBuilder str = new StringBuilder();
+
+        try {
+            scan = new Scanner(new File(where), StandardCharsets.UTF_8);
+
+            while (scan.hasNext()) {
+                str.append(scan.nextLine());
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
         }
-        return new JSONArray(str);
+
+        return new JSONArray(str.toString());
     }
 
-    public static void writeJSONToFile(JSONArray what, String where) throws IOException {
+    public static void writeJSONToFile(JSONArray what, String where) {
         String res = what.toString();
-        FileWriter writer = new FileWriter(new File(where), StandardCharsets.UTF_8);
-        writer.write(res);
-        writer.close();
+
+        try {
+            FileWriter writer = new FileWriter(new File(where), StandardCharsets.UTF_8);
+            writer.write(res);
+            writer.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 }

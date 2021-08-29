@@ -13,7 +13,6 @@ import qiwi.model.russian.FinishedBookRussian;
 import qiwi.service.russian.BookToReadServiceRussianImpl;
 import qiwi.service.russian.FinishedBookServiceRussianImpl;
 
-import java.io.IOException;
 import java.util.ArrayList;
 
 @Controller
@@ -55,7 +54,7 @@ public class BookToReadRussianController extends BookToReadController<
     }
 
     @PostMapping("/load")
-    public String load(@ModelAttribute("booksToReadRussianInput") Input input) throws IOException {
+    public String load(@ModelAttribute("booksToReadRussianInput") Input input) {
         super.load(input, Language.RUSSIAN);
         return "redirect:/bookstoread/russian/";
     }
