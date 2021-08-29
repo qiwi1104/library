@@ -32,14 +32,13 @@ public class FinishedBookSpanishController extends FinishedBookController<
 
     @PostMapping("/edit/{id}")
     public String edit(@ModelAttribute("finishedSpanishInput") Input inputFinished, BindingResult result) {
-        super.edit(inputFinished, result, service.getBookById(inputFinished.getId()));
+        super.edit(inputFinished, service.getBookById(inputFinished.getId()));
         return "redirect:/finishedbooks/spanish/";
     }
 
     @GetMapping("/delete/{id}")
     public String delete(@PathVariable Integer id) {
         service.deleteBook(id);
-
         return "redirect:/finishedbooks/spanish/";
     }
 
