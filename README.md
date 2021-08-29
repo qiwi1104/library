@@ -11,3 +11,7 @@ Books I want to read have the "_found_" property which represents the date when 
 In addition to the "_found_" property, Finished Books have the "_start_" and "_end_" properties which represent the date when I started reading a book and the date I finished it.
 
 ## 
+
+Features:
+<li>saving tables to/creating from JSON files</li>
+<li>additional dates for Finished Books in case I read a book in different periods of time or read it again</li>
