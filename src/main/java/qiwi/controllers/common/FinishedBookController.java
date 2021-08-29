@@ -3,7 +3,6 @@ package qiwi.controllers.common;
 import org.json.JSONArray;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.ui.Model;
-import org.springframework.validation.BindingResult;
 import qiwi.IO;
 import qiwi.TimeFormat;
 import qiwi.controllers.enums.Language;
@@ -229,7 +228,7 @@ public abstract class FinishedBookController<
         List<T> bookToReadList = service.findAll();
         List<U> additionalDatesList = additionalDatesService.findAll();
 
-        saveTableToJSON(bookToReadList, additionalDatesList, input.getName(), language);
+        JSONHandler.saveTableToJSON(bookToReadList, additionalDatesList, input.getName(), language);
     }
 
     protected void list(Model model, List<T> bookList) {

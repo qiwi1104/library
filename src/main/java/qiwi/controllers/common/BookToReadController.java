@@ -3,7 +3,6 @@ package qiwi.controllers.common;
 import org.json.JSONArray;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.ui.Model;
-import org.springframework.validation.BindingResult;
 import qiwi.IO;
 import qiwi.TimeFormat;
 import qiwi.controllers.enums.Language;
@@ -20,7 +19,6 @@ import qiwi.service.common.BookToReadServiceImpl;
 import qiwi.service.common.FinishedBookServiceImpl;
 
 import java.io.IOException;
-import java.sql.Date;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -168,7 +166,7 @@ public abstract class BookToReadController<
     protected void save(Input input, Language language) {
         List<T> bookToReadList = service.findAll();
 
-        saveTableToJSON(bookToReadList, input.getName(), language);
+        JSONHandler.saveTableToJSON(bookToReadList, input.getName(), language);
     }
 
     protected void list(Model model, List<T> bookList) {
