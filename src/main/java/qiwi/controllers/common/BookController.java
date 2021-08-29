@@ -38,9 +38,7 @@ public abstract class BookController {
 
                     jsonBook.put("author", book.getAuthor());
                     jsonBook.put("name", book.getName());
-                    String found = "";
-
-                    found = TimeFormat.formatTime("yyyy-M-d", "M/d/yy", book.getFound().toString());
+                    String found = TimeFormat.formatTime("yyyy-M-d", "M/d/yy", book.getFound().toString());
 
                     jsonBook.put("found", found);
                     jsonBook.put("description", book.getDescription());
@@ -63,11 +61,8 @@ public abstract class BookController {
                     jsonBook.put("name", finishedBook.getName());
 
                     JSONArray dates = new JSONArray();
-                    String start = "";
-                    String end = "";
-
-                    start = TimeFormat.formatTime("yyyy-M-d", "M/d/yy", finishedBook.getStart().toString());
-                    end = TimeFormat.formatTime("yyyy-M-d", "M/d/yy", finishedBook.getEnd().toString());
+                    String start = TimeFormat.formatTime("yyyy-M-d", "M/d/yy", finishedBook.getStart().toString());
+                    String end = TimeFormat.formatTime("yyyy-M-d", "M/d/yy", finishedBook.getEnd().toString());
 
                     dates.put(start);
                     dates.put(end);
@@ -88,9 +83,7 @@ public abstract class BookController {
                     additionalDatesJSON.put("end", additionalDatesEndJSON);
                     jsonBook.put("additional_dates", additionalDatesJSON);
 
-                    String found = "";
-
-                    found = TimeFormat.formatTime("yyyy-M-d", "M/d/yy", finishedBook.getFound().toString());
+                    String found = TimeFormat.formatTime("yyyy-M-d", "M/d/yy", finishedBook.getFound().toString());
 
                     jsonBook.put("found", found);
                     jsonBook.put("description", finishedBook.getDescription());
