@@ -153,13 +153,17 @@ public abstract class BookToReadController<
     }
 
     protected void load(Input input, Language language) {
-        service.clearAll();
-        List<T> bookToReadList;
+        JSONArray jsonBooks = IO.readJSONFile(input.getName());
+        if (jsonBooks.length() != 0) {
+            service.clearAll();
 
-        JSONArray jsonArray = IO.readJSONFile(input.getName());
-        bookToReadList = fillList(jsonArray, language);
+            List<T> bookToReadList;
+            bookToReadList = fillList(jsonBooks, language);
 
-        service.addAll(bookToReadList);
+            service.addAll(bookToReadList);
+        } else {
+            System.out.println("The list is empty :(");
+        }
     }
 
     protected void save(Input input, Language language) {

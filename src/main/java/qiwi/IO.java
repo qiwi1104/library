@@ -21,6 +21,7 @@ public class IO {
             }
         } catch (IOException e) {
             e.printStackTrace();
+            return new JSONArray();
         }
 
         return new JSONArray(str.toString());

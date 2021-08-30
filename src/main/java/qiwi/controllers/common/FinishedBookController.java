@@ -210,14 +210,18 @@ public abstract class FinishedBookController<
     }
 
     protected void load(Input input, Language language) {
-        service.clearAll();
-        List<T> finishedBooks;
-
         JSONArray jsonBooks = IO.readJSONFile(input.getName());
-        finishedBooks = fillList(jsonBooks, language);
+        if (jsonBooks.length() != 0) {
+            service.clearAll();
 
-        service.addAll(finishedBooks);
-        fillAdditionalDatesTable(jsonBooks, language); // добавляет доп. даты в свою таблицу
+            List<T> finishedBooks;
+            finishedBooks = fillList(jsonBooks, language);
+
+            service.addAll(finishedBooks);
+            fillAdditionalDatesTable(jsonBooks, language); // добавляет доп. даты в свою таблицу
+        } else {
+            System.out.println("The list is empty :(");
+        }
     }
 
     protected void save(Input input, Language language) {
