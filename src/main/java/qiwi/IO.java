@@ -24,6 +24,7 @@ public class IO {
             return new JSONArray();
         }
 
+        scan.close();
         return new JSONArray(str.toString());
     }
 
