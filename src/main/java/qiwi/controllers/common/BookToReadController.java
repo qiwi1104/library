@@ -70,8 +70,9 @@ public abstract class BookToReadController<
 
     private List<T> fillList(JSONArray source, Language language) {
         List<T> destination = new ArrayList<>();
+        int librarySize = service.findAll().size();
 
-        for (int i = 0; i < source.length(); i++) {
+        for (int i = librarySize; i < source.length() + librarySize; i++) {
             T bookToAdd;
 
             switch (language) {
@@ -89,18 +90,18 @@ public abstract class BookToReadController<
             }
 
             bookToAdd.setId(i + 1);
-            bookToAdd.setAuthor(source.getJSONObject(i).get("author").toString());
-            bookToAdd.setName(source.getJSONObject(i).get("name").toString());
+            bookToAdd.setAuthor(source.getJSONObject(i - librarySize).get("author").toString());
+            bookToAdd.setName(source.getJSONObject(i - librarySize).get("name").toString());
 
             try {
-                String date = TimeFormat.formatTime("M/d/yy", "yyyy-M-d", source.getJSONObject(i).get("found").toString());
+                String date = TimeFormat.formatTime("M/d/yy", "yyyy-M-d", source.getJSONObject(i - librarySize).get("found").toString());
 
                 bookToAdd.setFound(java.sql.Date.valueOf(date));
             } catch (Exception e) {
                 bookToAdd.setFound(java.sql.Date.valueOf("1970-1-1"));
             }
 
-            bookToAdd.setDescription(source.getJSONObject(i).get("description").toString());
+            bookToAdd.setDescription(source.getJSONObject(i - librarySize).get("description").toString());
 
             destination.add(bookToAdd);
         }
@@ -161,6 +162,17 @@ public abstract class BookToReadController<
             bookToReadList = fillList(jsonBooks, language);
 
             service.addAll(bookToReadList);
+        } else {
+            System.out.println("The list is empty :(");
+        }
+    }
+
+    protected void loadBatch(Input input, Language language) {
+        JSONArray jsonBooks = IO.readJSONFile(input.getName());
+        if (jsonBooks.length() != 0) {
+            List<T> bookToReadList;
+            bookToReadList = fillList(jsonBooks, language);
+            bookToReadList.forEach(book -> service.addBook(book));
         } else {
             System.out.println("The list is empty :(");
         }

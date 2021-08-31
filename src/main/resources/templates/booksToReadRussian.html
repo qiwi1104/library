@@ -38,7 +38,7 @@
             </tr>
         </table>
     </form>
-    <br/>
+
     <form action="#" th:action="@{'/bookstoread/russian/finish/{id}'}" th:object="${booksToReadRussianInput}"
           method="post">
         <table border="1px" class="hiddenPanel" hidden id="finish">
@@ -62,7 +62,7 @@
             </tr>
         </table>
     </form>
-    <br/>
+
     <form action="#" th:action="@{'/bookstoread/russian/edit/{id}'}" th:object="${booksToReadRussianInput}"
           method="post">
         <table border="1px" class="hiddenPanel" hidden id="edit">
@@ -99,11 +99,15 @@
             </tr>
         </table>
     </form>
-    <br/>
+
     <form action="#" th:action="@{'/bookstoread/russian/load'}" th:object="${booksToReadRussianInput}" method="post">
         <table th:replace="fragments/loadPanel :: loadPanel"></table>
     </form>
-    <br/>
+
+    <form action="#" th:action="@{'/bookstoread/russian/loadBatch'}" th:object="${booksToReadRussianInput}" method="post">
+        <table th:replace="fragments/loadBatch :: loadBatch"></table>
+    </form>
+
     <form action="#" th:action="@{'/bookstoread/russian/save'}" th:object="${booksToReadRussianInput}" method="post">
         <table th:replace="fragments/savePanel :: savePanel"></table>
     </form>
