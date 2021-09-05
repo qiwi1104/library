@@ -10,8 +10,8 @@ import qiwi.controllers.enums.SortBy;
 import qiwi.model.common.Input;
 import qiwi.model.russian.BookToReadRussian;
 import qiwi.model.russian.FinishedBookRussian;
-import qiwi.service.russian.BookToReadServiceRussianImpl;
-import qiwi.service.russian.FinishedBookServiceRussianImpl;
+import qiwi.service.russian.BookToReadRussianServiceImpl;
+import qiwi.service.russian.FinishedBookRussianServiceImpl;
 
 import java.util.ArrayList;
 
@@ -19,9 +19,9 @@ import java.util.ArrayList;
 @RequestMapping("/bookstoread/russian")
 public class BookToReadRussianController extends BookToReadController<
         BookToReadRussian,
-        BookToReadServiceRussianImpl,
+        BookToReadRussianServiceImpl,
         FinishedBookRussian,
-        FinishedBookServiceRussianImpl> {
+        FinishedBookRussianServiceImpl> {
 
     @PostMapping("/add")
     public String add(@ModelAttribute("booksToReadRussianInput") Input input) {

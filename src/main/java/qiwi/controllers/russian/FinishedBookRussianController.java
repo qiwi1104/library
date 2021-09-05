@@ -11,7 +11,7 @@ import qiwi.model.common.Input;
 import qiwi.model.russian.AdditionalDatesRussian;
 import qiwi.model.russian.FinishedBookRussian;
 import qiwi.service.russian.AdditionalDatesServiceRussianImpl;
-import qiwi.service.russian.FinishedBookServiceRussianImpl;
+import qiwi.service.russian.FinishedBookRussianServiceImpl;
 
 import java.util.ArrayList;
 
@@ -19,7 +19,7 @@ import java.util.ArrayList;
 @RequestMapping("/finishedbooks/russian")
 public class FinishedBookRussianController extends FinishedBookController<
         FinishedBookRussian,
-        FinishedBookServiceRussianImpl,
+        FinishedBookRussianServiceImpl,
         AdditionalDatesRussian,
         AdditionalDatesServiceRussianImpl> {
     @PostMapping("/add")

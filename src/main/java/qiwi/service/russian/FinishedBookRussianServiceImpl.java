@@ -6,5 +6,5 @@ import qiwi.repository.russian.FinishedBookRussianRepository;
 import qiwi.service.common.FinishedBookServiceImpl;
 
 @Service
-public class FinishedBookServiceRussianImpl extends FinishedBookServiceImpl<FinishedBookRussian, FinishedBookRussianRepository> {
+public class FinishedBookRussianServiceImpl extends FinishedBookServiceImpl<FinishedBookRussian, FinishedBookRussianRepository> {
 }
