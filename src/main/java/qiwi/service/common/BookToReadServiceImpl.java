@@ -2,14 +2,12 @@ package qiwi.service.common;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Sort;
-import org.springframework.stereotype.Service;
 import qiwi.model.common.book.BookToRead;
 import qiwi.repository.common.BookToReadRepository;
 import qiwi.service.BookService;
 
 import java.util.List;
 
-@Service
 public abstract class BookToReadServiceImpl<T extends BookToRead, S extends BookToReadRepository<T>> implements BookService<T> {
     @Autowired
     private S repository;
@@ -22,9 +20,13 @@ public abstract class BookToReadServiceImpl<T extends BookToRead, S extends Book
         return repository.findAll(Sort.by(Sort.Direction.DESC, "id"));
     }
 
-    public List<T> findAllByOrderByFoundByIdAsc() {return repository.findAll(Sort.by(Sort.Direction.ASC, "found", "id"));}
+    public List<T> findAllByOrderByFoundByIdAsc() {
+        return repository.findAll(Sort.by(Sort.Direction.ASC, "found", "id"));
+    }
 
-    public List<T> findAllByOrderByFoundByIdDesc() {return repository.findAll(Sort.by(Sort.Direction.DESC, "found", "id"));}
+    public List<T> findAllByOrderByFoundByIdDesc() {
+        return repository.findAll(Sort.by(Sort.Direction.DESC, "found", "id"));
+    }
 
     @Override
     public void addBook(T book) {
