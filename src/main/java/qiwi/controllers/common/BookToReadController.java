@@ -37,35 +37,6 @@ public abstract class BookToReadController<
     protected SortType sortDateMethod = ASC;
     protected SortBy sortProperty = FOUND;
 
-    @Override
-    protected List<T> filterAndSort() {
-        List<T> books = null;
-
-        switch (sortDateMethod) {
-            case ASC:
-                switch (sortProperty) {
-                    case ID:
-                        books = service.findAllByOrderByIdAsc();
-                        break;
-                    case FOUND:
-                        books = service.findAllByOrderByFoundByIdAsc();
-                        break;
-                }
-                break;
-            case DESC:
-                switch (sortProperty) {
-                    case ID:
-                        books = service.findAllByOrderByIdDesc();
-                        break;
-                    case FOUND:
-                        books = service.findAllByOrderByFoundByIdDesc();
-                        break;
-                }
-                break;
-        }
-        return books;
-    }
-
     private List<T> fillList(JSONArray source, Language language) {
         List<T> destination = new ArrayList<>();
         int librarySize = service.findAll().size();
@@ -105,6 +76,35 @@ public abstract class BookToReadController<
         }
 
         return destination;
+    }
+
+    @Override
+    protected List<T> filterAndSort() {
+        List<T> books = null;
+
+        switch (sortDateMethod) {
+            case ASC:
+                switch (sortProperty) {
+                    case ID:
+                        books = service.findAllByOrderByIdAsc();
+                        break;
+                    case FOUND:
+                        books = service.findAllByOrderByFoundByIdAsc();
+                        break;
+                }
+                break;
+            case DESC:
+                switch (sortProperty) {
+                    case ID:
+                        books = service.findAllByOrderByIdDesc();
+                        break;
+                    case FOUND:
+                        books = service.findAllByOrderByFoundByIdDesc();
+                        break;
+                }
+                break;
+        }
+        return books;
     }
 
     protected void add(Input input, T book) {
