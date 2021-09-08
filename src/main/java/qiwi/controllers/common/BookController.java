@@ -88,9 +88,10 @@ public abstract class BookController {
                 }
             }
         }
+
         /*
-        * Handles writing to/reading from file
-        * */
+         * Handles writing to/reading from file
+         * */
         protected static class IO {
             private static void writeJSONArrayToFile(JSONArray array, String path) {
                 String res = array.toString();
@@ -134,6 +135,15 @@ public abstract class BookController {
 
                 scan.close();
                 return new JSONArray(str.toString());
+            }
+
+            protected static JSONArray readJSONFile(String path, BookType bookType) {
+                if (path.equals("")) {
+                    path = getPathToBackupDirectory(bookType);
+                    path += getLatestFileName(path);
+                }
+
+                return readJSONFile(path);
             }
         }
 
@@ -179,6 +189,22 @@ public abstract class BookController {
             return filePath;
         }
 
+        private static String getLatestFileName(String path) {
+            File directory = new File(path);
+            File[] files = directory.listFiles(File::isFile);
+            long lastModifiedTime = Long.MIN_VALUE;
+            File chosenFile = null;
+            if (files != null) {
+                for (File file : files) {
+                    if (file.lastModified() > lastModifiedTime) {
+                        chosenFile = file;
+                        lastModifiedTime = file.lastModified();
+                    }
+                }
+            }
+
+            return chosenFile.getName();
+        }
     }
 
     protected <T extends Book> void setBookAttributesFromInput(T book, Input input, Context context) {

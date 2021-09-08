@@ -4,6 +4,7 @@ import org.json.JSONArray;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.ui.Model;
 import qiwi.TimeFormat;
+import qiwi.controllers.enums.BookType;
 import qiwi.controllers.enums.Language;
 import qiwi.controllers.enums.SortBy;
 import qiwi.controllers.enums.SortType;
@@ -151,7 +152,7 @@ public abstract class BookToReadController<
     }
 
     protected void load(Input input, Language language) {
-        JSONArray jsonBooks = JSONHandler.IO.readJSONFile(input.getName());
+        JSONArray jsonBooks = JSONHandler.IO.readJSONFile(input.getName(), BookType.TO_READ);
         if (jsonBooks.length() != 0) {
             service.clearAll();
 
