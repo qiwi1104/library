@@ -3,7 +3,6 @@ package qiwi.controllers.common;
 import org.json.JSONArray;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.ui.Model;
-import qiwi.IO;
 import qiwi.TimeFormat;
 import qiwi.controllers.enums.Language;
 import qiwi.controllers.enums.SortBy;
@@ -22,9 +21,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static qiwi.controllers.enums.Context.*;
-import static qiwi.controllers.enums.SortBy.FOUND;
-import static qiwi.controllers.enums.SortType.ASC;
-import static qiwi.controllers.enums.SortType.DESC;
+import static qiwi.controllers.enums.SortBy.*;
+import static qiwi.controllers.enums.SortType.*;
 
 public abstract class BookToReadController<
         T extends BookToRead,
@@ -154,7 +152,7 @@ public abstract class BookToReadController<
     }
 
     protected void load(Input input, Language language) {
-        JSONArray jsonBooks = IO.readJSONFile(input.getName());
+        JSONArray jsonBooks = JSONHandler.readJSONFile(input.getName());
         if (jsonBooks.length() != 0) {
             service.clearAll();
 
@@ -168,7 +166,7 @@ public abstract class BookToReadController<
     }
 
     protected void loadBatch(Input input, Language language) {
-        JSONArray jsonBooks = IO.readJSONFile(input.getName());
+        JSONArray jsonBooks = JSONHandler.readJSONFile(input.getName());
         if (jsonBooks.length() != 0) {
             List<T> bookToReadList;
             bookToReadList = fillList(jsonBooks, language);
@@ -180,11 +178,10 @@ public abstract class BookToReadController<
 
     protected void save(Input input, Language language) {
         List<T> bookToReadList = service.findAll();
-
         JSONHandler.saveTableToJSON(bookToReadList, input.getName(), language);
     }
 
-    protected void list(Model model, List<T> bookList) {
+    protected void list(Model model, List<T> bookList) { // CHECK THIS
         bookList = filterAndSort();
 
         model.addAttribute("booksToRead", bookList);

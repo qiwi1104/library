@@ -3,7 +3,6 @@ package qiwi.controllers.common;
 import org.json.JSONArray;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.ui.Model;
-import qiwi.IO;
 import qiwi.TimeFormat;
 import qiwi.controllers.enums.Language;
 import qiwi.controllers.enums.SortBy;
@@ -26,9 +25,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static qiwi.controllers.enums.Context.*;
-import static qiwi.controllers.enums.SortBy.START;
-import static qiwi.controllers.enums.SortType.ASC;
-import static qiwi.controllers.enums.SortType.DESC;
+import static qiwi.controllers.enums.SortBy.*;
+import static qiwi.controllers.enums.SortType.*;
 
 public abstract class FinishedBookController<
         T extends FinishedBook,
@@ -210,7 +208,7 @@ public abstract class FinishedBookController<
     }
 
     protected void load(Input input, Language language) {
-        JSONArray jsonBooks = IO.readJSONFile(input.getName());
+        JSONArray jsonBooks = JSONHandler.readJSONFile(input.getName());
         if (jsonBooks.length() != 0) {
             service.clearAll();
 
