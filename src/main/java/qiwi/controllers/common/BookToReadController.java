@@ -166,9 +166,8 @@ public abstract class BookToReadController<
     protected void loadBatch(Input input, Language language) {
         JSONArray jsonBooks = JSONHandler.IO.readJSONFile(input.getName());
         if (jsonBooks.length() != 0) {
-            List<T> bookToReadList;
-            bookToReadList = fillList(jsonBooks, language);
-            bookToReadList.forEach(book -> service.addBook(book));
+            List<T> bookToReadList = fillList(jsonBooks, language);
+            service.addAll(bookToReadList);
         } else {
             System.out.println("The list is empty :(");
         }
