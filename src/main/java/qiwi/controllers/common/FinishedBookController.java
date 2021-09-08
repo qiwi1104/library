@@ -41,10 +41,6 @@ public abstract class FinishedBookController<
     protected SortType sortDateMethod = ASC;
     protected SortBy sortProperty = START;
 
-    private static class JSONTest extends BookController.JSONHandler {
-
-    }
-
     private void fillAdditionalDatesTable(JSONArray source, Language language) {
         for (int i = 0; i < source.length(); i++) {
             if (source.getJSONObject(i).getJSONObject("additional_dates").getJSONArray("start").length() != 0) {
