@@ -179,7 +179,7 @@ public abstract class BookToReadController<
         JSONHandler.IO.saveTableToJSON(bookToReadList, input.getName(), language);
     }
 
-    protected void list(Model model, List<T> bookList) { // CHECK THIS
+    protected void list(Model model, List<T> bookList) {
         bookList = filterAndSort();
 
         model.addAttribute("booksToRead", bookList);
