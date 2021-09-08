@@ -212,7 +212,7 @@ public abstract class BookController {
                     book.setDescription(input.getDescription());
                 }
                 break;
-            case ADD_FIRST: // first потому что используется в первый раз (до isInTable)
+            case ADD:
                 book.setAuthor(input.getAuthor());
                 book.setName(input.getName());
 
@@ -222,8 +222,7 @@ public abstract class BookController {
                     fb.setStart(input.getStart());
                     fb.setEnd(input.getEnd());
                 }
-                break;
-            case ADD_SECOND:
+
                 book.setFound(input.getFound());
                 book.setDescription(input.getDescription());
                 break;

@@ -109,8 +109,7 @@ public abstract class BookToReadController<
 
     protected void add(Input input, T book) {
         book.setId(service.findAll().size() + 1);
-        setBookAttributesFromInput(book, input, ADD_FIRST);
-        setBookAttributesFromInput(book, input, ADD_SECOND);
+        setBookAttributesFromInput(book, input, ADD);
 
         boolean exists = false;
         for (T bookToRead : service.findAll()) {

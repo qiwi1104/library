@@ -181,7 +181,7 @@ public abstract class FinishedBookController<
 
     protected void add(Input inputFinished, T book, U additionalDates) {
         book.setId(service.findAll().size() + 1);
-        setBookAttributesFromInput(book, inputFinished, ADD_FIRST);
+        setBookAttributesFromInput(book, inputFinished, ADD);
 
         if (service.isInTable(book)) {
             additionalDates.setId(additionalDatesService.findAll().size() + 1);
@@ -191,8 +191,6 @@ public abstract class FinishedBookController<
 
             additionalDatesService.addDates(additionalDates);
         } else {
-            setBookAttributesFromInput(book, inputFinished, ADD_SECOND);
-
             service.addBook(book);
         }
     }
