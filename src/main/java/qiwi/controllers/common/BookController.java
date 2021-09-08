@@ -25,6 +25,118 @@ import static qiwi.controllers.enums.BookType.*;
 
 public abstract class BookController {
     protected static class JSONHandler {
+        /*
+         * Converts Entity books to JSON books and vice versa
+         */
+        protected static class Conversion {
+            private static <T extends Book> void setCommonAttributes(JSONObject jsonBook, T book) {
+                jsonBook.put("author", book.getAuthor());
+                jsonBook.put("name", book.getName());
+
+                String found = TimeFormat.formatTime("yyyy-M-d", "M/d/yy", book.getFound().toString());
+                jsonBook.put("found", found);
+                jsonBook.put("description", book.getDescription());
+            }
+
+            private static <T extends Book> void fillJSONArray(JSONArray jsonArray, List<T> booksList) {
+                if (booksList.get(0) instanceof BookToRead) {
+                    for (T book : booksList) {
+                        JSONObject jsonBook = new JSONObject();
+                        setCommonAttributes(jsonBook, book);
+                        jsonArray.put(jsonBook);
+                    }
+                } else {
+                    System.out.println("Something went wrong :(");
+                }
+            }
+
+            private static <T extends Book, S extends AdditionalDates> void fillJSONArray(
+                    JSONArray jsonArray, List<T> booksList, List<S> additionalDates) {
+                if (booksList.get(0) instanceof FinishedBook) {
+                    for (T book : booksList) {
+                        FinishedBook finishedBook = (FinishedBook) book;
+                        JSONObject jsonBook = new JSONObject();
+                        setCommonAttributes(jsonBook, finishedBook);
+
+                        JSONArray dates = new JSONArray();
+                        String start = TimeFormat.formatTime("yyyy-M-d", "M/d/yy", finishedBook.getStart().toString());
+                        String end = TimeFormat.formatTime("yyyy-M-d", "M/d/yy", finishedBook.getEnd().toString());
+
+                        dates.put(start);
+                        dates.put(end);
+                        jsonBook.put("dates", dates);
+
+                        JSONObject additionalDatesJSON = new JSONObject();
+                        JSONArray additionalDatesStartJSON = new JSONArray();
+                        JSONArray additionalDatesEndJSON = new JSONArray();
+
+                        for (AdditionalDates additionalDate : additionalDates) {
+                            if (additionalDate.getFinishedBookId().equals(finishedBook.getId())) {
+                                additionalDatesStartJSON.put(TimeFormat.formatTime("yyyy-M-d", "M/d/yy", additionalDate.getStart().toString()));
+                                additionalDatesEndJSON.put(TimeFormat.formatTime("yyyy-M-d", "M/d/yy", additionalDate.getEnd().toString()));
+                            }
+                        }
+
+                        additionalDatesJSON.put("start", additionalDatesStartJSON);
+                        additionalDatesJSON.put("end", additionalDatesEndJSON);
+                        jsonBook.put("additional_dates", additionalDatesJSON);
+
+                        jsonArray.put(jsonBook);
+                    }
+                } else {
+                    System.out.println("Something went wrong :(");
+                }
+            }
+        }
+        /*
+        * Handles writing to/reading from file
+        * */
+        protected static class IO {
+            private static void writeJSONArrayToFile(JSONArray array, String path) {
+                String res = array.toString();
+
+                try {
+                    FileWriter writer = new FileWriter(new File(path), StandardCharsets.UTF_8);
+                    writer.write(res);
+                    writer.close();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+
+            protected static <T extends Book> void saveTableToJSON(List<T> booksList, String filePath, Language language) {
+                JSONArray jsonArray = new JSONArray();
+                Conversion.fillJSONArray(jsonArray, booksList);
+                writeJSONArrayToFile(jsonArray, fixPathToBackupFile(filePath, language, TO_READ));
+            }
+
+            protected static <T extends Book, S extends AdditionalDates> void saveTableToJSON(
+                    List<T> booksList, List<S> additionalDates, String filePath, Language language) {
+                JSONArray jsonArray = new JSONArray();
+                Conversion.fillJSONArray(jsonArray, booksList, additionalDates);
+                writeJSONArrayToFile(jsonArray, fixPathToBackupFile(filePath, language, FINISHED));
+            }
+
+            protected static JSONArray readJSONFile(String path) {
+                Scanner scan;
+                StringBuilder str = new StringBuilder();
+
+                try {
+                    scan = new Scanner(new File(path), StandardCharsets.UTF_8);
+
+                    while (scan.hasNext()) {
+                        str.append(scan.nextLine());
+                    }
+                } catch (IOException e) {
+                    e.printStackTrace();
+                    return new JSONArray();
+                }
+
+                scan.close();
+                return new JSONArray(str.toString());
+            }
+        }
+
         private static String getPathToBackupDirectory(BookType bookType) {
             Properties property = new Properties();
 
@@ -67,108 +179,6 @@ public abstract class BookController {
             return filePath;
         }
 
-        private static <T extends Book> void setCommonAttributes(JSONObject jsonBook, T book) {
-            jsonBook.put("author", book.getAuthor());
-            jsonBook.put("name", book.getName());
-
-            String found = TimeFormat.formatTime("yyyy-M-d", "M/d/yy", book.getFound().toString());
-            jsonBook.put("found", found);
-            jsonBook.put("description", book.getDescription());
-        }
-
-        private static <T extends Book> void fillJSONArray(JSONArray jsonArray, List<T> booksList) {
-            if (booksList.get(0) instanceof BookToRead) {
-                for (T book : booksList) {
-                    JSONObject jsonBook = new JSONObject();
-                    setCommonAttributes(jsonBook, book);
-                    jsonArray.put(jsonBook);
-                }
-            } else {
-                System.out.println("Something went wrong :(");
-            }
-        }
-
-        private static <T extends Book, S extends AdditionalDates> void fillJSONArray(
-                JSONArray jsonArray, List<T> booksList, List<S> additionalDates) {
-            if (booksList.get(0) instanceof FinishedBook) {
-                for (T book : booksList) {
-                    FinishedBook finishedBook = (FinishedBook) book;
-                    JSONObject jsonBook = new JSONObject();
-                    setCommonAttributes(jsonBook, finishedBook);
-
-                    JSONArray dates = new JSONArray();
-                    String start = TimeFormat.formatTime("yyyy-M-d", "M/d/yy", finishedBook.getStart().toString());
-                    String end = TimeFormat.formatTime("yyyy-M-d", "M/d/yy", finishedBook.getEnd().toString());
-
-                    dates.put(start);
-                    dates.put(end);
-                    jsonBook.put("dates", dates);
-
-                    JSONObject additionalDatesJSON = new JSONObject();
-                    JSONArray additionalDatesStartJSON = new JSONArray();
-                    JSONArray additionalDatesEndJSON = new JSONArray();
-
-                    for (AdditionalDates additionalDate : additionalDates) {
-                        if (additionalDate.getFinishedBookId().equals(finishedBook.getId())) {
-                            additionalDatesStartJSON.put(TimeFormat.formatTime("yyyy-M-d", "M/d/yy", additionalDate.getStart().toString()));
-                            additionalDatesEndJSON.put(TimeFormat.formatTime("yyyy-M-d", "M/d/yy", additionalDate.getEnd().toString()));
-                        }
-                    }
-
-                    additionalDatesJSON.put("start", additionalDatesStartJSON);
-                    additionalDatesJSON.put("end", additionalDatesEndJSON);
-                    jsonBook.put("additional_dates", additionalDatesJSON);
-
-                    jsonArray.put(jsonBook);
-                }
-            } else {
-                System.out.println("Something went wrong :(");
-            }
-        }
-
-        private static void writeJSONArrayToFile(JSONArray array, String path) {
-            String res = array.toString();
-
-            try {
-                java.io.FileWriter writer = new java.io.FileWriter(new File(path), StandardCharsets.UTF_8);
-                writer.write(res);
-                writer.close();
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        }
-
-        protected static <T extends Book> void saveTableToJSON(List<T> booksList, String filePath, Language language) {
-            JSONArray jsonArray = new JSONArray();
-            fillJSONArray(jsonArray, booksList);
-            writeJSONArrayToFile(jsonArray, fixPathToBackupFile(filePath, language, TO_READ));
-        }
-
-        protected static <T extends Book, S extends AdditionalDates> void saveTableToJSON(
-                List<T> booksList, List<S> additionalDates, String filePath, Language language) {
-            JSONArray jsonArray = new JSONArray();
-            fillJSONArray(jsonArray, booksList, additionalDates);
-            writeJSONArrayToFile(jsonArray, fixPathToBackupFile(filePath, language, FINISHED));
-        }
-
-        protected static JSONArray readJSONFile(String path) {
-            Scanner scan;
-            StringBuilder str = new StringBuilder();
-
-            try {
-                scan = new Scanner(new File(path), StandardCharsets.UTF_8);
-
-                while (scan.hasNext()) {
-                    str.append(scan.nextLine());
-                }
-            } catch (IOException e) {
-                e.printStackTrace();
-                return new JSONArray();
-            }
-
-            scan.close();
-            return new JSONArray(str.toString());
-        }
     }
 
     protected <T extends Book> void setBookAttributesFromInput(T book, Input input, Context context) {

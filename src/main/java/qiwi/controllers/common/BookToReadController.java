@@ -152,12 +152,11 @@ public abstract class BookToReadController<
     }
 
     protected void load(Input input, Language language) {
-        JSONArray jsonBooks = JSONHandler.readJSONFile(input.getName());
+        JSONArray jsonBooks = JSONHandler.IO.readJSONFile(input.getName());
         if (jsonBooks.length() != 0) {
             service.clearAll();
 
-            List<T> bookToReadList;
-            bookToReadList = fillList(jsonBooks, language);
+            List<T> bookToReadList = fillList(jsonBooks, language);
 
             service.addAll(bookToReadList);
         } else {
@@ -166,7 +165,7 @@ public abstract class BookToReadController<
     }
 
     protected void loadBatch(Input input, Language language) {
-        JSONArray jsonBooks = JSONHandler.readJSONFile(input.getName());
+        JSONArray jsonBooks = JSONHandler.IO.readJSONFile(input.getName());
         if (jsonBooks.length() != 0) {
             List<T> bookToReadList;
             bookToReadList = fillList(jsonBooks, language);
@@ -178,7 +177,7 @@ public abstract class BookToReadController<
 
     protected void save(Input input, Language language) {
         List<T> bookToReadList = service.findAll();
-        JSONHandler.saveTableToJSON(bookToReadList, input.getName(), language);
+        JSONHandler.IO.saveTableToJSON(bookToReadList, input.getName(), language);
     }
 
     protected void list(Model model, List<T> bookList) { // CHECK THIS

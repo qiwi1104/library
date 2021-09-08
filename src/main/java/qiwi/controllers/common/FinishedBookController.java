@@ -208,12 +208,11 @@ public abstract class FinishedBookController<
     }
 
     protected void load(Input input, Language language) {
-        JSONArray jsonBooks = JSONHandler.readJSONFile(input.getName());
+        JSONArray jsonBooks = JSONHandler.IO.readJSONFile(input.getName());
         if (jsonBooks.length() != 0) {
             service.clearAll();
 
-            List<T> finishedBooks;
-            finishedBooks = fillList(jsonBooks, language);
+            List<T> finishedBooks = fillList(jsonBooks, language);
 
             service.addAll(finishedBooks);
             fillAdditionalDatesTable(jsonBooks, language); // добавляет доп. даты в свою таблицу
@@ -226,7 +225,7 @@ public abstract class FinishedBookController<
         List<T> bookToReadList = service.findAll();
         List<U> additionalDatesList = additionalDatesService.findAll();
 
-        JSONHandler.saveTableToJSON(bookToReadList, additionalDatesList, input.getName(), language);
+        JSONHandler.IO.saveTableToJSON(bookToReadList, additionalDatesList, input.getName(), language);
     }
 
     protected void list(Model model, List<T> bookList) {
