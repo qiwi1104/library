@@ -1,6 +1,6 @@
 # Library
 
-Used to manage the books I want to read/have already read.
+An application used to manage books that I want to read/have already read.
 
 There are 3 languages - Russian, English, and Spanish; 2 book types - Finished Books and Books To Read; and a special Additional Dates type used when a book has been read more than one time.
 

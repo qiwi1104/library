@@ -3,7 +3,6 @@ package qiwi.controllers.common;
 import org.json.JSONArray;
 import org.json.JSONObject;
 import qiwi.Application;
-import qiwi.TimeFormat;
 import qiwi.controllers.enums.BookType;
 import qiwi.controllers.enums.Context;
 import qiwi.controllers.enums.Language;
@@ -15,6 +14,7 @@ import qiwi.model.common.book.FinishedBook;
 
 import java.io.*;
 import java.nio.charset.StandardCharsets;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
@@ -151,14 +151,8 @@ public abstract class BookController {
             Properties property = new Properties();
 
             try {
-                FileInputStream inputStream = new FileInputStream(
-                        String.valueOf((Application.class
-                                .getClassLoader()
-                                .getResource("config.properties")
-                                .toString()
-                                .split("file:/")[1])));
-
-                property.load(new InputStreamReader(inputStream, StandardCharsets.UTF_8));
+                Reader inputStream = new InputStreamReader(Application.class.getResourceAsStream("/config.properties"), StandardCharsets.UTF_8);
+                property.load(inputStream);
             } catch (IOException e) {
                 e.printStackTrace();
             }
@@ -204,6 +198,24 @@ public abstract class BookController {
             }
 
             return chosenFile.getName();
+        }
+    }
+
+    protected static class TimeFormat {
+        public static String formatTime(String oldFormat, String newFormat, String stringToParse) {
+            SimpleDateFormat oldDateFormat = new SimpleDateFormat(oldFormat);
+            SimpleDateFormat newDateFormat = new SimpleDateFormat(newFormat);
+
+            Date date;
+
+            try {
+                date = oldDateFormat.parse(stringToParse);
+            } catch (ParseException e) {
+                date = java.sql.Date.valueOf("1970-1-1");
+                e.printStackTrace();
+            }
+
+            return newDateFormat.format(date);
         }
     }
 
