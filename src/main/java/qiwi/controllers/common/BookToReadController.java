@@ -59,7 +59,7 @@ public abstract class BookToReadController<
                     throw new IllegalStateException("Unexpected value: " + language);
             }
 
-            setAttributes(bookToAdd, source.getJSONObject(i - librarySize), i+1);
+            setAttributes(bookToAdd, source.getJSONObject(i - librarySize), i + 1);
 
             destination.add(bookToAdd);
         }
