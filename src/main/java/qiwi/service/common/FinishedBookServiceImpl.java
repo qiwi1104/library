@@ -61,7 +61,7 @@ public abstract class FinishedBookServiceImpl<T extends FinishedBook, S extends 
                 for (int i = id + 1; i < repository.findAll().size() + 1; i++) {
                     T book = null;
                     try {
-                        book = (T) repository.getOne(i).clone(); // без clone() выкидывает ошибку
+                        book = (T) repository.getOne(i).clone();
                     } catch (CloneNotSupportedException e) {
                         e.printStackTrace();
                     }
