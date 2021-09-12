@@ -42,7 +42,10 @@ public abstract class BookToReadServiceImpl<T extends BookToRead, S extends Book
     public void deleteBook(Integer id) {
         repository.deleteById(id);
 
-        if (id != repository.findAll().size() + 1) {
+        if (id != repository.findAll().size() + 1) { // deleted book was not the last one in the list
+            /*
+             * Computing new IDs for the books whose IDs were greater than that of the deleted book
+             * */
             if (id != repository.findAll().size()) {
                 for (int i = id + 1; i < repository.findAll().size() + 1; i++) {
                     T book = null;
@@ -66,6 +69,9 @@ public abstract class BookToReadServiceImpl<T extends BookToRead, S extends Book
                 book.setId(repository.findAll().size());
                 repository.save(book);
             }
+            /*
+            * The last book in the list and the previous one now have identical values
+            * */
             repository.deleteById(repository.findAll().size());
         }
     }
