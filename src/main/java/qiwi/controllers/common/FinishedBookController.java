@@ -24,6 +24,7 @@ import java.sql.Date;
 import java.util.ArrayList;
 import java.util.List;
 
+import static qiwi.controllers.common.BookController.JSONHandler.Conversion.setAttributes;
 import static qiwi.controllers.enums.Context.*;
 import static qiwi.controllers.enums.SortBy.*;
 import static qiwi.controllers.enums.SortType.*;
@@ -101,36 +102,7 @@ public abstract class FinishedBookController<
                     throw new IllegalStateException("Unexpected value: " + language);
             }
 
-            bookToAdd.setId(i + 1);
-            bookToAdd.setAuthor(source.getJSONObject(i).get("author").toString());
-            bookToAdd.setName(source.getJSONObject(i).get("name").toString());
-
-            try {
-                String date = TimeFormat.formatTime("M/d/yy", "yyyy-M-d",
-                        source.getJSONObject(i).getJSONArray("dates").get(0).toString());
-
-                bookToAdd.setStart(Date.valueOf(date));
-            } catch (Exception e) {
-                bookToAdd.setStart(Date.valueOf("1970-1-1"));
-            }
-
-            try {
-                String date = TimeFormat.formatTime("M/d/yy", "yyyy-M-d",
-                        source.getJSONObject(i).getJSONArray("dates").get(1).toString());
-
-                bookToAdd.setEnd(Date.valueOf(date));
-            } catch (Exception e) {
-                bookToAdd.setEnd(Date.valueOf("1970-1-1"));
-            }
-
-            try {
-                String date = TimeFormat.formatTime("M/d/yy", "yyyy-M-d", source.getJSONObject(i).get("found").toString());
-                bookToAdd.setFound(Date.valueOf(date));
-            } catch (Exception e) {
-                bookToAdd.setFound(Date.valueOf("1970-1-1"));
-            }
-
-            bookToAdd.setDescription(source.getJSONObject(i).get("description").toString());
+            setAttributes(bookToAdd, source.getJSONObject(i), i + 1);
 
             destination.add(bookToAdd);
         }

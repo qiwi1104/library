@@ -20,6 +20,7 @@ import qiwi.service.common.FinishedBookServiceImpl;
 import java.util.ArrayList;
 import java.util.List;
 
+import static qiwi.controllers.common.BookController.JSONHandler.Conversion.setAttributes;
 import static qiwi.controllers.enums.Context.*;
 import static qiwi.controllers.enums.SortBy.*;
 import static qiwi.controllers.enums.SortType.*;
@@ -58,19 +59,7 @@ public abstract class BookToReadController<
                     throw new IllegalStateException("Unexpected value: " + language);
             }
 
-            bookToAdd.setId(i + 1);
-            bookToAdd.setAuthor(source.getJSONObject(i - librarySize).get("author").toString());
-            bookToAdd.setName(source.getJSONObject(i - librarySize).get("name").toString());
-
-            try {
-                String date = TimeFormat.formatTime("M/d/yy", "yyyy-M-d", source.getJSONObject(i - librarySize).get("found").toString());
-
-                bookToAdd.setFound(java.sql.Date.valueOf(date));
-            } catch (Exception e) {
-                bookToAdd.setFound(java.sql.Date.valueOf("1970-1-1"));
-            }
-
-            bookToAdd.setDescription(source.getJSONObject(i - librarySize).get("description").toString());
+            setAttributes(bookToAdd, source.getJSONObject(i - librarySize), i+1);
 
             destination.add(bookToAdd);
         }

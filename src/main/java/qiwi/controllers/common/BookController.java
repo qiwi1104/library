@@ -30,6 +30,46 @@ public abstract class BookController {
          * */
         protected static class Conversion {
             /*
+            * Sets properties to a Finished Book/Book To Read
+            * */
+            protected static <T extends Book> void setAttributes(T bookToAdd, JSONObject jsonBook, int id) {
+                bookToAdd.setId(id);
+                bookToAdd.setAuthor(jsonBook.get("author").toString());
+                bookToAdd.setName(jsonBook.get("name").toString());
+
+                if (bookToAdd instanceof FinishedBook) {
+                    FinishedBook fb = (FinishedBook) bookToAdd;
+
+                    try {
+                        String date = TimeFormat.formatTime("M/d/yy", "yyyy-M-d",
+                                jsonBook.getJSONArray("dates").get(0).toString());
+
+                        fb.setStart(java.sql.Date.valueOf(date));
+                    } catch (Exception e) {
+                        fb.setStart(java.sql.Date.valueOf("1970-1-1"));
+                    }
+
+                    try {
+                        String date = TimeFormat.formatTime("M/d/yy", "yyyy-M-d",
+                                jsonBook.getJSONArray("dates").get(1).toString());
+
+                        fb.setEnd(java.sql.Date.valueOf(date));
+                    } catch (Exception e) {
+                        fb.setEnd(java.sql.Date.valueOf("1970-1-1"));
+                    }
+                }
+
+                try {
+                    String date = TimeFormat.formatTime("M/d/yy", "yyyy-M-d", jsonBook.get("found").toString());
+                    bookToAdd.setFound(java.sql.Date.valueOf(date));
+                } catch (Exception e) {
+                    bookToAdd.setFound(java.sql.Date.valueOf("1970-1-1"));
+                }
+
+                bookToAdd.setDescription(jsonBook.get("description").toString());
+            }
+
+            /*
              * Sets properties shared by both Books To Read and Finished Books to a JSON book
              * */
             private static <T extends Book> void setCommonAttributes(JSONObject jsonBook, T book) {
