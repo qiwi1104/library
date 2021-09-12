@@ -178,7 +178,7 @@ public abstract class FinishedBookController<
     }
 
     protected void load(Input input, Language language) {
-        JSONArray jsonBooks = JSONHandler.IO.readJSONFile(input.getName(), BookType.FINISHED);
+        JSONArray jsonBooks = JSONHandler.IO.readJSONFile(input.getName(), BookType.FINISHED, language);
         if (jsonBooks.length() != 0) {
             service.clearAll();
 

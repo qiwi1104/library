@@ -30,8 +30,8 @@ public abstract class BookController {
          * */
         protected static class Conversion {
             /*
-            * Sets properties to a Finished Book/Book To Read
-            * */
+             * Sets properties to a Finished Book/Book To Read
+             * */
             protected static <T extends Book> void setAttributes(T bookToAdd, JSONObject jsonBook, int id) {
                 bookToAdd.setId(id);
                 bookToAdd.setAuthor(jsonBook.get("author").toString());
@@ -186,10 +186,10 @@ public abstract class BookController {
                 return new JSONArray(str.toString());
             }
 
-            protected static JSONArray readJSONFile(String path, BookType bookType) {
+            protected static JSONArray readJSONFile(String path, BookType bookType, Language language) {
                 if (path.equals("")) {
                     path = getPathToBackupDirectory(bookType);
-                    path += getLatestFileName(path);
+                    path += getLatestFileName(path, language);
                 }
 
                 return readJSONFile(path);
@@ -232,14 +232,14 @@ public abstract class BookController {
             return filePath;
         }
 
-        private static String getLatestFileName(String path) {
+        private static String getLatestFileName(String path, Language language) {
             File directory = new File(path);
             File[] files = directory.listFiles(File::isFile);
             long lastModifiedTime = Long.MIN_VALUE;
             File chosenFile = null;
             if (files != null) {
                 for (File file : files) {
-                    if (file.lastModified() > lastModifiedTime) {
+                    if (file.lastModified() > lastModifiedTime && file.getName().toLowerCase().contains(language.toString().toLowerCase())) {
                         chosenFile = file;
                         lastModifiedTime = file.lastModified();
                     }
