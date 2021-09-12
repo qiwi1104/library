@@ -27,8 +27,11 @@ public abstract class BookController {
     protected static class JSONHandler {
         /*
          * Converts Entity books to JSON books and vice versa
-         */
+         * */
         protected static class Conversion {
+            /*
+             * Sets properties shared by both Books To Read and Finished Books to a JSON book
+             * */
             private static <T extends Book> void setCommonAttributes(JSONObject jsonBook, T book) {
                 jsonBook.put("author", book.getAuthor());
                 jsonBook.put("name", book.getName());
@@ -38,6 +41,9 @@ public abstract class BookController {
                 jsonBook.put("description", book.getDescription());
             }
 
+            /*
+             * Fills JSON array with Books To Read
+             * */
             private static <T extends Book> void fillJSONArray(JSONArray jsonArray, List<T> booksList) {
                 if (booksList.get(0) instanceof BookToRead) {
                     for (T book : booksList) {
@@ -50,6 +56,9 @@ public abstract class BookController {
                 }
             }
 
+            /*
+             * Fills JSON array with Finished Books
+             * */
             private static <T extends Book, S extends AdditionalDates> void fillJSONArray(
                     JSONArray jsonArray, List<T> booksList, List<S> additionalDates) {
                 if (booksList.get(0) instanceof FinishedBook) {
