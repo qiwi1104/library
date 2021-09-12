@@ -14,16 +14,6 @@ public class AdditionalDates {
     private Date start;
     private Date end;
 
-    public AdditionalDates() {
-    }
-
-    public AdditionalDates(Integer id, Integer finishedBookId, Date start, Date end) {
-        this.id = id;
-        this.finishedBookId = finishedBookId;
-        this.start = start;
-        this.end = end;
-    }
-
     public Integer getId() {
         return id;
     }

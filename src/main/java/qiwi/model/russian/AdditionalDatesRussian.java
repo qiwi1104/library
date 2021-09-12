@@ -14,8 +14,4 @@ public class AdditionalDatesRussian extends AdditionalDates {
     @ManyToOne
     @JoinColumn(name = "finished_book_id", insertable = false, updatable = false)
     private FinishedBookRussian finishedBook;
-
-    public AdditionalDatesRussian() {super();}
-
-    public AdditionalDatesRussian(Integer id, Integer finishedBookId, Date start, Date end) {super(id, finishedBookId, start, end);}
 }
