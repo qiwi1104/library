@@ -14,12 +14,4 @@ import java.util.List;
 public class FinishedBookRussian extends FinishedBook {
     @OneToMany(mappedBy = "finishedBook", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<AdditionalDatesRussian> additionalDates;
-
-    public FinishedBookRussian() {
-        super();
-    }
-
-    public FinishedBookRussian(String author, String name, Date start, Date end, Date found, String foundDescription) {
-        super(author, name, start, end, found, foundDescription);
-    }
 }

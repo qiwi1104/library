@@ -8,18 +8,6 @@ public class FinishedBook extends Book implements Cloneable {
     private Date start;
     private Date end;
 
-    public FinishedBook() {
-    }
-
-    public FinishedBook(String author, String name, Date start, Date end, Date found, String description) {
-        this.setName(name);
-        this.setAuthor(author);
-        this.setStart(start);
-        this.setEnd(end);
-        this.setFound(found);
-        this.setDescription(description);
-    }
-
     public Date getStart() {
         return start;
     }
