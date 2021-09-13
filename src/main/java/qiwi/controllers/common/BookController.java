@@ -189,8 +189,12 @@ public abstract class BookController {
             protected static JSONArray readJSONFile(String path, BookType bookType, Language language) {
                 if (path.equals("")) {
                     path = getPathToBackupDirectory(bookType);
-                    path += getLatestFileName(path, language);
+                } else {
+                    if (!path.endsWith("\\")) {
+                        path += "\\";
+                    }
                 }
+                path += getLatestFileName(path, language);
 
                 return readJSONFile(path);
             }
