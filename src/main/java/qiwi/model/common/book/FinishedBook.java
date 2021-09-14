@@ -40,7 +40,13 @@ public class FinishedBook extends Book implements Cloneable {
     }
 
     @Override
-    public Object clone() throws CloneNotSupportedException {
-        return super.clone();
+    public FinishedBook clone() {
+        try {
+            return (FinishedBook) super.clone();
+        } catch (CloneNotSupportedException e) {
+            e.printStackTrace();
+        }
+
+        return new FinishedBook();
     }
 }

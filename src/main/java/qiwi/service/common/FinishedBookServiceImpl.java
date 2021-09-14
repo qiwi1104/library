@@ -38,9 +38,13 @@ public abstract class FinishedBookServiceImpl<T extends FinishedBook, S extends 
         return repository.findAll(Sort.by(Sort.Direction.DESC, "end"));
     }
 
-    public List<T> findAllByOrderByFoundByIdAsc() {return repository.findAll(Sort.by(Sort.Direction.ASC, "found", "id"));}
+    public List<T> findAllByOrderByFoundByIdAsc() {
+        return repository.findAll(Sort.by(Sort.Direction.ASC, "found", "id"));
+    }
 
-    public List<T> findAllByOrderByFoundByIdDesc() {return repository.findAll(Sort.by(Sort.Direction.DESC, "found", "id"));}
+    public List<T> findAllByOrderByFoundByIdDesc() {
+        return repository.findAll(Sort.by(Sort.Direction.DESC, "found", "id"));
+    }
 
     @Override
     public void addBook(T book) {
@@ -59,23 +63,13 @@ public abstract class FinishedBookServiceImpl<T extends FinishedBook, S extends 
         if (id != repository.findAll().size() + 1) {
             if (id != repository.findAll().size()) {
                 for (int i = id + 1; i < repository.findAll().size() + 1; i++) {
-                    T book = null;
-                    try {
-                        book = (T) repository.getOne(i).clone();
-                    } catch (CloneNotSupportedException e) {
-                        e.printStackTrace();
-                    }
+                    T book = (T) repository.getOne(i).clone();
 
                     book.setId(i - 1);
                     repository.save(book);
                 }
             } else {
-                T book = null;
-                try {
-                    book = (T) repository.getOne(repository.findAll().size() + 1).clone();
-                } catch (CloneNotSupportedException e) {
-                    e.printStackTrace();
-                }
+                T book = (T) repository.getOne(repository.findAll().size() + 1).clone();
 
                 book.setId(repository.findAll().size());
                 repository.save(book);

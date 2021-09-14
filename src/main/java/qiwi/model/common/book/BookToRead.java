@@ -20,7 +20,13 @@ public class BookToRead extends Book implements Cloneable {
     }
 
     @Override
-    public Object clone() throws CloneNotSupportedException {
-        return super.clone();
+    public BookToRead clone() {
+        try {
+            return (BookToRead) super.clone();
+        } catch (CloneNotSupportedException e) {
+            e.printStackTrace();
+        }
+
+        return new BookToRead();
     }
 }
