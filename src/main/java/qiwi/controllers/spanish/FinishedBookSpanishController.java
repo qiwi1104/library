@@ -60,7 +60,7 @@ public class FinishedBookSpanishController extends FinishedBookController<
 
     @GetMapping("/")
     public String list(Model model) {
-        super.list(model, new ArrayList<FinishedBookSpanish>());
+        super.list(model, new ArrayList<>());
         return "finishedBooksSpanish";
     }
 }

@@ -73,7 +73,7 @@ public class BookToReadSpanishController extends BookToReadController<
 
     @GetMapping("/")
     public String list(Model model) {
-        super.list(model, new ArrayList<BookToReadSpanish>());
+        super.list(model, new ArrayList<>());
         return "booksToReadSpanish";
     }
 }
