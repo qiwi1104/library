@@ -13,6 +13,7 @@ import qiwi.model.common.book.FinishedBook;
 import qiwi.model.english.BookToReadEnglish;
 import qiwi.model.russian.BookToReadRussian;
 import qiwi.model.spanish.BookToReadSpanish;
+import qiwi.repository.common.BookToReadRepository;
 import qiwi.repository.common.FinishedBookRepository;
 import qiwi.service.common.BookToReadServiceImpl;
 import qiwi.service.common.FinishedBookServiceImpl;
@@ -27,7 +28,7 @@ import static qiwi.controllers.enums.SortType.*;
 
 public abstract class BookToReadController<
         T extends BookToRead,
-        S extends BookToReadServiceImpl<T, ?>,
+        S extends BookToReadServiceImpl<T, ? extends BookToReadRepository<T>>,
         U extends FinishedBook,
         V extends FinishedBookServiceImpl<U, ? extends FinishedBookRepository<U>>> extends BookController {
     @Autowired

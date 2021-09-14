@@ -17,6 +17,7 @@ import qiwi.model.russian.FinishedBookRussian;
 import qiwi.model.spanish.AdditionalDatesSpanish;
 import qiwi.model.spanish.FinishedBookSpanish;
 import qiwi.repository.common.AdditionalDatesRepository;
+import qiwi.repository.common.FinishedBookRepository;
 import qiwi.service.common.AdditionalDatesServiceImpl;
 import qiwi.service.common.FinishedBookServiceImpl;
 
@@ -31,7 +32,7 @@ import static qiwi.controllers.enums.SortType.*;
 
 public abstract class FinishedBookController<
         T extends FinishedBook,
-        S extends FinishedBookServiceImpl<T, ?>,
+        S extends FinishedBookServiceImpl<T, ? extends FinishedBookRepository<T>>,
         U extends AdditionalDates,
         V extends AdditionalDatesServiceImpl<U, ? extends AdditionalDatesRepository<U>>> extends BookController {
     @Autowired
