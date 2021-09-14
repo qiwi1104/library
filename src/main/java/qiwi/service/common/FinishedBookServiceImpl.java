@@ -10,7 +10,9 @@ import qiwi.service.BookService;
 import java.util.List;
 
 @Service
-public abstract class FinishedBookServiceImpl<T extends FinishedBook, S extends FinishedBookRepository<T>> implements BookService<T> {
+public abstract class FinishedBookServiceImpl<
+        T extends FinishedBook,
+        S extends FinishedBookRepository<T>> implements BookService<T> {
     @Autowired
     private S repository;
 

@@ -9,7 +9,9 @@ import qiwi.service.AdditionalDatesService;
 import java.util.List;
 
 @Service
-public abstract class AdditionalDatesServiceImpl<T extends AdditionalDates, S extends AdditionalDatesRepository<T>> implements AdditionalDatesService<T> {
+public abstract class AdditionalDatesServiceImpl<
+        T extends AdditionalDates,
+        S extends AdditionalDatesRepository<T>> implements AdditionalDatesService<T> {
     @Autowired
     private S additionalDatesRepository;
 
