@@ -10,100 +10,20 @@
 <br/>
 <div>
     <form action="#" th:action="@{/finishedbooks/spanish/add}" th:object="${finishedSpanishInput}" method="post">
-        <table border="1px" class="hiddenPanel" id="add">
-            <tr>
-                <td>
-                    <label>Author</label>
-                    <input type="text" field="*{author}" name="author">
-                </td>
-                <td>
-                    <label>Name</label>
-                    <input type="text" field="*{name}" name="name">
-                </td>
-            </tr>
-            <tr>
-                <td>
-                    <label>Start</label>
-                    <input type="date" field="*{start}" name="start">
-                </td>
-                <td>
-                    <label>End</label>
-                    <input type="date" field="*{end}" name="end">
-                </td>
-            </tr>
-            <tr>
-                <td>
-                    <label>Found</label>
-                    <input type="date" field="*{found}" name="found">
-                </td>
-                <td>
-                    <label>Description</label>
-                    <input type="text" field="*{description}" name="description">
-                </td>
-            </tr>
-            <tr>
-                <td>
-                    <input type="submit" value="add book">
-                </td>
-            </tr>
-        </table>
+        <table th:replace="fragments/fullInfoPanels :: finishedBookAddPanel"></table>
     </form>
     <br/>
     <form action="#" th:action="@{'/finishedbooks/spanish/edit/{id}'}" th:object="${finishedSpanishInput}"
           method="post">
-        <table border="1px" class="hiddenPanel" hidden id="edit">
-            <tr>
-                <td>
-                    <label>#</label>
-                    <input type="number" field="*{id}" name="id">
-                </td>
-            </tr>
-            <tr>
-                <td>
-                    <label>Author</label>
-                    <input type="text" field="*{author}" name="author">
-                </td>
-                <td>
-                    <label>Name</label>
-                    <input type="text" field="*{name}" name="name">
-                </td>
-            </tr>
-            <tr>
-                <td>
-                    <label>Start</label>
-                    <input type="date" field="*{start}" name="start">
-                </td>
-            </tr>
-            <tr>
-                <td>
-                    <label>End</label>
-                    <input type="date" field="*{end}" name="end">
-                </td>
-            </tr>
-            <tr>
-                <td>
-                    <label>Found</label>
-                    <input type="date" field="*{found}" name="found">
-                </td>
-                <td>
-                    <label>Description</label>
-                    <input type="text" field="*{description}" name="description">
-                </td>
-            </tr>
-            <tr>
-                <td>
-                    <input type="submit" value="edit book">
-                </td>
-            </tr>
-        </table>
+        <table th:replace="fragments/fullInfoPanels :: finishedBookEditPanel"></table>
     </form>
     <br/>
     <form action="#" th:action="@{'/finishedbooks/spanish/load'}" th:object="${finishedSpanishInput}" method="post">
-        <table th:replace="fragments/loadPanel :: loadPanel"></table>
+        <table th:replace="fragments/IOPanels :: loadPanel"></table>
     </form>
     <br/>
     <form action="#" th:action="@{'/finishedbooks/spanish/save'}" th:object="${finishedSpanishInput}" method="post">
-        <table th:replace="fragments/savePanel :: savePanel"></table>
+        <table th:replace="fragments/IOPanels :: savePanel"></table>
     </form>
 </div>
 <br/>
