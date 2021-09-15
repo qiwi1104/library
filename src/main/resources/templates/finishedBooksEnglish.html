@@ -10,20 +10,20 @@
 <br/>
 <div>
     <form action="#" th:action="@{/finishedbooks/english/add}" th:object="${finishedEnglishInput}" method="post">
-        <table th:replace="fragments/fullInfoPanels :: finishedBookAddPanel"></table>
+        <table th:replace="fragments/finishedBooksPanels :: add"></table>
     </form>
     <br/>
     <form action="#" th:action="@{'/finishedbooks/english/edit/{id}'}" th:object="${finishedEnglishInput}"
           method="post">
-        <table th:replace="fragments/fullInfoPanels :: finishedBookEditPanel"></table>
+        <table th:replace="fragments/finishedBooksPanels :: edit"></table>
     </form>
     <br/>
     <form action="#" th:action="@{'/finishedbooks/english/load'}" th:object="${finishedEnglishInput}" method="post">
-        <table th:replace="fragments/IOPanels :: loadPanel"></table>
+        <table th:replace="fragments/IO :: load"></table>
     </form>
     <br/>
     <form action="#" th:action="@{'/finishedbooks/english/save'}" th:object="${finishedEnglishInput}" method="post">
-        <table th:replace="fragments/IOPanels :: savePanel"></table>
+        <table th:replace="fragments/IO :: save"></table>
     </form>
 </div>
 <br/>
