@@ -187,16 +187,26 @@ public abstract class BookController {
             }
 
             protected static JSONArray readJSONFile(String path, BookType bookType, Language language) {
+                // path to a folder/file has not been set, meaning the one from config.properties will be used
                 if (path.equals("")) {
                     path = getPathToBackupDirectory(bookType);
                 } else {
-                    if (!path.endsWith("\\")) {
-                        path += "\\";
+                    if (!path.endsWith(".json")) { // path to a certain file is not defined
+                        if (!path.endsWith("\\")) { // path to a folder containing the file to create table from
+                            path += "\\";
+                        }
                     }
                 }
-                path += getLatestFileName(path, language);
 
-                return readJSONFile(path);
+                boolean isPathCorrect = true;
+                if (!path.equals("")) {
+                    path += getLatestFileName(path, language);
+                } else {
+                    isPathCorrect = false;
+                    System.out.println("Paths in config.properties might not have been defined :(");
+                }
+
+                return isPathCorrect ? readJSONFile(path) : new JSONArray();
             }
         }
 
@@ -212,9 +222,9 @@ public abstract class BookController {
 
             switch (bookType) {
                 case TO_READ:
-                    return property.getProperty("booksToRead.path");
+                    return property.getOrDefault("booksToRead.path", "").toString();
                 case FINISHED:
-                    return property.getProperty("finishedBooks.path");
+                    return property.getOrDefault("finishedBooks.path", "").toString();
                 default:
                     return "";
             }
@@ -250,7 +260,12 @@ public abstract class BookController {
                 }
             }
 
-            return chosenFile.getName();
+            String ret = "";
+            if (chosenFile != null) {
+                ret = chosenFile.getName();
+            }
+
+            return ret;
         }
     }
 
