@@ -145,9 +145,7 @@ public abstract class BookController {
             private static void writeJSONArrayToFile(JSONArray array, String path) {
                 String res = array.toString();
 
-                /*
-                * An error may occur when paths in config.properties are invalid (e.g. string like "dfdfdf" and the like)
-                * */
+                // an error occurs when trying to save to a certain file
                 if (!path.equals("")) {
                     try {
                         FileWriter writer = new FileWriter(new File(path), StandardCharsets.UTF_8);
