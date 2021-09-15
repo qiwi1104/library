@@ -31,7 +31,7 @@ $ mvn spring-boot:run
 
 Go to `localhost:8080/bookstoread/english/`
 
-Load sample files (from `sample` folder) using `load` button.
+You can load sample files (from `sample` folder) using `load` button.
 #
 P.S.
 
