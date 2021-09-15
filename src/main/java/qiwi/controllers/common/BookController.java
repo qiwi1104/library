@@ -145,26 +145,33 @@ public abstract class BookController {
             private static void writeJSONArrayToFile(JSONArray array, String path) {
                 String res = array.toString();
 
-                try {
-                    FileWriter writer = new FileWriter(new File(path), StandardCharsets.UTF_8);
-                    writer.write(res);
-                    writer.close();
-                } catch (IOException e) {
-                    e.printStackTrace();
+                /*
+                * An error may occur when paths in config.properties are invalid (e.g. string like "dfdfdf" and the like)
+                * */
+                if (!path.equals("")) {
+                    try {
+                        FileWriter writer = new FileWriter(new File(path), StandardCharsets.UTF_8);
+                        writer.write(res);
+                        writer.close();
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                } else {
+                    System.out.println("Something's wrong with the path :(");
                 }
             }
 
-            protected static <T extends Book> void saveTableToJSON(List<T> booksList, String filePath, Language language) {
+            protected static <T extends Book> void saveTableToJSON(List<T> booksList, String path, Language language) {
                 JSONArray jsonArray = new JSONArray();
                 Conversion.fillJSONArray(jsonArray, booksList);
-                writeJSONArrayToFile(jsonArray, fixPathToBackupFile(filePath, language, TO_READ));
+                writeJSONArrayToFile(jsonArray, fixPathToBackupFile(path, language, TO_READ));
             }
 
             protected static <T extends Book, S extends AdditionalDates> void saveTableToJSON(
-                    List<T> booksList, List<S> additionalDates, String filePath, Language language) {
+                    List<T> booksList, List<S> additionalDates, String path, Language language) {
                 JSONArray jsonArray = new JSONArray();
                 Conversion.fillJSONArray(jsonArray, booksList, additionalDates);
-                writeJSONArrayToFile(jsonArray, fixPathToBackupFile(filePath, language, FINISHED));
+                writeJSONArrayToFile(jsonArray, fixPathToBackupFile(path, language, FINISHED));
             }
 
             protected static JSONArray readJSONFile(String path) {
@@ -230,20 +237,25 @@ public abstract class BookController {
             }
         }
 
-        private static String fixPathToBackupFile(String filePath, Language language, BookType bookType) {
-            if (filePath.isEmpty()) {
-                filePath = getPathToBackupDirectory(bookType);
+        private static String fixPathToBackupFile(String path, Language language, BookType bookType) {
+            if (path.equals("")) {
+                path = getPathToBackupDirectory(bookType);
+                if (path.equals("")) {
+                    System.out.println("Paths in config.properties might not have been defined :(");
+                    return "";
+                }
             } else {
-                if (!filePath.endsWith("\\")) {
-                    filePath += "\\";
+                if (!path.endsWith("\\")) {
+                    path += "\\";
                 }
             }
 
             String languageStr = language.toString().toLowerCase();
             languageStr = languageStr.substring(0, 1).toUpperCase() + languageStr.substring(1);
 
-            filePath += languageStr + " " + new SimpleDateFormat("yyyy-MM-dd HH-mm-ss").format(new Date()) + ".json";
-            return filePath;
+            path += languageStr + " " + new SimpleDateFormat("yyyy-MM-dd HH-mm-ss").format(new Date()) + ".json";
+
+            return path;
         }
 
         private static String getLatestFileName(String path, Language language) {
