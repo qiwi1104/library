@@ -62,21 +62,10 @@ public abstract class FinishedBookServiceImpl<
     public void deleteBook(Integer id) {
         repository.deleteById(id);
 
+        // Deleted book was not the last one in the list
         if (id != repository.findAll().size() + 1) {
-            if (id != repository.findAll().size()) {
-                for (int i = id + 1; i < repository.findAll().size() + 1; i++) {
-                    T book = (T) repository.getOne(i).clone();
-
-                    book.setId(i - 1);
-                    repository.save(book);
-                }
-            } else {
-                T book = (T) repository.getOne(repository.findAll().size() + 1).clone();
-
-                book.setId(repository.findAll().size());
-                repository.save(book);
-            }
-            repository.deleteById(repository.findAll().size());
+            // Computing new IDs for the books whose IDs were greater than that of the deleted book
+            repository.computeIds();
         }
     }
 
