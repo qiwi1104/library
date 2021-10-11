@@ -90,20 +90,18 @@ public abstract class FinishedBookServiceImpl<
         return false;
     }
 
-    @Override
-    public List<T> findAll() {
-        return repository.findAll();
-    }
-
-    public boolean isInTable(T book) {
+    public T get(T book) {
         for (T finishedBook : repository.findAll()) {
             if (finishedBook.equals(book)) {
-                book.setId(finishedBook.getId());
-                book.setFound(finishedBook.getFound());
-                return true;
+                return finishedBook;
             }
         }
 
-        return false;
+        return (T) new FinishedBook();
+    }
+
+    @Override
+    public List<T> findAll() {
+        return repository.findAll();
     }
 }

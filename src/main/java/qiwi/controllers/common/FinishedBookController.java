@@ -156,7 +156,10 @@ public abstract class FinishedBookController<
         book.setId(service.findAll().size() + 1);
         setBookAttributesFromInput(book, inputFinished, ADD);
 
-        if (service.isInTable(book)) {
+        if (service.exists(book)) {
+            book.setId(service.get(book).getId());
+            book.setFound(service.get(book).getFound());
+
             additionalDates.setId(additionalDatesService.findAll().size() + 1);
             additionalDates.setFinishedBookId(book.getId());
             additionalDates.setStart(book.getStart());
