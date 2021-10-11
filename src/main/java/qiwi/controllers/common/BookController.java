@@ -145,7 +145,6 @@ public abstract class BookController {
             private static void writeJSONArrayToFile(JSONArray array, String path) {
                 String res = array.toString();
 
-                // an error occurs when trying to save to a certain file
                 if (!path.equals("")) {
                     try {
                         FileWriter writer = new FileWriter(new File(path), StandardCharsets.UTF_8);
@@ -236,22 +235,24 @@ public abstract class BookController {
         }
 
         private static String fixPathToBackupFile(String path, Language language, BookType bookType) {
-            if (path.equals("")) {
-                path = getPathToBackupDirectory(bookType);
+            if (!path.endsWith(".json")) {
                 if (path.equals("")) {
-                    System.out.println("Paths in config.properties might not have been defined :(");
-                    return "";
+                    path = getPathToBackupDirectory(bookType);
+                    if (path.equals("")) {
+                        System.out.println("Paths in config.properties might not have been defined :(");
+                        return "";
+                    }
+                } else {
+                    if (!path.endsWith("\\")) {
+                        path += "\\";
+                    }
                 }
-            } else {
-                if (!path.endsWith("\\")) {
-                    path += "\\";
-                }
+
+                String languageStr = language.toString().toLowerCase();
+                languageStr = languageStr.substring(0, 1).toUpperCase() + languageStr.substring(1);
+
+                path += languageStr + " " + new SimpleDateFormat("yyyy-MM-dd HH-mm-ss").format(new Date()) + ".json";
             }
-
-            String languageStr = language.toString().toLowerCase();
-            languageStr = languageStr.substring(0, 1).toUpperCase() + languageStr.substring(1);
-
-            path += languageStr + " " + new SimpleDateFormat("yyyy-MM-dd HH-mm-ss").format(new Date()) + ".json";
 
             return path;
         }
