@@ -1,6 +1,5 @@
 package qiwi.controllers.common;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import org.json.JSONArray;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.ui.Model;
@@ -109,7 +108,8 @@ public abstract class BookToReadController<
         }
     }
 
-    protected void edit(Input input, T book) {
+    protected void edit(Input input) {
+        T book = service.getBookById(input.getId());
         setBookAttributesFromInput(book, input, EDIT);
         service.addBook(book);
     }

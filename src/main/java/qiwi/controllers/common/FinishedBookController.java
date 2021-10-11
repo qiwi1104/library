@@ -171,7 +171,8 @@ public abstract class FinishedBookController<
         }
     }
 
-    protected void edit(Input inputFinished, T book) {
+    protected void edit(Input inputFinished) {
+        T book = service.getBookById(inputFinished.getId());
         setBookAttributesFromInput(book, inputFinished, EDIT);
         service.addBook(book);
     }

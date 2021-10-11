@@ -31,7 +31,7 @@ public class BookToReadEnglishController extends BookToReadController<
 
     @PostMapping("/edit/{id}")
     public String edit(@ModelAttribute("booksToReadEnglishInput") Input input, BindingResult result) {
-        super.edit(input, service.getBookById(input.getId()));
+        super.edit(input);
         return "redirect:/bookstoread/english/";
     }
 
