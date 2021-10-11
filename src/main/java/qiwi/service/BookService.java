@@ -15,5 +15,7 @@ public interface BookService<T extends Book> {
 
     T getBookById(Integer id);
 
+    boolean exists(T book);
+
     List<T> findAll();
 }

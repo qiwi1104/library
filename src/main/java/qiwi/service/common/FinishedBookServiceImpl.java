@@ -80,6 +80,17 @@ public abstract class FinishedBookServiceImpl<
     }
 
     @Override
+    public boolean exists(T book) {
+        for (T finishedBook : repository.findAll()) {
+            if (finishedBook.equals(book)) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    @Override
     public List<T> findAll() {
         return repository.findAll();
     }

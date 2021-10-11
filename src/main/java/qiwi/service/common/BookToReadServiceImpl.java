@@ -62,6 +62,17 @@ public abstract class BookToReadServiceImpl<
     }
 
     @Override
+    public boolean exists(T book) {
+        for (T bookToRead : repository.findAll()) {
+            if (bookToRead.equals(book)) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    @Override
     public List<T> findAll() {
         return repository.findAll();
     }

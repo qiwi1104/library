@@ -1,5 +1,6 @@
 package qiwi.controllers.common;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.json.JSONArray;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.ui.Model;
@@ -101,17 +102,10 @@ public abstract class BookToReadController<
         book.setId(service.findAll().size() + 1);
         setBookAttributesFromInput(book, input, ADD);
 
-        boolean exists = false;
-        for (T bookToRead : service.findAll()) {
-            if (bookToRead.equals(book)) {
-                System.out.println("This book already exists!");
-                exists = true;
-                break;
-            }
-        }
-
-        if (!exists) {
+        if (!service.exists(book)) {
             service.addBook(book);
+        } else {
+            System.out.println("This book already exists!");
         }
     }
 
