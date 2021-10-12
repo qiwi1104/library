@@ -1,11 +1,9 @@
 package qiwi.model.common.book;
 
 import qiwi.controllers.common.BookController;
-import qiwi.model.common.AdditionalDates;
 
 import javax.persistence.MappedSuperclass;
 import java.sql.Date;
-import java.util.List;
 import java.util.Map;
 
 @MappedSuperclass

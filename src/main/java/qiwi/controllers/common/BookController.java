@@ -1,7 +1,6 @@
 package qiwi.controllers.common;
 
 import org.json.JSONArray;
-import org.json.JSONException;
 import org.json.JSONObject;
 import qiwi.Application;
 import qiwi.controllers.enums.BookType;
@@ -22,7 +21,8 @@ import java.util.List;
 import java.util.Properties;
 import java.util.Scanner;
 
-import static qiwi.controllers.enums.BookType.*;
+import static qiwi.controllers.enums.BookType.FINISHED;
+import static qiwi.controllers.enums.BookType.TO_READ;
 
 public abstract class BookController {
     protected static class JSONHandler {
@@ -32,6 +32,7 @@ public abstract class BookController {
         protected static class Conversion {
             /*
              * Sets properties to a Finished Book/Book To Read
+             * Also keeps every Book class free from identical & redundant constructors
              * */
             protected static <T extends Book> void setAttributes(T bookToAdd, JSONObject jsonBook, int id) {
                 bookToAdd.setId(id);
