@@ -1,6 +1,7 @@
 package qiwi.controllers.common;
 
 import org.json.JSONArray;
+import org.json.JSONException;
 import org.json.JSONObject;
 import qiwi.Application;
 import qiwi.controllers.enums.BookType;
@@ -70,25 +71,12 @@ public abstract class BookController {
             }
 
             /*
-             * Sets properties shared by both Books To Read and Finished Books to a JSON book
-             * */
-            private static <T extends Book> void setCommonAttributes(JSONObject jsonBook, T book) {
-                jsonBook.put("author", book.getAuthor());
-                jsonBook.put("name", book.getName());
-
-                String found = TimeFormat.formatTime("yyyy-M-d", "M/d/yy", book.getFound().toString());
-                jsonBook.put("found", found);
-                jsonBook.put("description", book.getDescription());
-            }
-
-            /*
              * Fills JSON array with Books To Read
              * */
             private static <T extends Book> void fillJSONArray(JSONArray jsonArray, List<T> booksList) {
                 if (booksList.get(0) instanceof BookToRead) {
                     for (T book : booksList) {
-                        JSONObject jsonBook = new JSONObject();
-                        setCommonAttributes(jsonBook, book);
+                        JSONObject jsonBook = new JSONObject(book.toString());
                         jsonArray.put(jsonBook);
                     }
                 } else {
@@ -104,16 +92,7 @@ public abstract class BookController {
                 if (booksList.get(0) instanceof FinishedBook) {
                     for (T book : booksList) {
                         FinishedBook finishedBook = (FinishedBook) book;
-                        JSONObject jsonBook = new JSONObject();
-                        setCommonAttributes(jsonBook, finishedBook);
-
-                        JSONArray dates = new JSONArray();
-                        String start = TimeFormat.formatTime("yyyy-M-d", "M/d/yy", finishedBook.getStart().toString());
-                        String end = TimeFormat.formatTime("yyyy-M-d", "M/d/yy", finishedBook.getEnd().toString());
-
-                        dates.put(start);
-                        dates.put(end);
-                        jsonBook.put("dates", dates);
+                        JSONObject jsonBook = new JSONObject(finishedBook.toString());
 
                         JSONObject additionalDatesJSON = new JSONObject();
                         JSONArray additionalDatesStartJSON = new JSONArray();
@@ -280,7 +259,7 @@ public abstract class BookController {
         }
     }
 
-    protected static class TimeFormat {
+    public static class TimeFormat {
         public static String formatTime(String oldFormat, String newFormat, String stringToParse) {
             SimpleDateFormat oldDateFormat = new SimpleDateFormat(oldFormat);
             SimpleDateFormat newDateFormat = new SimpleDateFormat(newFormat);
