@@ -1,31 +1,8 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
-<head>
-    <meta charset="UTF-8">
-    <title>Title</title>
-</head>
 <body>
 <table th:fragment="add" border="1px" class="hiddenPanel" id="add">
-    <tr>
-        <td>
-            <label>Author</label>
-            <input type="text" field="*{author}" name="author">
-        </td>
-        <td>
-            <label>Name</label>
-            <input type="text" field="*{name}" name="name">
-        </td>
-    </tr>
-    <tr>
-        <td>
-            <label>Found</label>
-            <input type="date" field="*{found}" name="found">
-        </td>
-        <td>
-            <label>Description</label>
-            <input type="text" field="*{description}" name="description">
-        </td>
-    </tr>
+    <div th:replace="fragments/commonAttributes :: commonAttributesToRead"></div>
     <tr>
         <td>
             <input type="submit" value="add book">
@@ -59,26 +36,7 @@
             <input type="number" field="*{id}" name="id">
         </td>
     </tr>
-    <tr>
-        <td>
-            <label>Author</label>
-            <input type="text" field="*{author}" name="author">
-        </td>
-        <td>
-            <label>Name</label>
-            <input type="text" field="*{name}" name="name">
-        </td>
-    </tr>
-    <tr>
-        <td>
-            <label>Found</label>
-            <input type="date" field="*{found}" name="found">
-        </td>
-        <td>
-            <label>Description</label>
-            <input type="text" field="*{description}" name="description">
-        </td>
-    </tr>
+    <div th:replace="fragments/commonAttributes :: commonAttributesToRead"></div>
     <tr>
         <td>
             <input type="submit" value="edit book">
