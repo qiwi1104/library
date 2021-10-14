@@ -4,6 +4,7 @@ import javax.persistence.Column;
 import javax.persistence.Id;
 import javax.persistence.MappedSuperclass;
 import java.sql.Date;
+import java.util.Objects;
 
 @MappedSuperclass
 public class AdditionalDates {
@@ -44,5 +45,20 @@ public class AdditionalDates {
 
     public void setEnd(Date end) {
         this.end = end;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof AdditionalDates)) return false;
+        AdditionalDates dates = (AdditionalDates) o;
+        return finishedBookId.equals(dates.finishedBookId) &&
+                start.equals(dates.start) &&
+                end.equals(dates.end);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(finishedBookId, start, end);
     }
 }
