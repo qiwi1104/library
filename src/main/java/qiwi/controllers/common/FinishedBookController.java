@@ -9,6 +9,7 @@ import qiwi.controllers.enums.SortBy;
 import qiwi.controllers.enums.SortType;
 import qiwi.model.common.AdditionalDates;
 import qiwi.model.common.Input;
+import qiwi.model.common.PathInput;
 import qiwi.model.common.book.FinishedBook;
 import qiwi.model.english.AdditionalDatesEnglish;
 import qiwi.model.english.FinishedBookEnglish;
@@ -152,9 +153,9 @@ public abstract class FinishedBookController<
         return books;
     }
 
-    protected void add(Input inputFinished, T book, U additionalDates) {
+    protected void add(Input input, T book, U additionalDates) {
         book.setId(service.findAll().size() + 1);
-        setBookAttributesFromInput(book, inputFinished, ADD);
+        setBookAttributesFromInput(book, input, ADD);
 
         if (service.exists(book)) {
             book.setId(service.get(book).getId());
@@ -171,9 +172,9 @@ public abstract class FinishedBookController<
         }
     }
 
-    protected void edit(Input inputFinished) {
-        T book = service.getBookById(inputFinished.getId());
-        setBookAttributesFromInput(book, inputFinished, EDIT);
+    protected void edit(Input input) {
+        T book = service.getBookById(input.getId());
+        setBookAttributesFromInput(book, input, EDIT);
         service.addBook(book);
     }
 
@@ -182,8 +183,8 @@ public abstract class FinishedBookController<
         this.sortProperty = sortProperty;
     }
 
-    protected void load(Input input, Language language) {
-        JSONArray jsonBooks = JSONHandler.IO.readJSONFile(input.getName(), BookType.FINISHED, language);
+    protected void load(PathInput input, Language language) {
+        JSONArray jsonBooks = JSONHandler.IO.readJSONFile(input.getPath(), BookType.FINISHED, language);
         if (jsonBooks.length() != 0) {
             service.clearAll();
 
@@ -196,11 +197,11 @@ public abstract class FinishedBookController<
         }
     }
 
-    protected void save(Input input, Language language) {
+    protected void save(PathInput input, Language language) {
         List<T> bookToReadList = service.findAll();
         List<U> additionalDatesList = additionalDatesService.findAll();
 
-        JSONHandler.IO.saveTableToJSON(bookToReadList, additionalDatesList, input.getName(), language);
+        JSONHandler.IO.saveTableToJSON(bookToReadList, additionalDatesList, input.getPath(), language);
     }
 
     protected void list(Model model, List<T> bookList) {
