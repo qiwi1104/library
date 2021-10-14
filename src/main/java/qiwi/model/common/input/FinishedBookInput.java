@@ -1,4 +1,4 @@
-package qiwi.model.common;
+package qiwi.model.common.input;
 
 import java.sql.Date;
 
