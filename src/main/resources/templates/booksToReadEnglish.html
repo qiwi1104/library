@@ -11,8 +11,7 @@
 <div>
     <form action="#" th:action="@{/bookstoread/english/add}" th:object="${booksToReadEnglishInput}" method="post">
         <table th:fragment="add" border="1px" class="hiddenPanel" id="add">
-            <div th:replace="fragments/commonAttributes :: commonAttributesToRead">
-            </div>
+            <div th:replace="fragments/commonAttributes :: commonAttributesToRead"></div>
             <tr>
                 <td>
                     <input type="submit" value="add book">
