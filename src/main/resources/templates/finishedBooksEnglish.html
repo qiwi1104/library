@@ -10,12 +10,44 @@
 <br/>
 <div>
     <form action="#" th:action="@{/finishedbooks/english/add}" th:object="${finishedEnglishInput}" method="post">
-        <table th:replace="fragments/finishedBooksPanels :: add"></table>
+        <table th:fragment="add" border="1px" class="hiddenPanel" id="add">
+            <div th:replace="fragments/commonAttributes :: commonAttributesFinished"></div>
+            <tr>
+                <td>
+                    <input type="submit" value="add book">
+                </td>
+                <td th:if="${#fields.hasErrors('found')}">
+                    <script>
+                        let table = document.body.getElementsByClassName("hiddenPanel").add;
+                        table.children[0].children[3].firstElementChild.append("Please enter the date.");
+                    </script>
+                </td>
+            </tr>
+        </table>
     </form>
     <br/>
     <form action="#" th:action="@{'/finishedbooks/english/edit/{id}'}" th:object="${finishedEnglishInput}"
           method="post">
-        <table th:replace="fragments/finishedBooksPanels :: edit"></table>
+        <table th:fragment="edit" border="1px" class="hiddenPanel" hidden id="edit">
+            <tr>
+                <td>
+                    <label>#</label>
+                    <input type="number" field="*{id}" name="id">
+                </td>
+            </tr>
+            <div th:replace="fragments/commonAttributes :: commonAttributesFinished"></div>
+            <tr>
+                <td>
+                    <input type="submit" value="edit book">
+                </td>
+                <td th:if="${#fields.hasErrors()}">
+                    <script>
+                        let table = document.body.getElementsByClassName("hiddenPanel").add;
+                        table.children[0].children[3].firstElementChild.append("Please enter the date.");
+                    </script>
+                </td>
+            </tr>
+        </table>
     </form>
     <br/>
     <form action="#" th:action="@{'/finishedbooks/english/load'}" th:object="${finishedEnglishInput}" method="post">

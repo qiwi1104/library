@@ -24,14 +24,29 @@ public class FinishedBookRussianController extends FinishedBookController<
         FinishedBookRussianServiceImpl,
         AdditionalDatesRussian,
         AdditionalDatesServiceRussianImpl> {
+
+
+
     @PostMapping("/add")
-    public String add(@ModelAttribute("finishedRussianInput") FinishedBookInput input) {
+    public String add(@ModelAttribute("finishedRussianInput") FinishedBookInput input, BindingResult result, Model model) {
+        if (result.hasErrors()) {
+            super.list(model, new ArrayList<>());
+            return "finishedBooksRussian";
+        }
+
         super.add(input, new FinishedBookRussian(), new AdditionalDatesRussian());
         return "redirect:/finishedbooks/russian/";
     }
 
     @PostMapping("/edit/{id}")
-    public String edit(@ModelAttribute("finishedRussianInput") FinishedBookInput input, BindingResult result) {
+    public String edit(@ModelAttribute("finishedRussianInput") FinishedBookInput input, BindingResult result, Model model) {
+        if (result.hasErrors()) {
+            if (input.getId() == null) {
+                super.list(model, new ArrayList<>());
+                return "finishedBooksRussian";
+            }
+        }
+
         super.edit(input);
         return "redirect:/finishedbooks/russian/";
     }
@@ -49,13 +64,13 @@ public class FinishedBookRussianController extends FinishedBookController<
     }
 
     @PostMapping("/load")
-    public String load(@ModelAttribute("finishedRussianInput") PathInput input) {
+    public String load(@ModelAttribute("finishedRussianInput") PathInput input, BindingResult result, Model model) {
         super.load(input, Language.RUSSIAN);
         return "redirect:/finishedbooks/russian/";
     }
 
     @PostMapping("/save")
-    public String save(@ModelAttribute("finishedRussianInput") PathInput input) {
+    public String save(@ModelAttribute("finishedRussianInput") PathInput input, BindingResult result, Model model) {
         super.save(input, Language.RUSSIAN);
         return "redirect:/finishedbooks/russian/";
     }

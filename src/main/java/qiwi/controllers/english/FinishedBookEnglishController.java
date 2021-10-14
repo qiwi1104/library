@@ -30,14 +30,26 @@ public class FinishedBookEnglishController extends FinishedBookController<
     }
 
     @PostMapping("/add")
-    public String add(@ModelAttribute("finishedEnglishInput") FinishedBookInput inputFinished, BindingResult result, Model model) {
-        super.add(inputFinished, new FinishedBookEnglish(), new AdditionalDatesEnglish());
+    public String add(@ModelAttribute("finishedEnglishInput") FinishedBookInput input, BindingResult result, Model model) {
+        if (result.hasErrors()) {
+            super.list(model, new ArrayList<>());
+            return "finishedBooksEnglish";
+        }
+
+        super.add(input, new FinishedBookEnglish(), new AdditionalDatesEnglish());
         return "redirect:/finishedbooks/english/";
     }
 
     @PostMapping("/edit/{id}")
-    public String edit(@ModelAttribute("finishedEnglishInput") FinishedBookInput inputFinished, BindingResult result, Model model) {
-        super.edit(inputFinished);
+    public String edit(@ModelAttribute("finishedEnglishInput") FinishedBookInput input, BindingResult result, Model model) {
+        if (result.hasErrors()) {
+            if (input.getId() == null) {
+                super.list(model, new ArrayList<>());
+                return "finishedBooksEnglish";
+            }
+        }
+
+        super.edit(input);
         return "redirect:/finishedbooks/english/";
     }
 

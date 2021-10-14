@@ -25,13 +25,25 @@ public class FinishedBookSpanishController extends FinishedBookController<
         AdditionalDatesSpanish,
         AdditionalDatesSpanishServiceImpl> {
     @PostMapping("/add")
-    public String add(@ModelAttribute("finishedSpanishInput") FinishedBookInput input) {
+    public String add(@ModelAttribute("finishedSpanishInput") FinishedBookInput input, BindingResult result, Model model) {
+        if (result.hasErrors()) {
+            super.list(model, new ArrayList<>());
+            return "finishedBooksSpanish";
+        }
+
         super.add(input, new FinishedBookSpanish(), new AdditionalDatesSpanish());
         return "redirect:/finishedbooks/spanish/";
     }
 
     @PostMapping("/edit/{id}")
-    public String edit(@ModelAttribute("finishedSpanishInput") FinishedBookInput input, BindingResult result) {
+    public String edit(@ModelAttribute("finishedSpanishInput") FinishedBookInput input, BindingResult result, Model model) {
+        if (result.hasErrors()) {
+            if (input.getId() == null) {
+                super.list(model, new ArrayList<>());
+                return "finishedBooksSpanish";
+            }
+        }
+
         super.edit(input);
         return "redirect:/finishedbooks/spanish/";
     }
@@ -49,13 +61,13 @@ public class FinishedBookSpanishController extends FinishedBookController<
     }
 
     @PostMapping("/load")
-    public String load(@ModelAttribute("finishedSpanishInput") PathInput input) {
+    public String load(@ModelAttribute("finishedSpanishInput") PathInput input, BindingResult result, Model model) {
         super.load(input, Language.SPANISH);
         return "redirect:/finishedbooks/spanish/";
     }
 
     @PostMapping("/save")
-    public String save(@ModelAttribute("finishedSpanishInput") PathInput input) {
+    public String save(@ModelAttribute("finishedSpanishInput") PathInput input, BindingResult result, Model model) {
         super.save(input, Language.SPANISH);
         return "redirect:/finishedbooks/spanish/";
     }
