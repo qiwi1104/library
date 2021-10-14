@@ -7,7 +7,7 @@ import qiwi.controllers.enums.BookType;
 import qiwi.controllers.enums.Language;
 import qiwi.controllers.enums.SortBy;
 import qiwi.controllers.enums.SortType;
-import qiwi.model.common.Input;
+import qiwi.model.common.*;
 import qiwi.model.common.book.BookToRead;
 import qiwi.model.common.book.FinishedBook;
 import qiwi.model.english.BookToReadEnglish;
@@ -114,7 +114,7 @@ public abstract class BookToReadController<
         service.addBook(book);
     }
 
-    protected void finish(Input input, U finishedBook) {
+    protected void finish(FinishedBookInput input, U finishedBook) {
         T bookToRead = service.getBookById(input.getId());
 
         finishedBook.setId(finishedBookService.findAll().size() + 1);
@@ -134,8 +134,8 @@ public abstract class BookToReadController<
         this.sortProperty = sortProperty;
     }
 
-    protected void load(Input input, Language language) {
-        JSONArray jsonBooks = JSONHandler.IO.readJSONFile(input.getName(), BookType.TO_READ, language);
+    protected void load(PathInput input, Language language) {
+        JSONArray jsonBooks = JSONHandler.IO.readJSONFile(input.getPath(), BookType.TO_READ, language);
         if (jsonBooks.length() != 0) {
             service.clearAll();
 
@@ -147,8 +147,8 @@ public abstract class BookToReadController<
         }
     }
 
-    protected void loadBatch(Input input, Language language) {
-        JSONArray jsonBooks = JSONHandler.IO.readJSONFile(input.getName());
+    protected void loadBatch(PathInput input, Language language) {
+        JSONArray jsonBooks = JSONHandler.IO.readJSONFile(input.getPath());
         if (jsonBooks.length() != 0) {
             List<T> bookToReadList = fillList(jsonBooks, language);
             service.addAll(bookToReadList);
@@ -157,9 +157,9 @@ public abstract class BookToReadController<
         }
     }
 
-    protected void save(Input input, Language language) {
+    protected void save(PathInput input, Language language) {
         List<T> bookToReadList = service.findAll();
-        JSONHandler.IO.saveTableToJSON(bookToReadList, input.getName(), language);
+        JSONHandler.IO.saveTableToJSON(bookToReadList, input.getPath(), language);
     }
 
     protected void list(Model model, List<T> bookList) {

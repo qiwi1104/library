@@ -10,7 +10,21 @@
 <br/>
 <div>
     <form action="#" th:action="@{/bookstoread/russian/add}" th:object="${booksToReadRussianInput}" method="post">
-        <table th:replace="fragments/booksToReadPanels :: add"></table>
+        <table th:fragment="add" border="1px" class="hiddenPanel" id="add">
+            <div th:replace="fragments/commonAttributes :: commonAttributesToRead">
+            </div>
+            <tr>
+                <td>
+                    <input type="submit" value="add book">
+                </td>
+                <td th:if="${#fields.hasErrors('found')}">
+                    <script>
+                        let table = document.body.getElementsByClassName("hiddenPanel").add;
+                        table.children[0].children[2].firstElementChild.append("Please enter the date.");
+                    </script>
+                </td>
+            </tr>
+        </table>
     </form>
 
     <form action="#" th:action="@{'/bookstoread/russian/finish/{id}'}" th:object="${booksToReadRussianInput}"

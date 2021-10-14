@@ -7,7 +7,7 @@ import org.springframework.web.bind.annotation.*;
 import qiwi.controllers.common.BookToReadController;
 import qiwi.controllers.enums.Language;
 import qiwi.controllers.enums.SortBy;
-import qiwi.model.common.Input;
+import qiwi.model.common.*;
 import qiwi.model.english.BookToReadEnglish;
 import qiwi.model.english.FinishedBookEnglish;
 import qiwi.service.english.BookToReadEnglishServiceImpl;
@@ -23,14 +23,30 @@ public class BookToReadEnglishController extends BookToReadController<
         FinishedBookEnglish,
         FinishedBookEnglishServiceImpl> {
 
+    private void addAttributesToModel(Model model) {
+        model.addAttribute("booksToReadEnglishInput", new Input());
+    }
+
     @PostMapping("/add")
-    public String add(@ModelAttribute("booksToReadEnglishInput") Input input) {
+    public String add(@ModelAttribute("booksToReadEnglishInput") Input input, BindingResult result, Model model) {
+        if (result.hasErrors()) {
+            super.list(model, new ArrayList<>());
+            return "booksToReadEnglish";
+        }
+
         super.add(input, new BookToReadEnglish());
         return "redirect:/bookstoread/english/";
     }
 
     @PostMapping("/edit/{id}")
-    public String edit(@ModelAttribute("booksToReadEnglishInput") Input input, BindingResult result) {
+    public String edit(@ModelAttribute("booksToReadEnglishInput") Input input, BindingResult result, Model model) {
+        if (result.hasErrors()) {
+            if (input.getId() == null) {
+                super.list(model, new ArrayList<>());
+                return "booksToReadEnglish";
+            }
+        }
+
         super.edit(input);
         return "redirect:/bookstoread/english/";
     }
@@ -42,7 +58,12 @@ public class BookToReadEnglishController extends BookToReadController<
     }
 
     @PostMapping("/finish/{id}")
-    public String finish(@ModelAttribute("booksToReadEnglishInput") Input input) {
+    public String finish(@ModelAttribute("booksToReadEnglishInput") FinishedBookInput input, BindingResult result, Model model) {
+        if (result.hasErrors()) {
+            super.list(model, new ArrayList<>());
+            return "booksToReadEnglish";
+        }
+
         super.finish(input, new FinishedBookEnglish());
         return "redirect:/bookstoread/english/";
     }
@@ -54,25 +75,26 @@ public class BookToReadEnglishController extends BookToReadController<
     }
 
     @PostMapping("/load")
-    public String load(@ModelAttribute("booksToReadEnglishInput") Input input) {
+    public String load(@ModelAttribute("booksToReadEnglishInput") PathInput input, BindingResult result, Model model) {
         super.load(input, Language.ENGLISH);
         return "redirect:/bookstoread/english/";
     }
 
     @PostMapping("/loadBatch")
-    public String loadBatch(@ModelAttribute("booksToReadEnglishInput") Input input) {
+    public String loadBatch(@ModelAttribute("booksToReadEnglishInput") PathInput input, BindingResult result, Model model) {
         super.loadBatch(input, Language.ENGLISH);
         return "redirect:/bookstoread/english/";
     }
 
     @PostMapping("/save")
-    public String save(@ModelAttribute("booksToReadEnglishInput") Input input) {
+    public String save(@ModelAttribute("booksToReadEnglishInput") PathInput input, BindingResult result, Model model) {
         super.save(input, Language.ENGLISH);
         return "redirect:/bookstoread/english/";
     }
 
     @GetMapping("/")
     public String list(Model model) {
+        addAttributesToModel(model);
         super.list(model, new ArrayList<>());
         return "booksToReadEnglish";
     }

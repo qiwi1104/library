@@ -3,13 +3,11 @@ package qiwi.model.common;
 import java.sql.Date;
 
 public class Input {
-    private Integer id;
-    private String author = "";
-    private String name = "";
-    private Date found = Date.valueOf("1970-1-1");
-    private Date start = Date.valueOf("1970-1-1");
-    private Date end = Date.valueOf("1970-1-1");
-    private String description = "";
+    protected Integer id;
+    protected String author = "";
+    protected String name = "";
+    protected Date found = Date.valueOf("1970-1-1");
+    protected String description = "";
 
     public Integer getId() {
         return id;
@@ -41,22 +39,6 @@ public class Input {
 
     public void setFound(Date found) {
         this.found = found;
-    }
-
-    public Date getStart() {
-        return start;
-    }
-
-    public void setStart(Date start) {
-        this.start = start;
-    }
-
-    public Date getEnd() {
-        return end;
-    }
-
-    public void setEnd(Date end) {
-        this.end = end;
     }
 
     public String getDescription() {
