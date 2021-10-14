@@ -7,7 +7,9 @@ import org.springframework.web.bind.annotation.*;
 import qiwi.controllers.common.FinishedBookController;
 import qiwi.controllers.enums.Language;
 import qiwi.controllers.enums.SortBy;
+import qiwi.model.common.FinishedBookInput;
 import qiwi.model.common.Input;
+import qiwi.model.common.PathInput;
 import qiwi.model.english.AdditionalDatesEnglish;
 import qiwi.model.english.FinishedBookEnglish;
 import qiwi.service.english.AdditionalDatesEnglishServiceImpl;
@@ -23,14 +25,18 @@ public class FinishedBookEnglishController extends FinishedBookController<
         AdditionalDatesEnglish,
         AdditionalDatesEnglishServiceImpl> {
 
+    private void addAttributesToModel(Model model) {
+        model.addAttribute("finishedEnglishInput", new Input());
+    }
+
     @PostMapping("/add")
-    public String add(@ModelAttribute("finishedEnglishInput") Input inputFinished) {
+    public String add(@ModelAttribute("finishedEnglishInput") FinishedBookInput inputFinished, BindingResult result, Model model) {
         super.add(inputFinished, new FinishedBookEnglish(), new AdditionalDatesEnglish());
         return "redirect:/finishedbooks/english/";
     }
 
     @PostMapping("/edit/{id}")
-    public String edit(@ModelAttribute("finishedEnglishInput") Input inputFinished, BindingResult result) {
+    public String edit(@ModelAttribute("finishedEnglishInput") FinishedBookInput inputFinished, BindingResult result, Model model) {
         super.edit(inputFinished);
         return "redirect:/finishedbooks/english/";
     }
@@ -48,19 +54,20 @@ public class FinishedBookEnglishController extends FinishedBookController<
     }
 
     @PostMapping("/load")
-    public String load(@ModelAttribute("finishedEnglishInput") Input input) {
+    public String load(@ModelAttribute("finishedEnglishInput") PathInput input, BindingResult result, Model model) {
         super.load(input, Language.ENGLISH);
         return "redirect:/finishedbooks/english/";
     }
 
     @PostMapping("/save")
-    public String save(@ModelAttribute("finishedEnglishInput") Input input) {
+    public String save(@ModelAttribute("finishedEnglishInput") PathInput input, BindingResult result, Model model) {
         super.save(input, Language.ENGLISH);
         return "redirect:/finishedbooks/english/";
     }
 
     @GetMapping("/")
     public String list(Model model) {
+        addAttributesToModel(model);
         super.list(model, new ArrayList<>());
         return "finishedBooksEnglish";
     }

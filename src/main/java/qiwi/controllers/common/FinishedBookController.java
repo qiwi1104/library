@@ -8,6 +8,7 @@ import qiwi.controllers.enums.Language;
 import qiwi.controllers.enums.SortBy;
 import qiwi.controllers.enums.SortType;
 import qiwi.model.common.AdditionalDates;
+import qiwi.model.common.FinishedBookInput;
 import qiwi.model.common.Input;
 import qiwi.model.common.PathInput;
 import qiwi.model.common.book.FinishedBook;
@@ -153,7 +154,7 @@ public abstract class FinishedBookController<
         return books;
     }
 
-    protected void add(Input input, T book, U additionalDates) {
+    protected void add(FinishedBookInput input, T book, U additionalDates) {
         book.setId(service.findAll().size() + 1);
         setBookAttributesFromInput(book, input, ADD);
 
@@ -172,7 +173,7 @@ public abstract class FinishedBookController<
         }
     }
 
-    protected void edit(Input input) {
+    protected void edit(FinishedBookInput input) {
         T book = service.getBookById(input.getId());
         setBookAttributesFromInput(book, input, EDIT);
         service.addBook(book);

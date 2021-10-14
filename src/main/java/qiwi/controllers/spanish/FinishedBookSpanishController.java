@@ -7,7 +7,9 @@ import org.springframework.web.bind.annotation.*;
 import qiwi.controllers.common.FinishedBookController;
 import qiwi.controllers.enums.Language;
 import qiwi.controllers.enums.SortBy;
+import qiwi.model.common.FinishedBookInput;
 import qiwi.model.common.Input;
+import qiwi.model.common.PathInput;
 import qiwi.model.spanish.AdditionalDatesSpanish;
 import qiwi.model.spanish.FinishedBookSpanish;
 import qiwi.service.spanish.AdditionalDatesSpanishServiceImpl;
@@ -23,14 +25,14 @@ public class FinishedBookSpanishController extends FinishedBookController<
         AdditionalDatesSpanish,
         AdditionalDatesSpanishServiceImpl> {
     @PostMapping("/add")
-    public String add(@ModelAttribute("finishedSpanishInput") Input inputFinished) {
-        super.add(inputFinished, new FinishedBookSpanish(), new AdditionalDatesSpanish());
+    public String add(@ModelAttribute("finishedSpanishInput") FinishedBookInput input) {
+        super.add(input, new FinishedBookSpanish(), new AdditionalDatesSpanish());
         return "redirect:/finishedbooks/spanish/";
     }
 
     @PostMapping("/edit/{id}")
-    public String edit(@ModelAttribute("finishedSpanishInput") Input inputFinished, BindingResult result) {
-        super.edit(inputFinished);
+    public String edit(@ModelAttribute("finishedSpanishInput") FinishedBookInput input, BindingResult result) {
+        super.edit(input);
         return "redirect:/finishedbooks/spanish/";
     }
 
@@ -47,13 +49,13 @@ public class FinishedBookSpanishController extends FinishedBookController<
     }
 
     @PostMapping("/load")
-    public String load(@ModelAttribute("finishedSpanishInput") Input input) {
+    public String load(@ModelAttribute("finishedSpanishInput") PathInput input) {
         super.load(input, Language.SPANISH);
         return "redirect:/finishedbooks/spanish/";
     }
 
     @PostMapping("/save")
-    public String save(@ModelAttribute("finishedSpanishInput") Input input) {
+    public String save(@ModelAttribute("finishedSpanishInput") PathInput input) {
         super.save(input, Language.SPANISH);
         return "redirect:/finishedbooks/spanish/";
     }
