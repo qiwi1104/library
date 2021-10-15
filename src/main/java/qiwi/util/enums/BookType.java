@@ -1,4 +1,4 @@
-package qiwi.controllers.enums;
+package qiwi.util.enums;
 
 public enum BookType {
     FINISHED, TO_READ

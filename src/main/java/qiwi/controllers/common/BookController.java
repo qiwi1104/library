@@ -3,15 +3,13 @@ package qiwi.controllers.common;
 import org.json.JSONArray;
 import org.json.JSONObject;
 import qiwi.Application;
-import qiwi.controllers.enums.BookType;
-import qiwi.controllers.enums.Context;
-import qiwi.controllers.enums.Language;
+import qiwi.util.enums.BookType;
+import qiwi.util.enums.Context;
+import qiwi.util.enums.Language;
 import qiwi.model.common.AdditionalDates;
 import qiwi.model.common.input.FinishedBookInput;
 import qiwi.model.common.input.Input;
-import qiwi.model.common.book.Book;
-import qiwi.model.common.book.BookToRead;
-import qiwi.model.common.book.FinishedBook;
+import qiwi.model.common.book.*;
 
 import java.io.*;
 import java.nio.charset.StandardCharsets;
@@ -22,8 +20,7 @@ import java.util.List;
 import java.util.Properties;
 import java.util.Scanner;
 
-import static qiwi.controllers.enums.BookType.FINISHED;
-import static qiwi.controllers.enums.BookType.TO_READ;
+import static qiwi.util.enums.BookType.*;
 
 public abstract class BookController {
     protected static class JSONHandler {

@@ -3,18 +3,11 @@ package qiwi.controllers.common;
 import org.json.JSONArray;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.ui.Model;
-import qiwi.controllers.enums.BookType;
-import qiwi.controllers.enums.Language;
-import qiwi.controllers.enums.SortBy;
-import qiwi.controllers.enums.SortType;
-import qiwi.model.common.book.BookToRead;
-import qiwi.model.common.book.FinishedBook;
-import qiwi.model.common.input.FinishedBookInput;
-import qiwi.model.common.input.Input;
-import qiwi.model.common.input.PathInput;
-import qiwi.model.english.BookToReadEnglish;
-import qiwi.model.russian.BookToReadRussian;
-import qiwi.model.spanish.BookToReadSpanish;
+import qiwi.util.enums.*;
+import qiwi.util.Factory;
+import qiwi.util.enums.TypeAndLanguage;
+import qiwi.model.common.book.*;
+import qiwi.model.common.input.*;
 import qiwi.repository.common.BookToReadRepository;
 import qiwi.repository.common.FinishedBookRepository;
 import qiwi.service.common.BookToReadServiceImpl;
@@ -24,9 +17,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static qiwi.controllers.common.BookController.JSONHandler.Conversion.setAttributes;
-import static qiwi.controllers.enums.Context.*;
-import static qiwi.controllers.enums.SortBy.*;
-import static qiwi.controllers.enums.SortType.*;
+import static qiwi.util.enums.BookType.TO_READ;
+import static qiwi.util.enums.Context.*;
+import static qiwi.util.enums.SortBy.*;
+import static qiwi.util.enums.SortType.*;
 
 public abstract class BookToReadController<
         T extends BookToRead,
@@ -41,27 +35,12 @@ public abstract class BookToReadController<
     protected SortType sortDateMethod = ASC;
     protected SortBy sortProperty = FOUND;
 
-    private List<T> fillList(JSONArray source, Language language) {
+    private List<T> fillList(JSONArray source, TypeAndLanguage type) {
         List<T> destination = new ArrayList<>();
         int librarySize = service.findAll().size();
 
         for (int i = librarySize; i < source.length() + librarySize; i++) {
-            T bookToAdd;
-
-            switch (language) {
-                case ENGLISH:
-                    bookToAdd = (T) new BookToReadEnglish();
-                    break;
-                case RUSSIAN:
-                    bookToAdd = (T) new BookToReadRussian();
-                    break;
-                case SPANISH:
-                    bookToAdd = (T) new BookToReadSpanish();
-                    break;
-                default:
-                    throw new IllegalStateException("Unexpected value: " + language);
-            }
-
+            T bookToAdd = Factory.createBook(type);
             setAttributes(bookToAdd, source.getJSONObject(i - librarySize), i + 1);
 
             destination.add(bookToAdd);
@@ -137,11 +116,11 @@ public abstract class BookToReadController<
     }
 
     protected void load(PathInput input, Language language) {
-        JSONArray jsonBooks = JSONHandler.IO.readJSONFile(input.getPath(), BookType.TO_READ, language);
+        JSONArray jsonBooks = JSONHandler.IO.readJSONFile(input.getPath(), TO_READ, language);
         if (jsonBooks.length() != 0) {
             service.clearAll();
 
-            List<T> booksToRead = fillList(jsonBooks, language);
+            List<T> booksToRead = fillList(jsonBooks, TypeAndLanguage.valueOf(TO_READ + "_" + language));
 
             service.addAll(booksToRead);
         } else {
@@ -152,7 +131,7 @@ public abstract class BookToReadController<
     protected void loadBatch(PathInput input, Language language) {
         JSONArray jsonBooks = JSONHandler.IO.readJSONFile(input.getPath());
         if (jsonBooks.length() != 0) {
-            List<T> bookToReadList = fillList(jsonBooks, language);
+            List<T> bookToReadList = fillList(jsonBooks, TypeAndLanguage.valueOf(TO_READ + "_" + language));
             service.addAll(bookToReadList);
         } else {
             System.out.println("The list is empty :(");

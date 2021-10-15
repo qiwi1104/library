@@ -5,9 +5,10 @@ import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import qiwi.controllers.common.FinishedBookController;
-import qiwi.controllers.enums.Language;
-import qiwi.controllers.enums.SortBy;
+import qiwi.util.enums.Language;
+import qiwi.util.enums.SortBy;
 import qiwi.model.common.input.FinishedBookInput;
+import qiwi.model.common.input.Input;
 import qiwi.model.common.input.PathInput;
 import qiwi.model.russian.AdditionalDatesRussian;
 import qiwi.model.russian.FinishedBookRussian;
@@ -24,7 +25,9 @@ public class FinishedBookRussianController extends FinishedBookController<
         AdditionalDatesRussian,
         AdditionalDatesServiceRussianImpl> {
 
-
+    private void addAttributesToModel(Model model) {
+        model.addAttribute("finishedRussianInput", new Input());
+    }
 
     @PostMapping("/add")
     public String add(@ModelAttribute("finishedRussianInput") FinishedBookInput input, BindingResult result, Model model) {
@@ -76,6 +79,7 @@ public class FinishedBookRussianController extends FinishedBookController<
 
     @GetMapping("/")
     public String list(Model model) {
+        addAttributesToModel(model);
         super.list(model, new ArrayList<>());
         return "finishedBooksRussian";
     }

@@ -3,20 +3,13 @@ package qiwi.controllers.common;
 import org.json.JSONArray;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.ui.Model;
-import qiwi.controllers.enums.BookType;
-import qiwi.controllers.enums.Language;
-import qiwi.controllers.enums.SortBy;
-import qiwi.controllers.enums.SortType;
+import qiwi.util.enums.*;
+import qiwi.util.Factory;
 import qiwi.model.common.AdditionalDates;
+import qiwi.util.enums.TypeAndLanguage;
+import qiwi.model.common.book.FinishedBook;
 import qiwi.model.common.input.FinishedBookInput;
 import qiwi.model.common.input.PathInput;
-import qiwi.model.common.book.FinishedBook;
-import qiwi.model.english.AdditionalDatesEnglish;
-import qiwi.model.english.FinishedBookEnglish;
-import qiwi.model.russian.AdditionalDatesRussian;
-import qiwi.model.russian.FinishedBookRussian;
-import qiwi.model.spanish.AdditionalDatesSpanish;
-import qiwi.model.spanish.FinishedBookSpanish;
 import qiwi.repository.common.AdditionalDatesRepository;
 import qiwi.repository.common.FinishedBookRepository;
 import qiwi.service.common.AdditionalDatesServiceImpl;
@@ -27,9 +20,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static qiwi.controllers.common.BookController.JSONHandler.Conversion.setAttributes;
-import static qiwi.controllers.enums.Context.*;
-import static qiwi.controllers.enums.SortBy.*;
-import static qiwi.controllers.enums.SortType.*;
+import static qiwi.util.enums.BookType.FINISHED;
+import static qiwi.util.enums.Context.*;
+import static qiwi.util.enums.SortBy.*;
+import static qiwi.util.enums.SortType.*;
 
 public abstract class FinishedBookController<
         T extends FinishedBook,
@@ -44,26 +38,12 @@ public abstract class FinishedBookController<
     protected SortType sortDateMethod = ASC;
     protected SortBy sortProperty = START;
 
-    private void fillAdditionalDatesTable(JSONArray source, Language language) {
+    private void fillAdditionalDatesTable(JSONArray source, TypeAndLanguage type) {
         for (int i = 0; i < source.length(); i++) {
             if (source.getJSONObject(i).getJSONObject("additional_dates").getJSONArray("start").length() != 0) {
                 for (T finishedBook : service.findAll()) {
                     if (finishedBook.getName().equals(source.getJSONObject(i).get("name"))) {
-                        U additionalDates;
-
-                        switch (language) {
-                            case ENGLISH:
-                                additionalDates = (U) new AdditionalDatesEnglish();
-                                break;
-                            case RUSSIAN:
-                                additionalDates = (U) new AdditionalDatesRussian();
-                                break;
-                            case SPANISH:
-                                additionalDates = (U) new AdditionalDatesSpanish();
-                                break;
-                            default:
-                                throw new IllegalStateException("Unexpected value: " + language);
-                        }
+                        U additionalDates = Factory.createDates(type);
 
                         additionalDates.setId(additionalDatesService.findAll().size() + 1);
                         additionalDates.setFinishedBookId(finishedBook.getId());
@@ -84,26 +64,11 @@ public abstract class FinishedBookController<
         }
     }
 
-    private List<T> fillList(JSONArray source, Language language) {
+    private List<T> fillList(JSONArray source, TypeAndLanguage type) {
         List<T> destination = new ArrayList<>();
 
         for (int i = 0; i < source.length(); i++) {
-            T bookToAdd;
-
-            switch (language) {
-                case ENGLISH:
-                    bookToAdd = (T) new FinishedBookEnglish();
-                    break;
-                case RUSSIAN:
-                    bookToAdd = (T) new FinishedBookRussian();
-                    break;
-                case SPANISH:
-                    bookToAdd = (T) new FinishedBookSpanish();
-                    break;
-                default:
-                    throw new IllegalStateException("Unexpected value: " + language);
-            }
-
+            T bookToAdd = Factory.createBook(type);
             setAttributes(bookToAdd, source.getJSONObject(i), i + 1);
 
             destination.add(bookToAdd);
@@ -184,14 +149,14 @@ public abstract class FinishedBookController<
     }
 
     protected void load(PathInput input, Language language) {
-        JSONArray jsonBooks = JSONHandler.IO.readJSONFile(input.getPath(), BookType.FINISHED, language);
+        JSONArray jsonBooks = JSONHandler.IO.readJSONFile(input.getPath(), FINISHED, language);
         if (jsonBooks.length() != 0) {
             service.clearAll();
 
-            List<T> finishedBooks = fillList(jsonBooks, language);
+            List<T> finishedBooks = fillList(jsonBooks, TypeAndLanguage.valueOf(FINISHED + "_" + language));
 
             service.addAll(finishedBooks);
-            fillAdditionalDatesTable(jsonBooks, language); // добавляет доп. даты в свою таблицу
+            fillAdditionalDatesTable(jsonBooks, TypeAndLanguage.valueOf("DATES_" + language)); // добавляет доп. даты в свою таблицу
         } else {
             System.out.println("The list is empty :(");
         }
