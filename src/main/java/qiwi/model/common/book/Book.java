@@ -6,6 +6,8 @@ import qiwi.controllers.common.BookController;
 
 import javax.persistence.Id;
 import javax.persistence.MappedSuperclass;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
 import java.sql.Date;
 import java.util.HashMap;
 import java.util.Map;
@@ -64,38 +66,5 @@ public abstract class Book {
     @Override
     public int hashCode() {
         return name.hashCode() + author.hashCode();
-    }
-
-    /*
-     * Used in toString() to replace "\"" so that an exception is not thrown if that symbol has been encountered
-     * Also reduces amount of code
-     * */
-    protected Map<String, String> setKeys() {
-        String nameStr = name.replace("\"", "\\\"");
-        String descriptionStr = description
-                .replace("\"", "\\\"")
-                .replace("\n", "\\n");;
-        String foundStr = BookController.TimeFormat.formatTime("yyyy-M-d", "M/d/yy", found.toString());
-
-        return new HashMap<>(Map.of(
-                "name", nameStr,
-                "description", descriptionStr,
-                "found", foundStr)
-        );
-    }
-
-    /*
-    * Used when converting entity to JSON Object
-    * */
-    @Override
-    public String toString() {
-        Map<String, String> keys = setKeys();
-
-        return "{" +
-                "\"author\": \"" + author + "\"" +
-                ", \"name\": \"" + keys.get("name") + "\"" +
-                ", \"found\": \"" + keys.get("found") + "\"" +
-                ", \"description\": \"" + keys.get("description") + "\"" +
-                "}";
     }
 }

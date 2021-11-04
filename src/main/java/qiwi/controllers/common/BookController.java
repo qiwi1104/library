@@ -35,7 +35,7 @@ public abstract class BookController {
         protected static class IO {
             protected static <T extends Book> void saveTableToJSON(List<T> booksList, String path, Language language, BookType type) {
                 try {
-                    ObjectWriter writer = new ObjectMapper().writer().withDefaultPrettyPrinter();
+                    ObjectWriter writer = new ObjectMapper().setTimeZone(TimeZone.getDefault()).writer().withDefaultPrettyPrinter();
                     writer.writeValue(Paths.get(fixPathToBackupFile(path, language, type)).toFile(), booksList);
                 } catch (IOException e) {
                     e.printStackTrace();

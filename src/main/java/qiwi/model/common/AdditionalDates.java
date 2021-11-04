@@ -2,7 +2,6 @@ package qiwi.model.common;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import qiwi.model.common.book.FinishedBook;
 
 import javax.persistence.Column;
 import javax.persistence.Id;
@@ -53,8 +52,6 @@ public class AdditionalDates {
     public void setEnd(Date end) {
         this.end = end;
     }
-
-    public void setFinishedBook(FinishedBook finishedBook) {}
 
     @Override
     public boolean equals(Object o) {
