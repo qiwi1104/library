@@ -57,7 +57,7 @@ public abstract class FinishedBookController<
         }
     }
 
-    private void setAttributesNew(List<T> books) {
+    private void setIdsAndDates(List<T> books) {
         int i = 1;
         for (T book : books) {
             book.setId(i);
@@ -150,10 +150,10 @@ public abstract class FinishedBookController<
     }
 
     protected void load(PathInput input, Language language) {
-        List<T> finishedBooks = JSONHandler.IO.newReadJSONFile(input.getPath(), FINISHED, language);
+        List<T> finishedBooks = JSONHandler.IO.readJSONFile(input.getPath(), FINISHED, language);
 
         if (finishedBooks.size() != 0) {
-            setAttributesNew(finishedBooks);
+            setIdsAndDates(finishedBooks);
 
             service.clearAll();
             service.addAll(finishedBooks);
@@ -164,7 +164,7 @@ public abstract class FinishedBookController<
 
     protected void save(PathInput input, Language language) {
         List<T> bookToReadList = service.findAll();
-        JSONHandler.IO.finishedBookTableSaveToJSON(bookToReadList, input.getPath(), language);
+        JSONHandler.IO.saveTableToJSON(bookToReadList, input.getPath(), language, FINISHED);
     }
 
     protected void list(Model model, List<T> bookList) {

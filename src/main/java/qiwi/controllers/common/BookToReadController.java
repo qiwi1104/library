@@ -1,26 +1,28 @@
 package qiwi.controllers.common;
 
-import org.json.JSONArray;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.ui.Model;
-import qiwi.util.enums.*;
-import qiwi.util.Factory;
-import qiwi.util.enums.TypeAndLanguage;
-import qiwi.model.common.book.*;
-import qiwi.model.common.input.*;
+import qiwi.model.common.book.BookToRead;
+import qiwi.model.common.book.FinishedBook;
+import qiwi.model.common.input.FinishedBookInput;
+import qiwi.model.common.input.Input;
+import qiwi.model.common.input.PathInput;
 import qiwi.repository.common.BookToReadRepository;
 import qiwi.repository.common.FinishedBookRepository;
 import qiwi.service.common.BookToReadServiceImpl;
 import qiwi.service.common.FinishedBookServiceImpl;
+import qiwi.util.enums.Language;
+import qiwi.util.enums.SortBy;
+import qiwi.util.enums.SortType;
 
-import java.util.ArrayList;
 import java.util.List;
 
-import static qiwi.controllers.common.BookController.JSONHandler.Conversion.setAttributes;
 import static qiwi.util.enums.BookType.TO_READ;
-import static qiwi.util.enums.Context.*;
-import static qiwi.util.enums.SortBy.*;
-import static qiwi.util.enums.SortType.*;
+import static qiwi.util.enums.Context.ADD;
+import static qiwi.util.enums.Context.EDIT;
+import static qiwi.util.enums.SortBy.FOUND;
+import static qiwi.util.enums.SortType.ASC;
+import static qiwi.util.enums.SortType.DESC;
 
 public abstract class BookToReadController<
         T extends BookToRead,
@@ -35,18 +37,12 @@ public abstract class BookToReadController<
     protected SortType sortDateMethod = ASC;
     protected SortBy sortProperty = FOUND;
 
-    private List<T> fillList(JSONArray source, TypeAndLanguage type) {
-        List<T> destination = new ArrayList<>();
-        int librarySize = service.findAll().size();
-
-        for (int i = librarySize; i < source.length() + librarySize; i++) {
-            T bookToAdd = Factory.createBook(type);
-            setAttributes(bookToAdd, source.getJSONObject(i - librarySize), i + 1);
-
-            destination.add(bookToAdd);
+    private void setIds(List<T> books) {
+        int i = service.findAll().size() + 1;
+        for (T book : books) {
+            book.setId(i);
+            i++;
         }
-
-        return destination;
     }
 
     @Override
@@ -116,23 +112,21 @@ public abstract class BookToReadController<
     }
 
     protected void load(PathInput input, Language language) {
-        JSONArray jsonBooks = JSONHandler.IO.readJSONFile(input.getPath(), TO_READ, language);
-        if (jsonBooks.length() != 0) {
+        List<T> books = JSONHandler.IO.readJSONFile(input.getPath(), TO_READ, language);
+
+        if (books.size() != 0) {
             service.clearAll();
-
-            List<T> booksToRead = fillList(jsonBooks, TypeAndLanguage.valueOf(TO_READ + "_" + language));
-
-            service.addAll(booksToRead);
-        } else {
-            System.out.println("The list is empty :(");
+            setIds(books);
+            service.addAll(books);
         }
     }
 
     protected void loadBatch(PathInput input, Language language) {
-        JSONArray jsonBooks = JSONHandler.IO.readJSONFile(input.getPath());
-        if (jsonBooks.length() != 0) {
-            List<T> bookToReadList = fillList(jsonBooks, TypeAndLanguage.valueOf(TO_READ + "_" + language));
-            service.addAll(bookToReadList);
+        List<T> books = JSONHandler.IO.readJSONFile(input.getPath(), TO_READ, language);
+
+        if (books.size() != 0) {
+            setIds(books);
+            service.addAll(books);
         } else {
             System.out.println("The list is empty :(");
         }
@@ -140,7 +134,7 @@ public abstract class BookToReadController<
 
     protected void save(PathInput input, Language language) {
         List<T> bookToReadList = service.findAll();
-        JSONHandler.IO.saveTableToJSON(bookToReadList, input.getPath(), language);
+        JSONHandler.IO.saveTableToJSON(bookToReadList, input.getPath(), language, TO_READ);
     }
 
     protected void list(Model model, List<T> bookList) {

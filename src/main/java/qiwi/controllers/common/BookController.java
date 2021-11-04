@@ -1,177 +1,58 @@
 package qiwi.controllers.common;
 
-import org.json.JSONArray;
-import org.json.JSONObject;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.ObjectWriter;
 import qiwi.Application;
+import qiwi.model.common.book.Book;
+import qiwi.model.common.book.FinishedBook;
+import qiwi.model.common.input.FinishedBookInput;
+import qiwi.model.common.input.Input;
+import qiwi.model.english.BookToReadEnglish;
+import qiwi.model.english.FinishedBookEnglish;
+import qiwi.model.russian.BookToReadRussian;
+import qiwi.model.russian.FinishedBookRussian;
+import qiwi.model.spanish.BookToReadSpanish;
+import qiwi.model.spanish.FinishedBookSpanish;
 import qiwi.util.enums.BookType;
 import qiwi.util.enums.Context;
 import qiwi.util.enums.Language;
-import qiwi.model.common.AdditionalDates;
-import qiwi.model.common.input.FinishedBookInput;
-import qiwi.model.common.input.Input;
-import qiwi.model.common.book.*;
 
-import java.io.*;
+import java.io.File;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.Reader;
 import java.nio.charset.StandardCharsets;
+import java.nio.file.Paths;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.List;
-import java.util.Properties;
-import java.util.Scanner;
-
-import static qiwi.util.enums.BookType.*;
+import java.util.*;
 
 public abstract class BookController {
     protected static class JSONHandler {
         /*
-         * Converts Entity books to JSON books and vice versa
-         * */
-        protected static class Conversion {
-            /*
-             * Sets properties to a Finished Book/Book To Read
-             * Also keeps every Book class free from identical & redundant constructors
-             * */
-            protected static <T extends Book> void setAttributes(T bookToAdd, JSONObject jsonBook, int id) {
-                bookToAdd.setId(id);
-                bookToAdd.setAuthor(jsonBook.get("author").toString());
-                bookToAdd.setName(jsonBook.get("name").toString());
-
-                if (bookToAdd instanceof FinishedBook) {
-                    FinishedBook fb = (FinishedBook) bookToAdd;
-
-                    try {
-                        String date = TimeFormat.formatTime("M/d/yy", "yyyy-M-d",
-                                jsonBook.getJSONArray("dates").get(0).toString());
-
-                        fb.setStart(java.sql.Date.valueOf(date));
-                    } catch (Exception e) {
-                        fb.setStart(java.sql.Date.valueOf("1970-1-1"));
-                    }
-
-                    try {
-                        String date = TimeFormat.formatTime("M/d/yy", "yyyy-M-d",
-                                jsonBook.getJSONArray("dates").get(1).toString());
-
-                        fb.setEnd(java.sql.Date.valueOf(date));
-                    } catch (Exception e) {
-                        fb.setEnd(java.sql.Date.valueOf("1970-1-1"));
-                    }
-                }
-
-                try {
-                    String date = TimeFormat.formatTime("M/d/yy", "yyyy-M-d", jsonBook.get("found").toString());
-                    bookToAdd.setFound(java.sql.Date.valueOf(date));
-                } catch (Exception e) {
-                    bookToAdd.setFound(java.sql.Date.valueOf("1970-1-1"));
-                }
-
-                bookToAdd.setDescription(jsonBook.get("description").toString());
-            }
-
-            /*
-             * Fills JSON array with Books To Read
-             * */
-            private static <T extends Book> void fillJSONArray(JSONArray jsonArray, List<T> booksList) {
-                if (booksList.get(0) instanceof BookToRead) {
-                    for (T book : booksList) {
-                        JSONObject jsonBook = new JSONObject(book.toString());
-                        jsonArray.put(jsonBook);
-                    }
-                } else {
-                    System.out.println("Something went wrong :(");
-                }
-            }
-
-            /*
-             * Fills JSON array with Finished Books
-             * */
-            private static <T extends Book, S extends AdditionalDates> void fillJSONArray(
-                    JSONArray jsonArray, List<T> booksList, List<S> additionalDates) {
-                if (booksList.get(0) instanceof FinishedBook) {
-                    for (T book : booksList) {
-                        FinishedBook finishedBook = (FinishedBook) book;
-                        JSONObject jsonBook = new JSONObject(finishedBook.toString());
-
-                        JSONObject additionalDatesJSON = new JSONObject();
-                        JSONArray additionalDatesStartJSON = new JSONArray();
-                        JSONArray additionalDatesEndJSON = new JSONArray();
-
-                        for (AdditionalDates additionalDate : additionalDates) {
-                            if (additionalDate.getFinishedBookId().equals(finishedBook.getId())) {
-                                additionalDatesStartJSON.put(TimeFormat.formatTime("yyyy-M-d", "M/d/yy", additionalDate.getStart().toString()));
-                                additionalDatesEndJSON.put(TimeFormat.formatTime("yyyy-M-d", "M/d/yy", additionalDate.getEnd().toString()));
-                            }
-                        }
-
-                        additionalDatesJSON.put("start", additionalDatesStartJSON);
-                        additionalDatesJSON.put("end", additionalDatesEndJSON);
-                        jsonBook.put("additional_dates", additionalDatesJSON);
-
-                        jsonArray.put(jsonBook);
-                    }
-                } else {
-                    System.out.println("Something went wrong :(");
-                }
-            }
-        }
-
-        /*
          * Handles writing to/reading from file
          * */
         protected static class IO {
-            private static void writeJSONArrayToFile(JSONArray array, String path) {
-                String res = array.toString();
-
-                if (!path.equals("")) {
-                    try {
-                        FileWriter writer = new FileWriter(new File(path), StandardCharsets.UTF_8);
-                        writer.write(res);
-                        writer.close();
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                    }
-                } else {
-                    System.out.println("Something's wrong with the path :(");
-                }
-            }
-
-            protected static <T extends Book> void saveTableToJSON(List<T> booksList, String path, Language language) {
-                JSONArray jsonArray = new JSONArray();
-                Conversion.fillJSONArray(jsonArray, booksList);
-                writeJSONArrayToFile(jsonArray, fixPathToBackupFile(path, language, TO_READ));
-            }
-
-            protected static <T extends Book, S extends AdditionalDates> void saveTableToJSON(
-                    List<T> booksList, List<S> additionalDates, String path, Language language) {
-                JSONArray jsonArray = new JSONArray();
-                Conversion.fillJSONArray(jsonArray, booksList, additionalDates);
-                writeJSONArrayToFile(jsonArray, fixPathToBackupFile(path, language, FINISHED));
-            }
-
-            protected static JSONArray readJSONFile(String path) {
-                Scanner scan;
-                StringBuilder str = new StringBuilder();
-
+            protected static <T extends Book> void saveTableToJSON(List<T> booksList, String path, Language language, BookType type) {
                 try {
-                    scan = new Scanner(new File(path), StandardCharsets.UTF_8);
-
-                    while (scan.hasNext()) {
-                        str.append(scan.nextLine());
-                    }
+                    ObjectWriter writer = new ObjectMapper().writer().withDefaultPrettyPrinter();
+                    writer.writeValue(Paths.get(fixPathToBackupFile(path, language, type)).toFile(), booksList);
                 } catch (IOException e) {
                     e.printStackTrace();
-                    return new JSONArray();
                 }
-
-                scan.close();
-                return new JSONArray(str.toString());
             }
 
-            protected static JSONArray readJSONFile(String path, BookType bookType, Language language) {
+            public static <T extends Book> List<T> readJSONFile(String path, BookType bookType, Language language) {
                 // path to a folder/file has not been set, meaning the one from config.properties will be used
                 if (path.equals("")) {
                     path = getPathToBackupDirectory(bookType);
+
+                    if (!path.equals("")) {
+                        path += getLatestFileName(path, language);
+                    } else {
+                        System.out.println("Paths in config.properties might not have been defined :(");
+                        return new ArrayList<>();
+                    }
                 } else {
                     if (!path.endsWith(".json")) { // path to a certain file is not defined
                         if (!path.endsWith("\\")) { // path to a folder containing the file to create table from
@@ -180,15 +61,63 @@ public abstract class BookController {
                     }
                 }
 
-                boolean isPathCorrect = true;
-                if (!path.equals("")) {
-                    path += getLatestFileName(path, language);
-                } else {
-                    isPathCorrect = false;
-                    System.out.println("Paths in config.properties might not have been defined :(");
+                ObjectMapper mapper = new ObjectMapper();
+                List<T> books = new ArrayList<>();
+
+                switch (bookType) {
+                    case FINISHED:
+                        switch (language) {
+                            case ENGLISH:
+                                try {
+                                    books = (List<T>) Arrays.asList(mapper.readValue(Paths.get(path).toFile(), FinishedBookEnglish[].class));
+                                } catch (IOException e) {
+                                    e.printStackTrace();
+                                }
+                                break;
+                            case RUSSIAN:
+                                try {
+                                    books = (List<T>) Arrays.asList(mapper.readValue(Paths.get(path).toFile(), FinishedBookRussian[].class));
+                                } catch (IOException e) {
+                                    e.printStackTrace();
+                                }
+                                break;
+                            case SPANISH:
+                                try {
+                                    books = (List<T>) Arrays.asList(mapper.readValue(Paths.get(path).toFile(), FinishedBookSpanish[].class));
+                                } catch (IOException e) {
+                                    e.printStackTrace();
+                                }
+                                break;
+                        }
+                        break;
+                    case TO_READ:
+                        switch (language) {
+                            case ENGLISH:
+                                try {
+                                    books = (List<T>) Arrays.asList(mapper.readValue(Paths.get(path).toFile(), BookToReadEnglish[].class));
+                                } catch (IOException e) {
+                                    e.printStackTrace();
+                                }
+                                break;
+                            case RUSSIAN:
+                                try {
+                                    books = (List<T>) Arrays.asList(mapper.readValue(Paths.get(path).toFile(), BookToReadRussian[].class));
+                                } catch (IOException e) {
+                                    e.printStackTrace();
+                                }
+                                break;
+                            case SPANISH:
+                                try {
+                                    books = (List<T>) Arrays.asList(mapper.readValue(Paths.get(path).toFile(), BookToReadSpanish[].class));
+                                } catch (IOException e) {
+                                    e.printStackTrace();
+                                }
+                                break;
+                        }
+                        break;
                 }
 
-                return isPathCorrect ? readJSONFile(path) : new JSONArray();
+                return books;
             }
         }
 
@@ -249,12 +178,12 @@ public abstract class BookController {
                 }
             }
 
-            String ret = "";
+            String fileName = "";
             if (chosenFile != null) {
-                ret = chosenFile.getName();
+                fileName = chosenFile.getName();
             }
 
-            return ret;
+            return fileName;
         }
     }
 
