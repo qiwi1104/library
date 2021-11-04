@@ -1,12 +1,8 @@
 package qiwi.controllers.common;
 
-import org.json.JSONArray;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.ui.Model;
-import qiwi.util.enums.*;
-import qiwi.util.Factory;
 import qiwi.model.common.AdditionalDates;
-import qiwi.util.enums.TypeAndLanguage;
 import qiwi.model.common.book.FinishedBook;
 import qiwi.model.common.input.FinishedBookInput;
 import qiwi.model.common.input.PathInput;
@@ -14,16 +10,20 @@ import qiwi.repository.common.AdditionalDatesRepository;
 import qiwi.repository.common.FinishedBookRepository;
 import qiwi.service.common.AdditionalDatesServiceImpl;
 import qiwi.service.common.FinishedBookServiceImpl;
+import qiwi.util.Factory;
+import qiwi.util.enums.Language;
+import qiwi.util.enums.SortBy;
+import qiwi.util.enums.SortType;
+import qiwi.util.enums.TypeAndLanguage;
 
-import java.sql.Date;
-import java.util.ArrayList;
 import java.util.List;
 
-import static qiwi.controllers.common.BookController.JSONHandler.Conversion.setAttributes;
 import static qiwi.util.enums.BookType.FINISHED;
-import static qiwi.util.enums.Context.*;
-import static qiwi.util.enums.SortBy.*;
-import static qiwi.util.enums.SortType.*;
+import static qiwi.util.enums.Context.ADD;
+import static qiwi.util.enums.Context.EDIT;
+import static qiwi.util.enums.SortBy.START;
+import static qiwi.util.enums.SortType.ASC;
+import static qiwi.util.enums.SortType.DESC;
 
 public abstract class FinishedBookController<
         T extends FinishedBook,
@@ -38,43 +38,44 @@ public abstract class FinishedBookController<
     protected SortType sortDateMethod = ASC;
     protected SortBy sortProperty = START;
 
-    private void fillAdditionalDatesTable(JSONArray source, TypeAndLanguage type) {
-        for (int i = 0; i < source.length(); i++) {
-            if (source.getJSONObject(i).getJSONObject("additional_dates").getJSONArray("start").length() != 0) {
-                for (T finishedBook : service.findAll()) {
-                    if (finishedBook.getName().equals(source.getJSONObject(i).get("name"))) {
-                        U additionalDates = Factory.createDates(type);
+    private void fillAdditionalDatesTableNew(TypeAndLanguage type) {
+        for (T bookFromJSON : service.findAll()) {
+            if (bookFromJSON.getAdditionalDates().size() != 0) {
+                U additionalDates = Factory.createDates(type);
 
-                        additionalDates.setId(additionalDatesService.findAll().size() + 1);
-                        additionalDates.setFinishedBookId(finishedBook.getId());
-                        for (int j = 0; j < source.getJSONObject(i).getJSONObject("additional_dates").getJSONArray("start").length(); j++) {
-                            String date = TimeFormat.formatTime("M/d/yy", "yyyy-M-d",
-                                    source.getJSONObject(i).getJSONObject("additional_dates").getJSONArray("start").get(j).toString());
+                additionalDates.setId(additionalDatesService.findAll().size() + 1);
+                additionalDates.setFinishedBookId(bookFromJSON.getId());
 
-                            String date2 = TimeFormat.formatTime("M/d/yy", "yyyy-M-d",
-                                    source.getJSONObject(i).getJSONObject("additional_dates").getJSONArray("end").get(j).toString());
-
-                            additionalDates.setStart(Date.valueOf(date));
-                            additionalDates.setEnd(Date.valueOf(date2));
-                            additionalDatesService.addDates(additionalDates);
-                        }
-                    }
+                List<U> additionalDatesList = (List<U>) bookFromJSON.getAdditionalDates();
+                for (int i = 0; i < additionalDatesList.size(); i++) {
+                    additionalDates.setStart(additionalDatesList.get(i).getStart());
+                    additionalDates.setEnd(additionalDatesList.get(i).getEnd());
                 }
+
+                additionalDatesService.addDates(additionalDates);
             }
         }
     }
 
-    private List<T> fillList(JSONArray source, TypeAndLanguage type) {
-        List<T> destination = new ArrayList<>();
+    private void setAttributesNew(List<T> books) {
+        int i = 1;
+        for (T book : books) {
+            book.setId(i);
 
-        for (int i = 0; i < source.length(); i++) {
-            T bookToAdd = Factory.createBook(type);
-            setAttributes(bookToAdd, source.getJSONObject(i), i + 1);
+            if (book.getAdditionalDates().size() != 0) {
+                List<U> additionalDatesList = (List<U>) book.getAdditionalDates();
+                for (int j = 0; j < additionalDatesList.size(); j++) {
+                    U additionalDates = additionalDatesList.get(j);
 
-            destination.add(bookToAdd);
+                    additionalDates.setFinishedBookId(i);
+                    additionalDates.setId(j + 1);
+                    additionalDates.setStart(additionalDatesList.get(j).getStart());
+                    additionalDates.setEnd(additionalDatesList.get(j).getEnd());
+                }
+            }
+
+            i++;
         }
-
-        return destination;
     }
 
     @Override
@@ -149,24 +150,21 @@ public abstract class FinishedBookController<
     }
 
     protected void load(PathInput input, Language language) {
-        JSONArray jsonBooks = JSONHandler.IO.readJSONFile(input.getPath(), FINISHED, language);
-        if (jsonBooks.length() != 0) {
+        List<T> finishedBooks = JSONHandler.IO.newReadJSONFile(input.getPath(), FINISHED, language);
+
+        if (finishedBooks.size() != 0) {
+            setAttributesNew(finishedBooks);
+
             service.clearAll();
-
-            List<T> finishedBooks = fillList(jsonBooks, TypeAndLanguage.valueOf(FINISHED + "_" + language));
-
             service.addAll(finishedBooks);
-            fillAdditionalDatesTable(jsonBooks, TypeAndLanguage.valueOf("DATES_" + language)); // добавляет доп. даты в свою таблицу
-        } else {
-            System.out.println("The list is empty :(");
+
+            fillAdditionalDatesTableNew(TypeAndLanguage.valueOf("DATES_" + language));
         }
     }
 
     protected void save(PathInput input, Language language) {
         List<T> bookToReadList = service.findAll();
-        List<U> additionalDatesList = additionalDatesService.findAll();
-
-        JSONHandler.IO.saveTableToJSON(bookToReadList, additionalDatesList, input.getPath(), language);
+        JSONHandler.IO.finishedBookTableSaveToJSON(bookToReadList, input.getPath(), language);
     }
 
     protected void list(Model model, List<T> bookList) {

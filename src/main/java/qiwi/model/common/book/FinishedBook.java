@@ -1,15 +1,24 @@
 package qiwi.model.common.book;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import qiwi.controllers.common.BookController;
 
 import javax.persistence.MappedSuperclass;
 import java.sql.Date;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 
 @MappedSuperclass
 public class FinishedBook extends Book implements Cloneable {
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "M/d/yy")
     private Date start;
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "M/d/yy")
     private Date end;
+
+    public List<?> getAdditionalDates() {
+        return new ArrayList<>();
+    }
 
     public Date getStart() {
         return start;

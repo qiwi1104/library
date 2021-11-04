@@ -1,5 +1,9 @@
 package qiwi.model.common;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import qiwi.model.common.book.FinishedBook;
+
 import javax.persistence.Column;
 import javax.persistence.Id;
 import javax.persistence.MappedSuperclass;
@@ -7,12 +11,15 @@ import java.sql.Date;
 import java.util.Objects;
 
 @MappedSuperclass
+@JsonIgnoreProperties({"id", "finishedBookId"})
 public class AdditionalDates {
     @Id
     private Integer id;
     @Column(name = "finished_book_id")
     private Integer finishedBookId;
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "M/d/yy")
     private Date start;
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "M/d/yy")
     private Date end;
 
     public Integer getId() {
@@ -46,6 +53,8 @@ public class AdditionalDates {
     public void setEnd(Date end) {
         this.end = end;
     }
+
+    public void setFinishedBook(FinishedBook finishedBook) {}
 
     @Override
     public boolean equals(Object o) {
