@@ -187,24 +187,6 @@ public abstract class BookController {
         }
     }
 
-    public static class TimeFormat {
-        public static String formatTime(String oldFormat, String newFormat, String stringToParse) {
-            SimpleDateFormat oldDateFormat = new SimpleDateFormat(oldFormat);
-            SimpleDateFormat newDateFormat = new SimpleDateFormat(newFormat);
-
-            Date date;
-
-            try {
-                date = oldDateFormat.parse(stringToParse);
-            } catch (ParseException e) {
-                date = java.sql.Date.valueOf("1970-1-1");
-                e.printStackTrace();
-            }
-
-            return newDateFormat.format(date);
-        }
-    }
-
     protected <T extends Book, S extends Input> void setBookAttributesFromInput(T book, S input, Context context) {
         switch (context) {
             case EDIT:
