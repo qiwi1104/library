@@ -10,11 +10,9 @@ import qiwi.repository.common.AdditionalDatesRepository;
 import qiwi.repository.common.FinishedBookRepository;
 import qiwi.service.common.AdditionalDatesServiceImpl;
 import qiwi.service.common.FinishedBookServiceImpl;
-import qiwi.util.Factory;
 import qiwi.util.enums.Language;
 import qiwi.util.enums.SortBy;
 import qiwi.util.enums.SortType;
-import qiwi.util.enums.TypeAndLanguage;
 
 import java.util.List;
 
@@ -38,43 +36,24 @@ public abstract class FinishedBookController<
     protected SortType sortDateMethod = ASC;
     protected SortBy sortProperty = START;
 
-    private void fillAdditionalDatesTableNew(TypeAndLanguage type) {
-        for (T bookFromJSON : service.findAll()) {
-            if (bookFromJSON.getAdditionalDates().size() != 0) {
-                U additionalDates = Factory.createDates(type);
-
-                additionalDates.setId(additionalDatesService.findAll().size() + 1);
-                additionalDates.setFinishedBookId(bookFromJSON.getId());
-
-                List<U> additionalDatesList = (List<U>) bookFromJSON.getAdditionalDates();
-                for (int i = 0; i < additionalDatesList.size(); i++) {
-                    additionalDates.setStart(additionalDatesList.get(i).getStart());
-                    additionalDates.setEnd(additionalDatesList.get(i).getEnd());
-                }
-
-                additionalDatesService.addDates(additionalDates);
-            }
-        }
-    }
-
+    /*
+    * Sets ids to Additional Dates of a book
+    * */
     private void setIdsAndDates(List<T> books) {
-        int i = 1;
+        int additionalDatesCounter = 0;
+
         for (T book : books) {
-            book.setId(i);
+            List<U> additionalDatesList = (List<U>) book.getAdditionalDates();
 
-            if (book.getAdditionalDates().size() != 0) {
-                List<U> additionalDatesList = (List<U>) book.getAdditionalDates();
+            if (additionalDatesList.size() != 0) {
                 for (int j = 0; j < additionalDatesList.size(); j++) {
-                    U additionalDates = additionalDatesList.get(j);
+                    additionalDatesCounter++;
 
-                    additionalDates.setFinishedBookId(i);
-                    additionalDates.setId(j + 1);
-                    additionalDates.setStart(additionalDatesList.get(j).getStart());
-                    additionalDates.setEnd(additionalDatesList.get(j).getEnd());
+                    U additionalDates = additionalDatesList.get(j);
+                    additionalDates.setFinishedBookId(book.getId());
+                    additionalDates.setId(additionalDatesCounter);
                 }
             }
-
-            i++;
         }
     }
 
@@ -156,9 +135,8 @@ public abstract class FinishedBookController<
             setIdsAndDates(finishedBooks);
 
             service.clearAll();
+            // both additional dates table and books table are updated
             service.addAll(finishedBooks);
-
-            fillAdditionalDatesTableNew(TypeAndLanguage.valueOf("DATES_" + language));
         }
     }
 

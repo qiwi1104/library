@@ -116,7 +116,6 @@ public abstract class BookToReadController<
 
         if (books.size() != 0) {
             service.clearAll();
-            setIds(books);
             service.addAll(books);
         }
     }

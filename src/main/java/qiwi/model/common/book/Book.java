@@ -1,20 +1,13 @@
 package qiwi.model.common.book;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import qiwi.controllers.common.BookController;
 
 import javax.persistence.Id;
 import javax.persistence.MappedSuperclass;
-import javax.persistence.Temporal;
-import javax.persistence.TemporalType;
 import java.sql.Date;
-import java.util.HashMap;
-import java.util.Map;
 
 @MappedSuperclass
 public abstract class Book {
-    @JsonIgnore
     @Id
     protected Integer id;
     protected String author;
