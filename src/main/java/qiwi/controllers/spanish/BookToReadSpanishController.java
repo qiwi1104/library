@@ -5,17 +5,14 @@ import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import qiwi.controllers.common.BookToReadController;
-import qiwi.util.enums.Language;
-import qiwi.util.enums.SortBy;
-import qiwi.model.common.input.Input;
 import qiwi.model.common.input.Input;
 import qiwi.model.common.input.PathInput;
 import qiwi.model.spanish.BookToReadSpanish;
 import qiwi.model.spanish.FinishedBookSpanish;
 import qiwi.service.spanish.BookToReadSpanishServiceImpl;
 import qiwi.service.spanish.FinishedBookSpanishServiceImpl;
-
-import java.util.ArrayList;
+import qiwi.util.enums.Language;
+import qiwi.util.enums.SortBy;
 
 @Controller
 @RequestMapping("/bookstoread/spanish")
@@ -25,14 +22,10 @@ public class BookToReadSpanishController extends BookToReadController<
         FinishedBookSpanish,
         FinishedBookSpanishServiceImpl> {
 
-    private void addAttributesToModel(Model model) {
-        model.addAttribute("booksToReadSpanishInput", new Input());
-    }
-
     @PostMapping("/add")
     public String add(@ModelAttribute("booksToReadSpanishInput") Input input, BindingResult result, Model model) {
         if (result.hasErrors()) {
-            super.list(model, new Input());
+            super.list(model, input);
             return "booksToReadSpanish";
         }
 
@@ -44,7 +37,7 @@ public class BookToReadSpanishController extends BookToReadController<
     public String edit(@ModelAttribute("booksToReadSpanishInput") Input input, BindingResult result, Model model) {
         if (result.hasErrors()) {
             if (input.getId() == null) {
-                super.list(model, new Input());
+                super.list(model, input);
                 return "booksToReadSpanish";
             }
         }
@@ -96,7 +89,6 @@ public class BookToReadSpanishController extends BookToReadController<
 
     @GetMapping("/")
     public String list(Model model) {
-        addAttributesToModel(model);
         super.list(model, new Input());
         return "booksToReadSpanish";
     }

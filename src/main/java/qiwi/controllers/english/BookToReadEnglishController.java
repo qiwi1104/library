@@ -55,7 +55,6 @@ public class BookToReadEnglishController extends BookToReadController<
     @PostMapping("/finish/{id}")
     public String finish(@ModelAttribute("booksToReadEnglishInput") Input input, BindingResult result, Model model) {
         if (result.hasErrors()) {
-            result.getAllErrors().forEach(System.out::println);
             super.list(model, input);
             return "booksToReadEnglish";
         }
