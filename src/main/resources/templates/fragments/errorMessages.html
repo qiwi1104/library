@@ -4,7 +4,7 @@
 <div th:fragment="alreadyExists" th:object="${alreadyExistsMessage}" hidden>
     <div th:if="${alreadyExistsMessage}">
         <script>
-        let table = document.body.getElementsByClassName("hiddenPanel").add;
+        table = document.body.getElementsByClassName("hiddenPanel").add;
         table.children[0].children[2].firstElementChild.append("This book already exists.");
         </script>
     </div>
@@ -14,8 +14,18 @@
         <script th:src="@{/js/src/actionsHandler.js}"></script>
         <script>
         actionsHandler("finish");
-        let table = document.body.getElementsByClassName("hiddenPanel").finish;
+        table = document.body.getElementsByClassName("hiddenPanel").finish;
         table.children[0].children[1].firstElementChild.append("This book doesn't exist.");
+        </script>
+    </div>
+</div>
+<div th:fragment="nonExistentEdit" th:object="${nonExistentMessageEdit}" hidden>
+    <div th:if="${nonExistentMessageEdit}">
+        <script th:src="@{/js/src/actionsHandler.js}"></script>
+        <script>
+        actionsHandler("edit");
+        table = document.body.getElementsByClassName("hiddenPanel").edit;
+        table.children[0].children[3].firstElementChild.append("This book doesn't exist.");
         </script>
     </div>
 </div>

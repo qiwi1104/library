@@ -40,11 +40,16 @@ public class BookToReadRussianController extends BookToReadController<
         if (result.hasErrors()) {
             if (input.getId() == null) {
                 return showTable(input, model, "Russian");
+            } else {
+                if (super.edit(input, model))
+                    return "redirect:/bookstoread/russian/";
+                else return showTable(input, model, "Russian");
             }
         }
 
-        super.edit(input);
-        return "redirect:/bookstoread/russian/";
+        if (super.edit(input, model))
+            return "redirect:/bookstoread/russian/";
+        else return showTable(input, model, "Russian");
     }
 
     @GetMapping("/delete/{id}")

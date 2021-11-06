@@ -86,10 +86,17 @@ public abstract class BookToReadController<
         }
     }
 
-    protected void edit(Input input) {
+    protected boolean edit(Input input, Model model) {
         T book = service.getBookById(input.getId());
-        setBookAttributesFromInput(book, input, EDIT);
-        service.addBook(book);
+
+        if (book != null) {
+            setBookAttributesFromInput(book, input, EDIT);
+            service.addBook(book);
+            return true;
+        } else {
+            model.addAttribute("nonExistentMessageEdit", "");
+            return false;
+        }
     }
 
     protected boolean finish(Input input, Model model, U finishedBook) {
