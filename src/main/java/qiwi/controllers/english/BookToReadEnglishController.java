@@ -37,19 +37,7 @@ public class BookToReadEnglishController extends BookToReadController<
 
     @PostMapping("/edit/{id}")
     public String edit(@ModelAttribute("booksToReadEnglishInput") Input input, BindingResult result, Model model) {
-        if (result.hasErrors()) {
-            if (input.getId() == null) {
-                return showTable(input, model, "English");
-            } else {
-                if (super.edit(input, model))
-                    return "redirect:/bookstoread/english/";
-                else return showTable(input, model, "English");
-            }
-        }
-
-        if (super.edit(input, model))
-            return "redirect:/bookstoread/english/";
-        else return showTable(input, model, "English");
+        return getRedirectionAddress(input, result, model, "English", "bookstoread");
     }
 
     @GetMapping("/delete/{id}")

@@ -86,6 +86,7 @@ public abstract class BookToReadController<
         }
     }
 
+    @Override
     protected boolean edit(Input input, Model model) {
         T book = service.getBookById(input.getId());
 
@@ -150,6 +151,7 @@ public abstract class BookToReadController<
         JSONHandler.IO.saveTableToJSON(bookToReadList, input.getPath(), language, TO_READ);
     }
 
+    @Override
     protected String showTable(Input input, Model model, String language) {
         List<T> bookList = filterAndSort();
 

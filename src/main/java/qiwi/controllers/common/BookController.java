@@ -2,6 +2,8 @@ package qiwi.controllers.common;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.ObjectWriter;
+import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import qiwi.Application;
 import qiwi.model.common.book.Book;
 import qiwi.model.common.book.FinishedBook;
@@ -234,4 +236,24 @@ public abstract class BookController {
     }
 
     protected abstract <T extends Book> List<T> filterAndSort();
+
+    protected abstract String showTable(Input input, Model model, String language);
+
+    protected abstract boolean edit(Input input, Model model);
+
+    protected <T extends Book> String getRedirectionAddress(Input input, BindingResult result, Model model, String language, String bookType) {
+        if (result.hasErrors()) {
+            if (input.getId() == null) {
+                return showTable(input, model, language);
+            } else {
+                if (edit(input, model))
+                    return "redirect:/" + bookType + "/" + language.toLowerCase() + "/";
+                else return showTable(input, model, language);
+            }
+        }
+
+        if (edit(input, model))
+            return "redirect:/" + bookType + "/" + language.toLowerCase() + "/";
+        else return showTable(input, model, language);
+    }
 }

@@ -35,19 +35,7 @@ public class FinishedBookRussianController extends FinishedBookController<
 
     @PostMapping("/edit/{id}")
     public String edit(@ModelAttribute("finishedRussianInput") Input input, BindingResult result, Model model) {
-        if (result.hasErrors()) {
-            if (input.getId() == null) {
-                return showTable(input, model, "Russian");
-            } else {
-                if (super.edit(input, model))
-                    return "redirect:/finishedbooks/russian/";
-                else return showTable(input, model, "Russian");
-            }
-        }
-
-        if (super.edit(input, model))
-            return "redirect:/finishedbooks/russian/";
-        else return showTable(input, model, "Russian");
+        return getRedirectionAddress(input, result, model, "Russian", "finishedbooks");
     }
 
     @GetMapping("/delete/{id}")
