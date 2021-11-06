@@ -4,7 +4,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.ui.Model;
 import qiwi.model.common.book.BookToRead;
 import qiwi.model.common.book.FinishedBook;
-import qiwi.model.common.input.FinishedBookInput;
 import qiwi.model.common.input.Input;
 import qiwi.model.common.input.PathInput;
 import qiwi.repository.common.BookToReadRepository;
@@ -91,7 +90,7 @@ public abstract class BookToReadController<
         service.addBook(book);
     }
 
-    protected void finish(FinishedBookInput input, U finishedBook) {
+    protected void finish(Input input, U finishedBook) {
         T bookToRead = service.getBookById(input.getId());
 
         finishedBook.setId(finishedBookService.findAll().size() + 1);
@@ -136,9 +135,10 @@ public abstract class BookToReadController<
         JSONHandler.IO.saveTableToJSON(bookToReadList, input.getPath(), language, TO_READ);
     }
 
-    protected void list(Model model, List<T> bookList) {
-        bookList = filterAndSort();
+    protected void list(Model model, Input input) {
+        List<T> bookList = filterAndSort();
 
+        model.addAttribute("booksToReadEnglishInput", input);
         model.addAttribute("booksToRead", bookList);
     }
 }

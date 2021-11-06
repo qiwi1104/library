@@ -5,7 +5,6 @@ import com.fasterxml.jackson.databind.ObjectWriter;
 import qiwi.Application;
 import qiwi.model.common.book.Book;
 import qiwi.model.common.book.FinishedBook;
-import qiwi.model.common.input.FinishedBookInput;
 import qiwi.model.common.input.Input;
 import qiwi.model.english.BookToReadEnglish;
 import qiwi.model.english.FinishedBookEnglish;
@@ -23,7 +22,6 @@ import java.io.InputStreamReader;
 import java.io.Reader;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Paths;
-import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.*;
 
@@ -192,14 +190,13 @@ public abstract class BookController {
             case EDIT:
                 if (book instanceof FinishedBook) {
                     FinishedBook fb = (FinishedBook) book;
-                    FinishedBookInput finishedBookInput = (FinishedBookInput) input;
 
-                    if (!finishedBookInput.getStart().equals(java.sql.Date.valueOf("1970-1-1"))) { // дата введена, т.е. ее надо менять
-                        fb.setStart(finishedBookInput.getStart());
+                    if (!input.getStart().equals(java.sql.Date.valueOf("1970-1-1"))) { // дата введена, т.е. ее надо менять
+                        fb.setStart(input.getStart());
                     }
 
-                    if (!finishedBookInput.getEnd().equals(java.sql.Date.valueOf("1970-1-1"))) { // дата введена, т.е. ее надо менять
-                        fb.setEnd(finishedBookInput.getEnd());
+                    if (!input.getEnd().equals(java.sql.Date.valueOf("1970-1-1"))) { // дата введена, т.е. ее надо менять
+                        fb.setEnd(input.getEnd());
                     }
                 }
 
@@ -225,10 +222,9 @@ public abstract class BookController {
 
                 if (book instanceof FinishedBook) {
                     FinishedBook fb = (FinishedBook) book;
-                    FinishedBookInput finishedBookInput = (FinishedBookInput) input;
 
-                    fb.setStart(finishedBookInput.getStart());
-                    fb.setEnd(finishedBookInput.getEnd());
+                    fb.setStart(input.getStart());
+                    fb.setEnd(input.getEnd());
                 }
 
                 book.setFound(input.getFound());

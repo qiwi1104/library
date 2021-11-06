@@ -5,17 +5,14 @@ import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import qiwi.controllers.common.BookToReadController;
-import qiwi.util.enums.Language;
-import qiwi.util.enums.SortBy;
-import qiwi.model.common.input.FinishedBookInput;
 import qiwi.model.common.input.Input;
 import qiwi.model.common.input.PathInput;
 import qiwi.model.english.BookToReadEnglish;
 import qiwi.model.english.FinishedBookEnglish;
 import qiwi.service.english.BookToReadEnglishServiceImpl;
 import qiwi.service.english.FinishedBookEnglishServiceImpl;
-
-import java.util.ArrayList;
+import qiwi.util.enums.Language;
+import qiwi.util.enums.SortBy;
 
 @Controller
 @RequestMapping("/bookstoread/english")
@@ -25,14 +22,10 @@ public class BookToReadEnglishController extends BookToReadController<
         FinishedBookEnglish,
         FinishedBookEnglishServiceImpl> {
 
-    private void addAttributesToModel(Model model) {
-        model.addAttribute("booksToReadEnglishInput", new Input());
-    }
-
     @PostMapping("/add")
     public String add(@ModelAttribute("booksToReadEnglishInput") Input input, BindingResult result, Model model) {
         if (result.hasErrors()) {
-            super.list(model, new ArrayList<>());
+            super.list(model, input);
             return "booksToReadEnglish";
         }
 
@@ -44,7 +37,7 @@ public class BookToReadEnglishController extends BookToReadController<
     public String edit(@ModelAttribute("booksToReadEnglishInput") Input input, BindingResult result, Model model) {
         if (result.hasErrors()) {
             if (input.getId() == null) {
-                super.list(model, new ArrayList<>());
+                super.list(model, input);
                 return "booksToReadEnglish";
             }
         }
@@ -60,9 +53,10 @@ public class BookToReadEnglishController extends BookToReadController<
     }
 
     @PostMapping("/finish/{id}")
-    public String finish(@ModelAttribute("booksToReadEnglishInput") FinishedBookInput input, BindingResult result, Model model) {
+    public String finish(@ModelAttribute("booksToReadEnglishInput") Input input, BindingResult result, Model model) {
         if (result.hasErrors()) {
-            super.list(model, new ArrayList<>());
+            result.getAllErrors().forEach(System.out::println);
+            super.list(model, input);
             return "booksToReadEnglish";
         }
 
@@ -96,8 +90,7 @@ public class BookToReadEnglishController extends BookToReadController<
 
     @GetMapping("/")
     public String list(Model model) {
-        addAttributesToModel(model);
-        super.list(model, new ArrayList<>());
+        super.list(model, new Input());
         return "booksToReadEnglish";
     }
 }

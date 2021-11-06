@@ -29,7 +29,35 @@
 
     <form action="#" th:action="@{'/bookstoread/spanish/finish/{id}'}" th:object="${booksToReadSpanishInput}"
           method="post">
-        <table th:replace="fragments/booksToReadPanels :: finish"></table>
+        <table th:fragment="finish" border="1px" class="hiddenPanel"  hidden id="finish">
+            <tr>
+                <td>
+                    <label>#</label>
+                    <input type="number" field="*{id}" name="id">
+                </td>
+                <td>
+                    <label>Start</label>
+                    <input type="date" field="*{start}" name="start">
+                </td>
+                <td>
+                    <label>End</label>
+                    <input type="date" field="*{end}" name="end">
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <input type="submit" value="finish book">
+                </td>
+                <td th:if="${#fields.hasErrors('start') or #fields.hasErrors('end')}">
+                    <script th:src="@{/js/src/actionsHandler.js}"></script>
+                    <script>
+                        actionsHandler("finish");
+                        let table = document.body.getElementsByClassName("hiddenPanel").finish;
+                        table.children[0].children[1].firstElementChild.append("Please enter the dates.");
+                    </script>
+                </td>
+            </tr>
+        </table>
     </form>
 
     <form action="#" th:action="@{'/bookstoread/spanish/edit/{id}'}" th:object="${booksToReadSpanishInput}"

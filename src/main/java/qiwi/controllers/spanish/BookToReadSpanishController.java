@@ -7,7 +7,7 @@ import org.springframework.web.bind.annotation.*;
 import qiwi.controllers.common.BookToReadController;
 import qiwi.util.enums.Language;
 import qiwi.util.enums.SortBy;
-import qiwi.model.common.input.FinishedBookInput;
+import qiwi.model.common.input.Input;
 import qiwi.model.common.input.Input;
 import qiwi.model.common.input.PathInput;
 import qiwi.model.spanish.BookToReadSpanish;
@@ -32,7 +32,7 @@ public class BookToReadSpanishController extends BookToReadController<
     @PostMapping("/add")
     public String add(@ModelAttribute("booksToReadSpanishInput") Input input, BindingResult result, Model model) {
         if (result.hasErrors()) {
-            super.list(model, new ArrayList<>());
+            super.list(model, new Input());
             return "booksToReadSpanish";
         }
 
@@ -44,7 +44,7 @@ public class BookToReadSpanishController extends BookToReadController<
     public String edit(@ModelAttribute("booksToReadSpanishInput") Input input, BindingResult result, Model model) {
         if (result.hasErrors()) {
             if (input.getId() == null) {
-                super.list(model, new ArrayList<>());
+                super.list(model, new Input());
                 return "booksToReadSpanish";
             }
         }
@@ -60,10 +60,10 @@ public class BookToReadSpanishController extends BookToReadController<
     }
 
     @PostMapping("/finish/{id}")
-    public String finish(@ModelAttribute("booksToReadSpanishInput") FinishedBookInput input, BindingResult result, Model model) {
+    public String finish(@ModelAttribute("booksToReadSpanishInput") Input input, BindingResult result, Model model) {
         if (result.hasErrors()) {
-            super.list(model, new ArrayList<>());
-            return "booksToReadEnglish";
+            super.list(model, input);
+            return "booksToReadSpanish";
         }
 
         super.finish(input, new FinishedBookSpanish());
@@ -97,7 +97,7 @@ public class BookToReadSpanishController extends BookToReadController<
     @GetMapping("/")
     public String list(Model model) {
         addAttributesToModel(model);
-        super.list(model, new ArrayList<>());
+        super.list(model, new Input());
         return "booksToReadSpanish";
     }
 }
