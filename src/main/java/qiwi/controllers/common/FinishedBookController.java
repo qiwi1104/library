@@ -98,25 +98,6 @@ public abstract class FinishedBookController<
         return books;
     }
 
-    protected void add(Input input, T book, U additionalDates) {
-        book.setId(service.findAll().size() + 1);
-        setBookAttributesFromInput(book, input, ADD);
-
-        if (service.exists(book)) {
-            book.setId(service.get(book).getId());
-            book.setFound(service.get(book).getFound());
-
-            additionalDates.setId(additionalDatesService.findAll().size() + 1);
-            additionalDates.setFinishedBookId(book.getId());
-            additionalDates.setStart(book.getStart());
-            additionalDates.setEnd(book.getEnd());
-
-            additionalDatesService.addDates(additionalDates);
-        } else {
-            service.addBook(book);
-        }
-    }
-
     protected boolean add(Input input, Model model, T book, U additionalDates) {
         book.setId(service.findAll().size() + 1);
         setBookAttributesFromInput(book, input, ADD);
