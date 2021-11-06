@@ -26,7 +26,7 @@
             </tr>
         </table>
     </form>
-    <br/>
+
     <form action="#" th:action="@{'/finishedbooks/russian/edit/{id}'}" th:object="${finishedRussianInput}"
           method="post">
         <table th:fragment="edit" border="1px" class="hiddenPanel" hidden id="edit">
@@ -51,11 +51,11 @@
             </tr>
         </table>
     </form>
-    <br/>
+
     <form action="#" th:action="@{'/finishedbooks/russian/load'}" th:object="${finishedRussianInput}" method="post">
         <table th:replace="fragments/IO :: load"></table>
     </form>
-    <br/>
+
     <form action="#" th:action="@{'/finishedbooks/russian/save'}" th:object="${finishedRussianInput}" method="post">
         <table th:replace="fragments/IO :: save"></table>
     </form>
