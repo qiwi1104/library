@@ -58,6 +58,10 @@ public abstract class FinishedBookController<
         }
     }
 
+    /*
+    * Returns either a redirection link to the respective page (if there are no errors)
+    * Or a view name (if there are errors)
+    * */
     protected String getRedirectionAddress(Input input, BindingResult result, Model model, String language, T book, U additionalDates) {
         if (result.hasErrors())
             return showTable(input, model, language);
