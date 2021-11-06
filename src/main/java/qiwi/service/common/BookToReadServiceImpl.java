@@ -58,7 +58,9 @@ public abstract class BookToReadServiceImpl<
 
     @Override
     public T getBookById(Integer id) {
-        return repository.getOne(id);
+        if (id <= repository.count())
+            return repository.getOne(id);
+        else return null;
     }
 
     @Override
