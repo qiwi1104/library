@@ -24,13 +24,7 @@ public class FinishedBookRussianController extends FinishedBookController<
 
     @PostMapping("/add")
     public String add(@ModelAttribute("finishedRussianInput") Input input, BindingResult result, Model model) {
-        if (result.hasErrors()) {
-            return showTable(input, model, "Russian");
-        }
-
-        if (super.add(input, model, new FinishedBookRussian(), new AdditionalDatesRussian()))
-            return "redirect:/finishedbooks/russian/";
-        else return showTable(input, model, "Russian");
+        return getRedirectionAddress(input, result, model, "Russian", new FinishedBookRussian(), new AdditionalDatesRussian());
     }
 
     @PostMapping("/edit/{id}")

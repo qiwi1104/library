@@ -24,15 +24,7 @@ public class BookToReadRussianController extends BookToReadController<
 
     @PostMapping("/add")
     public String add(@ModelAttribute("booksToReadRussianInput") Input input, BindingResult result, Model model) {
-        if (result.hasErrors()) {
-            return showTable(input, model, "Russian");
-        }
-
-        if (super.add(input, model, new BookToReadRussian())) {
-            return "redirect:/bookstoread/russian/";
-        } else {
-            return showTable(input, model, "Russian");
-        }
+        return getRedirectionAddress(input, result, model, "Russian", new BookToReadRussian());
     }
 
     @PostMapping("/edit/{id}")

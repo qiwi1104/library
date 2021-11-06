@@ -2,6 +2,7 @@ package qiwi.controllers.common;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import qiwi.model.common.AdditionalDates;
 import qiwi.model.common.book.FinishedBook;
 import qiwi.model.common.input.Input;
@@ -55,6 +56,15 @@ public abstract class FinishedBookController<
                 }
             }
         }
+    }
+
+    protected String getRedirectionAddress(Input input, BindingResult result, Model model, String language, T book, U additionalDates) {
+        if (result.hasErrors())
+            return showTable(input, model, language);
+
+        if (add(input, model, book, additionalDates))
+            return "redirect:/finishedbooks/" + language.toLowerCase() + "/";
+        else return showTable(input, model, language);
     }
 
     @Override

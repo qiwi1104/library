@@ -2,10 +2,12 @@ package qiwi.controllers.common;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import qiwi.model.common.book.BookToRead;
 import qiwi.model.common.book.FinishedBook;
 import qiwi.model.common.input.Input;
 import qiwi.model.common.input.PathInput;
+import qiwi.model.english.BookToReadEnglish;
 import qiwi.repository.common.BookToReadRepository;
 import qiwi.repository.common.FinishedBookRepository;
 import qiwi.service.common.BookToReadServiceImpl;
@@ -42,6 +44,15 @@ public abstract class BookToReadController<
             book.setId(i);
             i++;
         }
+    }
+
+    protected String getRedirectionAddress(Input input, BindingResult result, Model model, String language, T book) {
+        if (result.hasErrors())
+            return showTable(input, model, language);
+
+        if (add(input, model, book))
+            return "redirect:/bookstoread/" + language.toLowerCase() + "/";
+        else return showTable(input, model, language);
     }
 
     @Override
