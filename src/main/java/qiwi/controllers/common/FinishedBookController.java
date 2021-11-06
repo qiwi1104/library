@@ -2,7 +2,6 @@ package qiwi.controllers.common;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.ui.Model;
-import org.springframework.validation.BindingResult;
 import qiwi.model.common.AdditionalDates;
 import qiwi.model.common.book.FinishedBook;
 import qiwi.model.common.input.Input;
