@@ -92,21 +92,6 @@ public abstract class BookToReadController<
         service.addBook(book);
     }
 
-    protected void finish(Input input, U finishedBook) {
-        T bookToRead = service.getBookById(input.getId());
-
-        finishedBook.setId(finishedBookService.findAll().size() + 1);
-        finishedBook.setAuthor(bookToRead.getAuthor());
-        finishedBook.setName(bookToRead.getName());
-        finishedBook.setStart(input.getStart());
-        finishedBook.setEnd(input.getEnd());
-        finishedBook.setFound(bookToRead.getFound());
-        finishedBook.setDescription(bookToRead.getDescription());
-
-        finishedBookService.addBook(finishedBook);
-        service.deleteBook(bookToRead.getId());
-    }
-
     protected boolean finish(Input input, Model model, U finishedBook) {
         T bookToRead = service.getBookById(input.getId());
 
