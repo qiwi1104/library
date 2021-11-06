@@ -14,7 +14,6 @@ import qiwi.util.enums.Language;
 import qiwi.util.enums.SortBy;
 import qiwi.util.enums.SortType;
 
-import javax.persistence.EntityNotFoundException;
 import java.util.List;
 
 import static qiwi.util.enums.BookType.TO_READ;
@@ -159,10 +158,12 @@ public abstract class BookToReadController<
         JSONHandler.IO.saveTableToJSON(bookToReadList, input.getPath(), language, TO_READ);
     }
 
-    protected void list(Model model, String language, Input input) {
+    protected String showTable(Input input, Model model, String language) {
         List<T> bookList = filterAndSort();
 
         model.addAttribute("booksToRead" + language + "Input", input);
         model.addAttribute("booksToRead", bookList);
+
+        return "booksToRead" + language;
     }
 }
