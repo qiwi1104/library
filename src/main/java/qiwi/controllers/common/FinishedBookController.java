@@ -2,6 +2,7 @@ package qiwi.controllers.common;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import qiwi.model.common.AdditionalDates;
 import qiwi.model.common.book.FinishedBook;
 import qiwi.model.common.input.Input;
@@ -112,7 +113,7 @@ public abstract class FinishedBookController<
             additionalDates.setEnd(book.getEnd());
 
             if (!additionalDatesService.exists(additionalDates)) {
-                if (!additionalDates.getStart().equals(book.getStart()) && ! additionalDates.getEnd().equals(book.getEnd())) {
+                if (!additionalDates.getStart().equals(book.getStart()) && !additionalDates.getEnd().equals(book.getEnd())) {
                     additionalDatesService.addDates(additionalDates);
                     return true;
                 }
@@ -126,10 +127,17 @@ public abstract class FinishedBookController<
         }
     }
 
-    protected void edit(Input input) {
+    protected boolean edit(Input input, Model model) {
         T book = service.getBookById(input.getId());
-        setBookAttributesFromInput(book, input, EDIT);
-        service.addBook(book);
+
+        if (book != null) {
+            setBookAttributesFromInput(book, input, EDIT);
+            service.addBook(book);
+            return true;
+        } else {
+            model.addAttribute("nonExistentMessageEdit", "");
+            return false;
+        }
     }
 
     protected void sort(SortBy sortProperty) {

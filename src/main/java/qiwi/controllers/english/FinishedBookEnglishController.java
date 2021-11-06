@@ -38,11 +38,16 @@ public class FinishedBookEnglishController extends FinishedBookController<
         if (result.hasErrors()) {
             if (input.getId() == null) {
                 return showTable(input, model, "English");
+            } else {
+                if (super.edit(input, model))
+                    return "redirect:/finishedbooks/english/";
+                else return showTable(input, model, "English");
             }
         }
 
-        super.edit(input);
-        return "redirect:/finishedbooks/english/";
+        if (super.edit(input, model))
+            return "redirect:/finishedbooks/english/";
+        else return showTable(input, model, "English");
     }
 
     @GetMapping("/delete/{id}")

@@ -40,6 +40,7 @@
             <tr>
                 <td>
                     <input type="submit" value="edit book">
+                    <div th:replace="fragments/errorMessages :: nonExistentEditFinished"></div>
                 </td>
                 <td th:if="${#fields.hasErrors()}">
                     <script>

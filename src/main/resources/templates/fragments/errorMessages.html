@@ -11,6 +11,17 @@
         </script>
     </div>
 </div>
+<div th:fragment="nonExistentEditFinished" th:object="${nonExistentMessageEdit}" hidden>
+    <div th:if="${nonExistentMessageEdit}">
+        <script th:src="@{/js/src/actionsHandler.js}"></script>
+        <script>
+        actionsHandler("edit");
+        table = document.body.getElementsByClassName("hiddenPanel").edit;
+        table.children[0].children[4].firstElementChild.append("This book doesn't exist.");
+
+        </script>
+    </div>
+</div>
 
 <!--Books To Read-->
 <div th:fragment="alreadyExists" th:object="${alreadyExistsMessage}" hidden>
