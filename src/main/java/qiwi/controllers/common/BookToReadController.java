@@ -14,6 +14,7 @@ import qiwi.util.enums.Language;
 import qiwi.util.enums.SortBy;
 import qiwi.util.enums.SortType;
 
+import javax.persistence.EntityNotFoundException;
 import java.util.List;
 
 import static qiwi.util.enums.BookType.TO_READ;
@@ -105,6 +106,27 @@ public abstract class BookToReadController<
 
         finishedBookService.addBook(finishedBook);
         service.deleteBook(bookToRead.getId());
+    }
+
+    protected boolean finish(Input input, Model model, U finishedBook) {
+        T bookToRead = service.getBookById(input.getId());
+
+        if (bookToRead != null) {
+            finishedBook.setId(finishedBookService.findAll().size() + 1);
+            finishedBook.setAuthor(bookToRead.getAuthor());
+            finishedBook.setName(bookToRead.getName());
+            finishedBook.setStart(input.getStart());
+            finishedBook.setEnd(input.getEnd());
+            finishedBook.setFound(bookToRead.getFound());
+            finishedBook.setDescription(bookToRead.getDescription());
+
+            finishedBookService.addBook(finishedBook);
+            service.deleteBook(bookToRead.getId());
+            return true;
+        } else {
+            model.addAttribute("nonExistentMessage", "");
+            return false;
+        }
     }
 
     protected void sort(SortBy sortProperty) {

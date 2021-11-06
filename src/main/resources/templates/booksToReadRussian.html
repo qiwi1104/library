@@ -48,6 +48,7 @@
             <tr>
                 <td>
                     <input type="submit" value="finish book">
+                    <div th:replace="fragments/commonAttributes :: nonExistent"></div>
                 </td>
                 <td th:if="${#fields.hasErrors('start') or #fields.hasErrors('end')}">
                     <script th:src="@{/js/src/actionsHandler.js}"></script>

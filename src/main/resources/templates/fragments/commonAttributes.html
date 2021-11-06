@@ -63,5 +63,15 @@
         </script>
     </div>
 </div>
+<div th:fragment="nonExistent" th:object="${nonExistentMessage}" hidden>
+    <div th:if="${nonExistentMessage}">
+        <script th:src="@{/js/src/actionsHandler.js}"></script>
+        <script>
+        actionsHandler("finish");
+        let table = document.body.getElementsByClassName("hiddenPanel").finish;
+        table.children[0].children[1].firstElementChild.append("This book doesn't exist.");
+        </script>
+    </div>
+</div>
 </body>
 </html>

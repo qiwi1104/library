@@ -63,8 +63,12 @@ public class BookToReadSpanishController extends BookToReadController<
             return "booksToReadSpanish";
         }
 
-        super.finish(input, new FinishedBookSpanish());
-        return "redirect:/bookstoread/spanish/";
+        if (super.finish(input, model, new FinishedBookSpanish())){
+            return "redirect:/bookstoread/spanish/";
+        } else {
+            super.list(model, "Spanish", input);
+            return "booksToReadSpanish";
+        }
     }
 
     @GetMapping("/sort/{property}")

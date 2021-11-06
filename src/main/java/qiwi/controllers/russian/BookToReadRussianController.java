@@ -9,6 +9,7 @@ import qiwi.model.common.input.Input;
 import qiwi.model.common.input.PathInput;
 import qiwi.model.russian.BookToReadRussian;
 import qiwi.model.russian.FinishedBookRussian;
+import qiwi.model.spanish.FinishedBookSpanish;
 import qiwi.service.russian.BookToReadRussianServiceImpl;
 import qiwi.service.russian.FinishedBookRussianServiceImpl;
 import qiwi.util.enums.Language;
@@ -63,8 +64,12 @@ public class BookToReadRussianController extends BookToReadController<
             return "booksToReadRussian";
         }
 
-        super.finish(input, new FinishedBookRussian());
-        return "redirect:/bookstoread/russian/";
+        if (super.finish(input, model, new FinishedBookRussian())) {
+            return "redirect:/bookstoread/russian/";
+        } else {
+            super.list(model, "Russian", input);
+            return "booksToReadRussian";
+        }
     }
 
     @GetMapping("/sort/{property}")
