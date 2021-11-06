@@ -4,7 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.ui.Model;
 import qiwi.model.common.AdditionalDates;
 import qiwi.model.common.book.FinishedBook;
-import qiwi.model.common.input.FinishedBookInput;
+import qiwi.model.common.input.Input;
 import qiwi.model.common.input.PathInput;
 import qiwi.repository.common.AdditionalDatesRepository;
 import qiwi.repository.common.FinishedBookRepository;
@@ -98,7 +98,7 @@ public abstract class FinishedBookController<
         return books;
     }
 
-    protected void add(FinishedBookInput input, T book, U additionalDates) {
+    protected void add(Input input, T book, U additionalDates) {
         book.setId(service.findAll().size() + 1);
         setBookAttributesFromInput(book, input, ADD);
 
@@ -117,7 +117,7 @@ public abstract class FinishedBookController<
         }
     }
 
-    protected void edit(FinishedBookInput input) {
+    protected void edit(Input input) {
         T book = service.getBookById(input.getId());
         setBookAttributesFromInput(book, input, EDIT);
         service.addBook(book);
