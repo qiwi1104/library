@@ -73,14 +73,16 @@ public abstract class BookToReadController<
         return books;
     }
 
-    protected void add(Input input, T book) {
+    protected boolean add(Input input, Model model, T book) {
         book.setId(service.findAll().size() + 1);
         setBookAttributesFromInput(book, input, ADD);
 
         if (!service.exists(book)) {
             service.addBook(book);
+            return true;
         } else {
-            System.out.println("This book already exists!");
+            model.addAttribute("alreadyExistsMessage", "");
+            return false;
         }
     }
 
@@ -135,10 +137,10 @@ public abstract class BookToReadController<
         JSONHandler.IO.saveTableToJSON(bookToReadList, input.getPath(), language, TO_READ);
     }
 
-    protected void list(Model model, Input input) {
+    protected void list(Model model, String language, Input input) {
         List<T> bookList = filterAndSort();
 
-        model.addAttribute("booksToReadEnglishInput", input);
+        model.addAttribute("booksToRead" + language + "Input", input);
         model.addAttribute("booksToRead", bookList);
     }
 }

@@ -25,19 +25,23 @@ public class BookToReadEnglishController extends BookToReadController<
     @PostMapping("/add")
     public String add(@ModelAttribute("booksToReadEnglishInput") Input input, BindingResult result, Model model) {
         if (result.hasErrors()) {
-            super.list(model, input);
+            super.list(model, "English", input);
             return "booksToReadEnglish";
         }
 
-        super.add(input, new BookToReadEnglish());
-        return "redirect:/bookstoread/english/";
+        if (super.add(input, model, new BookToReadEnglish())) {
+            return "redirect:/bookstoread/english/";
+        } else {
+            super.list(model, "English", input);
+            return "booksToReadEnglish";
+        }
     }
 
     @PostMapping("/edit/{id}")
     public String edit(@ModelAttribute("booksToReadEnglishInput") Input input, BindingResult result, Model model) {
         if (result.hasErrors()) {
             if (input.getId() == null) {
-                super.list(model, input);
+                super.list(model, "English", input);
                 return "booksToReadEnglish";
             }
         }
@@ -55,7 +59,7 @@ public class BookToReadEnglishController extends BookToReadController<
     @PostMapping("/finish/{id}")
     public String finish(@ModelAttribute("booksToReadEnglishInput") Input input, BindingResult result, Model model) {
         if (result.hasErrors()) {
-            super.list(model, input);
+            super.list(model, "English", input);
             return "booksToReadEnglish";
         }
 
@@ -89,7 +93,7 @@ public class BookToReadEnglishController extends BookToReadController<
 
     @GetMapping("/")
     public String list(Model model) {
-        super.list(model, new Input());
+        super.list(model, "English", new Input());
         return "booksToReadEnglish";
     }
 }

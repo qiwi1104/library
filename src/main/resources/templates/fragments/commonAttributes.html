@@ -55,5 +55,13 @@
         </td>
     </tr>
 </div>
+<div th:fragment="alreadyExists" th:object="${alreadyExistsMessage}" hidden>
+    <div th:if="${alreadyExistsMessage}">
+        <script>
+        let table = document.body.getElementsByClassName("hiddenPanel").add;
+        table.children[0].children[2].firstElementChild.append("This book already exists.");
+        </script>
+    </div>
+</div>
 </body>
 </html>

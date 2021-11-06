@@ -15,11 +15,13 @@
             <tr>
                 <td>
                     <input type="submit" value="add book">
+                    <div th:replace="fragments/commonAttributes :: alreadyExists"></div>
                 </td>
                 <td th:if="${#fields.hasErrors('found')}">
                     <script>
                         let table = document.body.getElementsByClassName("hiddenPanel").add;
                         table.children[0].children[2].firstElementChild.append("Please enter the date.");
+
                     </script>
                 </td>
             </tr>
@@ -53,6 +55,10 @@
                         actionsHandler("finish");
                         let table = document.body.getElementsByClassName("hiddenPanel").finish;
                         table.children[0].children[1].firstElementChild.append("Please enter the dates.");
+
+
+
+
                     </script>
                 </td>
             </tr>

@@ -25,19 +25,23 @@ public class BookToReadRussianController extends BookToReadController<
     @PostMapping("/add")
     public String add(@ModelAttribute("booksToReadRussianInput") Input input, BindingResult result, Model model) {
         if (result.hasErrors()) {
-            super.list(model, input);
+            super.list(model, "Russian", input);
             return "booksToReadRussian";
         }
 
-        super.add(input, new BookToReadRussian());
-        return "redirect:/bookstoread/russian/";
+        if (super.add(input, model, new BookToReadRussian())) {
+            return "redirect:/bookstoread/russian/";
+        } else {
+            super.list(model, "Russian", input);
+            return "booksToReadRussian";
+        }
     }
 
     @PostMapping("/edit/{id}")
     public String edit(@ModelAttribute("booksToReadRussianInput") Input input, BindingResult result, Model model) {
         if (result.hasErrors()) {
             if (input.getId() == null) {
-                super.list(model, input);
+                super.list(model, "Russian", input);
                 return "booksToReadRussian";
             }
         }
@@ -55,7 +59,7 @@ public class BookToReadRussianController extends BookToReadController<
     @PostMapping("/finish/{id}")
     public String finish(@ModelAttribute("booksToReadRussianInput") Input input, BindingResult result, Model model) {
         if (result.hasErrors()) {
-            super.list(model, input);
+            super.list(model, "Russian", input);
             return "booksToReadRussian";
         }
 
@@ -89,7 +93,7 @@ public class BookToReadRussianController extends BookToReadController<
 
     @GetMapping("/")
     public String list(Model model) {
-        super.list(model, new Input());
+        super.list(model, "Russian", new Input());
         return "booksToReadRussian";
     }
 }

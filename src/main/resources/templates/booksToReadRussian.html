@@ -16,6 +16,7 @@
             <tr>
                 <td>
                     <input type="submit" value="add book">
+                    <div th:replace="fragments/commonAttributes :: alreadyExists"></div>
                 </td>
                 <td th:if="${#fields.hasErrors('found')}">
                     <script>
