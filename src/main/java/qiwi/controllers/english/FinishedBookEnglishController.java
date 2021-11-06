@@ -5,16 +5,14 @@ import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import qiwi.controllers.common.FinishedBookController;
-import qiwi.util.enums.Language;
-import qiwi.util.enums.SortBy;
 import qiwi.model.common.input.Input;
 import qiwi.model.common.input.PathInput;
 import qiwi.model.english.AdditionalDatesEnglish;
 import qiwi.model.english.FinishedBookEnglish;
 import qiwi.service.english.AdditionalDatesEnglishServiceImpl;
 import qiwi.service.english.FinishedBookEnglishServiceImpl;
-
-import java.util.ArrayList;
+import qiwi.util.enums.Language;
+import qiwi.util.enums.SortBy;
 
 @Controller
 @RequestMapping("/finishedbooks/english")
@@ -24,27 +22,22 @@ public class FinishedBookEnglishController extends FinishedBookController<
         AdditionalDatesEnglish,
         AdditionalDatesEnglishServiceImpl> {
 
-    private void addAttributesToModel(Model model) {
-        model.addAttribute("finishedEnglishInput", new Input());
-    }
-
     @PostMapping("/add")
     public String add(@ModelAttribute("finishedEnglishInput") Input input, BindingResult result, Model model) {
         if (result.hasErrors()) {
-            super.list(model, new ArrayList<>());
-            return "finishedBooksEnglish";
+            return showTable(input, model, "English");
         }
 
-        super.add(input, new FinishedBookEnglish(), new AdditionalDatesEnglish());
-        return "redirect:/finishedbooks/english/";
+        if (super.add(input, model, new FinishedBookEnglish(), new AdditionalDatesEnglish()))
+            return "redirect:/finishedbooks/english/";
+        else return showTable(input, model, "English");
     }
 
     @PostMapping("/edit/{id}")
     public String edit(@ModelAttribute("finishedEnglishInput") Input input, BindingResult result, Model model) {
         if (result.hasErrors()) {
             if (input.getId() == null) {
-                super.list(model, new ArrayList<>());
-                return "finishedBooksEnglish";
+                return showTable(input, model, "English");
             }
         }
 
@@ -78,8 +71,6 @@ public class FinishedBookEnglishController extends FinishedBookController<
 
     @GetMapping("/")
     public String list(Model model) {
-        addAttributesToModel(model);
-        super.list(model, new ArrayList<>());
-        return "finishedBooksEnglish";
+        return showTable(new Input(), model, "English");
     }
 }

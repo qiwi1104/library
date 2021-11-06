@@ -11,5 +11,7 @@ public interface AdditionalDatesService<T extends AdditionalDates> {
 
     T getDatesById(Integer id);
 
+    boolean exists(T additionalDate);
+
     List<T> findAll();
 }

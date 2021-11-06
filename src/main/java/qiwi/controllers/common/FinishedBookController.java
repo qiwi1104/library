@@ -37,8 +37,8 @@ public abstract class FinishedBookController<
     protected SortBy sortProperty = START;
 
     /*
-    * Sets ids to Additional Dates of a book
-    * */
+     * Sets ids to Additional Dates of a book
+     * */
     private void setIdsAndDates(List<T> books) {
         int additionalDatesCounter = 0;
 
@@ -117,6 +117,34 @@ public abstract class FinishedBookController<
         }
     }
 
+    protected boolean add(Input input, Model model, T book, U additionalDates) {
+        book.setId(service.findAll().size() + 1);
+        setBookAttributesFromInput(book, input, ADD);
+
+        if (service.exists(book)) {
+            book.setId(service.get(book).getId());
+            book.setFound(service.get(book).getFound());
+
+            additionalDates.setId(additionalDatesService.findAll().size() + 1);
+            additionalDates.setFinishedBookId(book.getId());
+            additionalDates.setStart(book.getStart());
+            additionalDates.setEnd(book.getEnd());
+
+            if (!additionalDatesService.exists(additionalDates)) {
+                if (!additionalDates.getStart().equals(book.getStart()) && ! additionalDates.getEnd().equals(book.getEnd())) {
+                    additionalDatesService.addDates(additionalDates);
+                    return true;
+                }
+            }
+
+            model.addAttribute("alreadyExistsMessage", "");
+            return false;
+        } else {
+            service.addBook(book);
+            return true;
+        }
+    }
+
     protected void edit(Input input) {
         T book = service.getBookById(input.getId());
         setBookAttributesFromInput(book, input, EDIT);
@@ -145,10 +173,13 @@ public abstract class FinishedBookController<
         JSONHandler.IO.saveTableToJSON(bookToReadList, input.getPath(), language, FINISHED);
     }
 
-    protected void list(Model model, List<T> bookList) {
-        bookList = filterAndSort();
+    protected String showTable(Input input, Model model, String language) {
+        List<T> bookList = filterAndSort();
 
         model.addAttribute("books", bookList);
         model.addAttribute("additionalDates", additionalDatesService.findAll());
+        model.addAttribute("finished" + language + "Input", input);
+
+        return "finishedBooks" + language;
     }
 }

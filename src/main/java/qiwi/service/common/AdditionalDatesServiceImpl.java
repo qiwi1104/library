@@ -31,7 +31,20 @@ public abstract class AdditionalDatesServiceImpl<
 
     @Override
     public T getDatesById(Integer id) {
-        return additionalDatesRepository.getOne(id);
+        if (id <= additionalDatesRepository.count())
+            return additionalDatesRepository.getOne(id);
+        else return null;
+    }
+
+    @Override
+    public boolean exists(T additionalDate) {
+        for (T date : additionalDatesRepository.findAll()) {
+            if (additionalDate.equals(date)) {
+                return true;
+            }
+        }
+
+        return false;
     }
 
     @Override
