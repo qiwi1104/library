@@ -14,6 +14,8 @@ import qiwi.service.spanish.FinishedBookSpanishServiceImpl;
 import qiwi.util.enums.Language;
 import qiwi.util.enums.SortBy;
 
+import static qiwi.util.enums.Language.SPANISH;
+
 @Controller
 @RequestMapping("/finishedbooks/spanish")
 public class FinishedBookSpanishController extends FinishedBookController<
@@ -24,12 +26,12 @@ public class FinishedBookSpanishController extends FinishedBookController<
 
     @PostMapping("/add")
     public String add(@ModelAttribute("finishedSpanishInput") Input input, BindingResult result, Model model) {
-        return getRedirectionAddress(input, result, model, "Spanish", new FinishedBookSpanish(), new AdditionalDatesSpanish());
+        return getRedirectionAddress(input, result, model, SPANISH, new FinishedBookSpanish(), new AdditionalDatesSpanish());
     }
 
     @PostMapping("/edit/{id}")
     public String edit(@ModelAttribute("finishedSpanishInput") Input input, BindingResult result, Model model) {
-        return getRedirectionAddress(input, result, model, "Spanish", "finishedbooks");
+        return getRedirectionAddress(input, result, model, SPANISH, "finishedbooks");
     }
 
     @GetMapping("/delete/{id}")
@@ -46,18 +48,18 @@ public class FinishedBookSpanishController extends FinishedBookController<
 
     @PostMapping("/load")
     public String load(@ModelAttribute("finishedSpanishInput") PathInput input, BindingResult result, Model model) {
-        super.load(input, Language.SPANISH);
+        super.load(input, SPANISH);
         return "redirect:/finishedbooks/spanish/";
     }
 
     @PostMapping("/save")
     public String save(@ModelAttribute("finishedSpanishInput") PathInput input, BindingResult result, Model model) {
-        super.save(input, Language.SPANISH);
+        super.save(input, SPANISH);
         return "redirect:/finishedbooks/spanish/";
     }
 
     @GetMapping("/")
     public String list(Model model) {
-        return showTable(new Input(), model, "Spanish");
+        return showTable(new Input(), model, SPANISH);
     }
 }

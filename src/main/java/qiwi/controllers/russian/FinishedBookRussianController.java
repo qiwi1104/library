@@ -11,8 +11,9 @@ import qiwi.model.russian.AdditionalDatesRussian;
 import qiwi.model.russian.FinishedBookRussian;
 import qiwi.service.russian.AdditionalDatesServiceRussianImpl;
 import qiwi.service.russian.FinishedBookRussianServiceImpl;
-import qiwi.util.enums.Language;
 import qiwi.util.enums.SortBy;
+
+import static qiwi.util.enums.Language.RUSSIAN;
 
 @Controller
 @RequestMapping("/finishedbooks/russian")
@@ -24,12 +25,12 @@ public class FinishedBookRussianController extends FinishedBookController<
 
     @PostMapping("/add")
     public String add(@ModelAttribute("finishedRussianInput") Input input, BindingResult result, Model model) {
-        return getRedirectionAddress(input, result, model, "Russian", new FinishedBookRussian(), new AdditionalDatesRussian());
+        return getRedirectionAddress(input, result, model, RUSSIAN, new FinishedBookRussian(), new AdditionalDatesRussian());
     }
 
     @PostMapping("/edit/{id}")
     public String edit(@ModelAttribute("finishedRussianInput") Input input, BindingResult result, Model model) {
-        return getRedirectionAddress(input, result, model, "Russian", "finishedbooks");
+        return getRedirectionAddress(input, result, model, RUSSIAN, "finishedbooks");
     }
 
     @GetMapping("/delete/{id}")
@@ -46,18 +47,18 @@ public class FinishedBookRussianController extends FinishedBookController<
 
     @PostMapping("/load")
     public String load(@ModelAttribute("finishedRussianInput") PathInput input, BindingResult result, Model model) {
-        super.load(input, Language.RUSSIAN);
+        super.load(input, RUSSIAN);
         return "redirect:/finishedbooks/russian/";
     }
 
     @PostMapping("/save")
     public String save(@ModelAttribute("finishedRussianInput") PathInput input, BindingResult result, Model model) {
-        super.save(input, Language.RUSSIAN);
+        super.save(input, RUSSIAN);
         return "redirect:/finishedbooks/russian/";
     }
 
     @GetMapping("/")
     public String list(Model model) {
-        return showTable(new Input(), model, "Russian");
+        return showTable(new Input(), model, RUSSIAN);
     }
 }

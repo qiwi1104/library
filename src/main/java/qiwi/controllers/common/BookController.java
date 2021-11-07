@@ -237,11 +237,11 @@ public abstract class BookController {
 
     protected abstract <T extends Book> List<T> filterAndSort();
 
-    protected abstract String showTable(Input input, Model model, String language);
+    protected abstract String showTable(Input input, Model model, Language language);
 
     protected abstract boolean edit(Input input, Model model);
 
-    protected <T extends Book> String getRedirectionAddress(Input input, BindingResult result, Model model, String language, String bookType) {
+    protected <T extends Book> String getRedirectionAddress(Input input, BindingResult result, Model model, Language language, String bookType) {
         if (result.hasErrors()) {
             if (input.getId() == null) {
                 return showTable(input, model, language);

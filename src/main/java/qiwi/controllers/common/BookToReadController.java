@@ -7,7 +7,6 @@ import qiwi.model.common.book.BookToRead;
 import qiwi.model.common.book.FinishedBook;
 import qiwi.model.common.input.Input;
 import qiwi.model.common.input.PathInput;
-import qiwi.model.english.BookToReadEnglish;
 import qiwi.repository.common.BookToReadRepository;
 import qiwi.repository.common.FinishedBookRepository;
 import qiwi.service.common.BookToReadServiceImpl;
@@ -50,7 +49,7 @@ public abstract class BookToReadController<
      * Returns either a redirection link to the respective page (if there are no errors)
      * Or a view name (if there are errors)
      * */
-    protected String getRedirectionAddress(Input input, BindingResult result, Model model, String language, T book) {
+    protected String getRedirectionAddress(Input input, BindingResult result, Model model, Language language, T book) {
         if (result.hasErrors())
             return showTable(input, model, language);
 
@@ -166,13 +165,12 @@ public abstract class BookToReadController<
         JSONHandler.IO.saveTableToJSON(bookToReadList, input.getPath(), language, TO_READ);
     }
 
-    @Override
-    protected String showTable(Input input, Model model, String language) {
+    protected String showTable(Input input, Model model, Language language) {
         List<T> bookList = filterAndSort();
 
-        model.addAttribute("booksToRead" + language + "Input", input);
+        model.addAttribute("booksToRead" + language.firstLetterToUpperCase() + "Input", input);
         model.addAttribute("booksToRead", bookList);
 
-        return "booksToRead" + language;
+        return "booksToRead" + language.firstLetterToUpperCase();
     }
 }

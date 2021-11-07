@@ -62,7 +62,7 @@ public abstract class FinishedBookController<
     * Returns either a redirection link to the respective page (if there are no errors)
     * Or a view name (if there are errors)
     * */
-    protected String getRedirectionAddress(Input input, BindingResult result, Model model, String language, T book, U additionalDates) {
+    protected String getRedirectionAddress(Input input, BindingResult result, Model model, Language language, T book, U additionalDates) {
         if (result.hasErrors())
             return showTable(input, model, language);
 
@@ -177,13 +177,13 @@ public abstract class FinishedBookController<
     }
 
     @Override
-    protected String showTable(Input input, Model model, String language) {
+    protected String showTable(Input input, Model model, Language language) {
         List<T> bookList = filterAndSort();
 
         model.addAttribute("books", bookList);
         model.addAttribute("additionalDates", additionalDatesService.findAll());
-        model.addAttribute("finished" + language + "Input", input);
+        model.addAttribute("finished" + language.firstLetterToUpperCase() + "Input", input);
 
-        return "finishedBooks" + language;
+        return "finishedBooks" + language.firstLetterToUpperCase();
     }
 }

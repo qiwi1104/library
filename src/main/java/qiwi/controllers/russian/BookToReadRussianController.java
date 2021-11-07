@@ -11,8 +11,9 @@ import qiwi.model.russian.BookToReadRussian;
 import qiwi.model.russian.FinishedBookRussian;
 import qiwi.service.russian.BookToReadRussianServiceImpl;
 import qiwi.service.russian.FinishedBookRussianServiceImpl;
-import qiwi.util.enums.Language;
 import qiwi.util.enums.SortBy;
+
+import static qiwi.util.enums.Language.RUSSIAN;
 
 @Controller
 @RequestMapping("/bookstoread/russian")
@@ -24,12 +25,12 @@ public class BookToReadRussianController extends BookToReadController<
 
     @PostMapping("/add")
     public String add(@ModelAttribute("booksToReadRussianInput") Input input, BindingResult result, Model model) {
-        return getRedirectionAddress(input, result, model, "Russian", new BookToReadRussian());
+        return getRedirectionAddress(input, result, model, RUSSIAN, new BookToReadRussian());
     }
 
     @PostMapping("/edit/{id}")
     public String edit(@ModelAttribute("booksToReadRussianInput") Input input, BindingResult result, Model model) {
-        return getRedirectionAddress(input, result, model, "Russian", "bookstoread");
+        return getRedirectionAddress(input, result, model, RUSSIAN, "bookstoread");
     }
 
     @GetMapping("/delete/{id}")
@@ -41,13 +42,13 @@ public class BookToReadRussianController extends BookToReadController<
     @PostMapping("/finish/{id}")
     public String finish(@ModelAttribute("booksToReadRussianInput") Input input, BindingResult result, Model model) {
         if (result.hasErrors()) {
-            return showTable(input, model, "Russian");
+            return showTable(input, model, RUSSIAN);
         }
 
         if (super.finish(input, model, new FinishedBookRussian())) {
             return "redirect:/bookstoread/russian/";
         } else {
-            return showTable(input, model, "Russian");
+            return showTable(input, model, RUSSIAN);
         }
     }
 
@@ -59,24 +60,24 @@ public class BookToReadRussianController extends BookToReadController<
 
     @PostMapping("/load")
     public String load(@ModelAttribute("booksToReadRussianInput") PathInput input, BindingResult result, Model model) {
-        super.load(input, Language.RUSSIAN);
+        super.load(input, RUSSIAN);
         return "redirect:/bookstoread/russian/";
     }
 
     @PostMapping("/loadBatch")
     public String loadBatch(@ModelAttribute("booksToReadRussianInput") PathInput input, BindingResult result, Model model) {
-        super.loadBatch(input, Language.RUSSIAN);
+        super.loadBatch(input, RUSSIAN);
         return "redirect:/bookstoread/russian/";
     }
 
     @PostMapping("/save")
     public String save(@ModelAttribute("booksToReadRussianInput") PathInput input, BindingResult result, Model model) {
-        super.save(input, Language.RUSSIAN);
+        super.save(input, RUSSIAN);
         return "redirect:/bookstoread/russian/";
     }
 
     @GetMapping("/")
     public String list(Model model) {
-        return showTable(new Input(), model, "Russian");
+        return showTable(new Input(), model, RUSSIAN);
     }
 }
