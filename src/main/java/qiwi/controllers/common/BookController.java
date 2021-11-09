@@ -241,7 +241,7 @@ public abstract class BookController {
 
     protected abstract boolean edit(Input input, Model model);
 
-    protected <T extends Book> String getRedirectionAddress(Input input, BindingResult result, Model model, Language language, String bookType) {
+    protected String getRedirectionAddress(Input input, BindingResult result, Model model, Language language, String bookType) {
         if (result.hasErrors()) {
             if (input.getId() == null) {
                 return showTable(input, model, language);
