@@ -64,14 +64,29 @@
 
     <form action="#" th:action="@{'/bookstoread/spanish/edit/{id}'}" th:object="${booksToReadSpanishInput}"
           method="post">
-        <table th:replace="fragments/booksToReadPanels :: edit"></table>
+        <table th:fragment="edit" border="1px" class="hiddenPanel" hidden id="edit">
+            <tr>
+                <td>
+                    <label>#</label>
+                    <input type="number" field="*{id}" name="id">
+                </td>
+            </tr>
+            <div th:replace="fragments/commonAttributes :: commonAttributesToRead"></div>
+            <tr>
+                <td>
+                    <input type="submit" value="edit book">
+                    <div th:replace="fragments/errorMessages :: nonExistentEdit"></div>
+                </td>
+            </tr>
+        </table>
     </form>
 
     <form action="#" th:action="@{'/bookstoread/spanish/load'}" th:object="${booksToReadSpanishInput}" method="post">
         <table th:replace="fragments/IO :: load"></table>
     </form>
 
-    <form action="#" th:action="@{'/bookstoread/spanish/loadBatch'}" th:object="${booksToReadSpanishInput}" method="post">
+    <form action="#" th:action="@{'/bookstoread/spanish/loadBatch'}" th:object="${booksToReadSpanishInput}"
+          method="post">
         <table th:replace="fragments/IO :: loadBatch"></table>
     </form>
 
