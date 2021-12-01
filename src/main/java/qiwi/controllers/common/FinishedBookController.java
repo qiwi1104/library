@@ -59,9 +59,9 @@ public abstract class FinishedBookController<
     }
 
     /*
-    * Returns either a redirection link to the respective page (if there are no errors)
-    * Or a view name (if there are errors)
-    * */
+     * Returns either a redirection link to the respective page (if there are no errors)
+     * Or a view name (if there are errors)
+     * */
     protected String getRedirectionAddress(Input input, BindingResult result, Model model, Language language, T book, U additionalDates) {
         if (result.hasErrors())
             return showTable(input, model, language);
@@ -126,10 +126,8 @@ public abstract class FinishedBookController<
             additionalDates.setEnd(book.getEnd());
 
             if (!additionalDatesService.exists(additionalDates)) {
-                if (!additionalDates.getStart().equals(book.getStart()) && !additionalDates.getEnd().equals(book.getEnd())) {
-                    additionalDatesService.addDates(additionalDates);
-                    return true;
-                }
+                additionalDatesService.addDates(additionalDates);
+                return true;
             }
 
             model.addAttribute("alreadyExistsMessage", "");

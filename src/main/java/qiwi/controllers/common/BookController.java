@@ -155,7 +155,7 @@ public abstract class BookController {
                     }
                 }
 
-                String languageStr = language.toString().toLowerCase();
+                String languageStr = language.toLowerCase();
                 languageStr = languageStr.substring(0, 1).toUpperCase() + languageStr.substring(1);
 
                 path += languageStr + " " + new SimpleDateFormat("yyyy-MM-dd HH-mm-ss").format(new Date()) + ".json";
@@ -171,7 +171,7 @@ public abstract class BookController {
             File chosenFile = null;
             if (files != null) {
                 for (File file : files) {
-                    if (file.lastModified() > lastModifiedTime && file.getName().toLowerCase().contains(language.toString().toLowerCase())) {
+                    if (file.lastModified() > lastModifiedTime && file.getName().toLowerCase().contains(language.toLowerCase())) {
                         chosenFile = file;
                         lastModifiedTime = file.lastModified();
                     }
