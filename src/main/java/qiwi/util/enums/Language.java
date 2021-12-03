@@ -1,7 +1,7 @@
 package qiwi.util.enums;
 
 public enum Language {
-    ENGLISH, RUSSIAN, SPANISH;
+    ENGLISH, RUSSIAN, SPANISH, ALL;
 
     public String firstLetterToUpperCase() {
         return Character.toUpperCase(this.toString().charAt(0)) + this.toString().substring(1).toLowerCase();

@@ -1,60 +1,58 @@
-package qiwi.service.common;
+package qiwi.service.impl;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
-import qiwi.model.common.book.FinishedBook;
-import qiwi.repository.common.FinishedBookRepository;
+import qiwi.model.book.FinishedBook;
+import qiwi.repository.FinishedBookRepository;
 import qiwi.service.BookService;
 
 import java.util.List;
 
 @Service
-public abstract class FinishedBookServiceImpl<
-        T extends FinishedBook,
-        S extends FinishedBookRepository<T>> implements BookService<T> {
+public class FinishedBookServiceImpl implements BookService<FinishedBook> {
     @Autowired
-    private S repository;
+    private FinishedBookRepository repository;
 
-    public List<T> findAllByOrderByIdAsc() {
+    public List<FinishedBook> findAllByOrderByIdAsc() {
         return repository.findAll(Sort.by(Sort.Direction.ASC, "id"));
     }
 
-    public List<T> findAllByOrderByIdDesc() {
+    public List<FinishedBook> findAllByOrderByIdDesc() {
         return repository.findAll(Sort.by(Sort.Direction.DESC, "id"));
     }
 
-    public List<T> findAllByOrderByStartAsc() {
+    public List<FinishedBook> findAllByOrderByStartAsc() {
         return repository.findAll(Sort.by(Sort.Direction.ASC, "start"));
     }
 
-    public List<T> findAllByOrderByStartDesc() {
+    public List<FinishedBook> findAllByOrderByStartDesc() {
         return repository.findAll(Sort.by(Sort.Direction.DESC, "start"));
     }
 
-    public List<T> findAllByOrderByEndAsc() {
+    public List<FinishedBook> findAllByOrderByEndAsc() {
         return repository.findAll(Sort.by(Sort.Direction.ASC, "end"));
     }
 
-    public List<T> findAllByOrderByEndDesc() {
+    public List<FinishedBook> findAllByOrderByEndDesc() {
         return repository.findAll(Sort.by(Sort.Direction.DESC, "end"));
     }
 
-    public List<T> findAllByOrderByFoundByIdAsc() {
+    public List<FinishedBook> findAllByOrderByFoundByIdAsc() {
         return repository.findAll(Sort.by(Sort.Direction.ASC, "found", "id"));
     }
 
-    public List<T> findAllByOrderByFoundByIdDesc() {
+    public List<FinishedBook> findAllByOrderByFoundByIdDesc() {
         return repository.findAll(Sort.by(Sort.Direction.DESC, "found", "id"));
     }
 
     @Override
-    public void addBook(T book) {
+    public void addBook(FinishedBook book) {
         repository.save(book);
     }
 
     @Override
-    public void addAll(List<T> bookList) {
+    public void addAll(List<FinishedBook> bookList) {
         repository.saveAll(bookList);
     }
 
@@ -75,15 +73,15 @@ public abstract class FinishedBookServiceImpl<
     }
 
     @Override
-    public T getBookById(Integer id) {
+    public FinishedBook getBookById(Integer id) {
         if (id <= repository.count())
             return repository.getOne(id);
         else return null;
     }
 
     @Override
-    public boolean exists(T book) {
-        for (T finishedBook : repository.findAll()) {
+    public boolean exists(FinishedBook book) {
+        for (FinishedBook finishedBook : repository.findAll()) {
             if (finishedBook.equals(book)) {
                 return true;
             }
@@ -92,8 +90,8 @@ public abstract class FinishedBookServiceImpl<
         return false;
     }
 
-    public T get(T book) {
-        for (T finishedBook : repository.findAll()) {
+    public FinishedBook get(FinishedBook book) {
+        for (FinishedBook finishedBook : repository.findAll()) {
             if (finishedBook.equals(book)) {
                 return finishedBook;
             }
@@ -103,7 +101,7 @@ public abstract class FinishedBookServiceImpl<
     }
 
     @Override
-    public List<T> findAll() {
+    public List<FinishedBook> findAll() {
         return repository.findAll();
     }
 }

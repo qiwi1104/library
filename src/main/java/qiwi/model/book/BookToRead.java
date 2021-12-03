@@ -1,8 +1,6 @@
-package qiwi.model.common.book;
+package qiwi.model.book;
 
-import javax.persistence.MappedSuperclass;
-
-@MappedSuperclass
+//@MappedSuperclass
 public class BookToRead extends Book implements Cloneable {
     @Override
     public boolean equals(Object o) {

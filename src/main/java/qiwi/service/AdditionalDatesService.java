@@ -1,17 +1,17 @@
 package qiwi.service;
 
-import qiwi.model.common.AdditionalDates;
+import qiwi.model.AdditionalDates;
 
 import java.util.List;
 
-public interface AdditionalDatesService<T extends AdditionalDates> {
-    void addDates(T additionalDates);
+public interface AdditionalDatesService {
+    void addDates(AdditionalDates additionalDates);
 
     void deleteDates(Integer id);
 
-    T getDatesById(Integer id);
+    AdditionalDates getDatesById(Integer id);
 
-    boolean exists(T additionalDate);
+    boolean exists(AdditionalDates additionalDate);
 
-    List<T> findAll();
+    List<AdditionalDates> findAll();
 }

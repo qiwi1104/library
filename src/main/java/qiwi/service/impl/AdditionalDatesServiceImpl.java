@@ -1,26 +1,21 @@
-package qiwi.service.common;
+package qiwi.service.impl;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import qiwi.model.common.AdditionalDates;
-import qiwi.repository.common.AdditionalDatesRepository;
-import qiwi.service.AdditionalDatesService;
+import qiwi.model.AdditionalDates;
+import qiwi.repository.AdditionalDatesRepository;
 
 import java.util.List;
 
 @Service
-public abstract class AdditionalDatesServiceImpl<
-        T extends AdditionalDates,
-        S extends AdditionalDatesRepository<T>> implements AdditionalDatesService<T> {
+public class AdditionalDatesServiceImpl {
     @Autowired
-    private S additionalDatesRepository;
+    private AdditionalDatesRepository additionalDatesRepository;
 
-    @Override
-    public void addDates(T additionalDates) {
+    public void addDates(AdditionalDates additionalDates) {
         additionalDatesRepository.save(additionalDates);
     }
 
-    @Override
     public void deleteDates(Integer id) {
         try {
             additionalDatesRepository.deleteById(id);
@@ -29,16 +24,14 @@ public abstract class AdditionalDatesServiceImpl<
         }
     }
 
-    @Override
-    public T getDatesById(Integer id) {
+    public AdditionalDates getDatesById(Integer id) {
         if (id <= additionalDatesRepository.count())
             return additionalDatesRepository.getOne(id);
         else return null;
     }
 
-    @Override
-    public boolean exists(T additionalDate) {
-        for (T date : additionalDatesRepository.findAll()) {
+    public boolean exists(AdditionalDates additionalDate) {
+        for (AdditionalDates date : additionalDatesRepository.findAll()) {
             if (additionalDate.equals(date)) {
                 return true;
             }
@@ -47,8 +40,7 @@ public abstract class AdditionalDatesServiceImpl<
         return false;
     }
 
-    @Override
-    public List<T> findAll() {
+    public List<AdditionalDates> findAll() {
         return additionalDatesRepository.findAll();
     }
 }

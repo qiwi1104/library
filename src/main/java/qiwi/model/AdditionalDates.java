@@ -1,15 +1,15 @@
-package qiwi.model.common;
+package qiwi.model;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import qiwi.model.book.FinishedBook;
 
-import javax.persistence.Column;
-import javax.persistence.Id;
-import javax.persistence.MappedSuperclass;
+import javax.persistence.*;
 import java.sql.Date;
 import java.util.Objects;
 
-@MappedSuperclass
+@Entity
+@Table(name = "`additional_dates`")
 @JsonIgnoreProperties({"id", "finishedBookId"})
 public class AdditionalDates {
     @Id
@@ -20,6 +20,20 @@ public class AdditionalDates {
     private Date start;
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "M/d/yy")
     private Date end;
+
+    @ManyToOne
+    @JoinColumn(name = "finished_book_id", insertable = false, updatable = false)
+    private FinishedBook finishedBook;
+
+    private String language;
+
+    public String getLanguage() {
+        return language;
+    }
+
+    public void setLanguage(String language) {
+        this.language = language;
+    }
 
     public Integer getId() {
         return id;

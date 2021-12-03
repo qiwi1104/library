@@ -1,22 +1,20 @@
-package qiwi.model.common.book;
+package qiwi.model.book;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import qiwi.model.AdditionalDates;
 
-import javax.persistence.MappedSuperclass;
+import javax.persistence.*;
 import java.sql.Date;
-import java.util.ArrayList;
 import java.util.List;
 
-@MappedSuperclass
+@Entity
+@Table(name = "`finished_books`")
 public class FinishedBook extends Book implements Cloneable {
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "M/d/yy")
     private Date start;
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "M/d/yy")
     private Date end;
-
-    public List<?> getAdditionalDates() {
-        return new ArrayList<>();
-    }
 
     public Date getStart() {
         return start;
@@ -32,6 +30,25 @@ public class FinishedBook extends Book implements Cloneable {
 
     public void setEnd(Date end) {
         this.end = end;
+    }
+
+    @JsonProperty("additional_dates")
+    @OneToMany(mappedBy = "finishedBook", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<AdditionalDates> additionalDates;
+
+    private String language;
+
+    public String getLanguage() {
+        return language;
+    }
+
+    public void setLanguage(String language) {
+        this.language = language;
+    }
+
+
+    public List<AdditionalDates> getAdditionalDates() {
+        return additionalDates;
     }
 
     @Override

@@ -1,6 +1,6 @@
 package qiwi.service;
 
-import qiwi.model.common.book.Book;
+import qiwi.model.book.Book;
 
 import java.util.List;
 

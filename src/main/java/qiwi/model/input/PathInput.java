@@ -1,4 +1,4 @@
-package qiwi.model.common.input;
+package qiwi.model.input;
 
 public class PathInput {
     private String path = "";

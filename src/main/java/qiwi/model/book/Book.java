@@ -1,4 +1,4 @@
-package qiwi.model.common.book;
+package qiwi.model.book;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 
