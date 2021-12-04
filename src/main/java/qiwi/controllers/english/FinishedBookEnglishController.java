@@ -1,36 +1,39 @@
 package qiwi.controllers.english;
 
 import org.springframework.stereotype.Controller;
+import org.springframework.transaction.annotation.Isolation;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import qiwi.controllers.common.FinishedBookController;
-import qiwi.model.common.input.Input;
-import qiwi.model.common.input.PathInput;
-import qiwi.model.english.AdditionalDatesEnglish;
-import qiwi.model.english.FinishedBookEnglish;
-import qiwi.service.english.AdditionalDatesEnglishServiceImpl;
-import qiwi.service.english.FinishedBookEnglishServiceImpl;
+import qiwi.model.AdditionalDates;
+import qiwi.model.book.FinishedBook;
+import qiwi.model.input.Input;
+import qiwi.model.input.PathInput;
+import qiwi.util.enums.Language;
 import qiwi.util.enums.SortBy;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import static qiwi.util.enums.Language.ENGLISH;
 
 @Controller
 @RequestMapping("/finishedbooks/english")
-public class FinishedBookEnglishController extends FinishedBookController<
-        FinishedBookEnglish,
-        FinishedBookEnglishServiceImpl,
-        AdditionalDatesEnglish,
-        AdditionalDatesEnglishServiceImpl> {
+public class FinishedBookEnglishController extends FinishedBookController {
+    private final Language language = ENGLISH;
+    private List<FinishedBook> books = new ArrayList<>();
 
     @PostMapping("/add")
     public String add(@ModelAttribute("finishedEnglishInput") Input input, BindingResult result, Model model) {
-        return getRedirectionAddress(input, result, model, ENGLISH, new FinishedBookEnglish(), new AdditionalDatesEnglish());
+        return getRedirectionAddress(input, result, model, language, new FinishedBook(), new AdditionalDates());
     }
 
     @PostMapping("/edit/{id}")
     public String edit(@ModelAttribute("finishedEnglishInput") Input input, BindingResult result, Model model) {
-        return getRedirectionAddress(input, result, model, ENGLISH, "finishedbooks");
+        return getRedirectionAddress(input, result, model, language, "finishedbooks", service.findAll());
     }
 
     @GetMapping("/delete/{id}")
@@ -47,18 +50,18 @@ public class FinishedBookEnglishController extends FinishedBookController<
 
     @PostMapping("/load")
     public String load(@ModelAttribute("finishedEnglishInput") PathInput input, BindingResult result, Model model) {
-        super.load(input, ENGLISH);
+        super.load(input, language);
         return "redirect:/finishedbooks/english/";
     }
 
     @PostMapping("/save")
     public String save(@ModelAttribute("finishedEnglishInput") PathInput input, BindingResult result, Model model) {
-        super.save(input, ENGLISH);
+        super.save(input, language);
         return "redirect:/finishedbooks/english/";
     }
 
     @GetMapping("/")
     public String list(Model model) {
-        return showTable(new Input(), model, ENGLISH);
+        return showTable(model, language, books);
     }
 }

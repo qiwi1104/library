@@ -36,17 +36,6 @@ public class FinishedBook extends Book implements Cloneable {
     @OneToMany(mappedBy = "finishedBook", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<AdditionalDates> additionalDates;
 
-    private String language;
-
-    public String getLanguage() {
-        return language;
-    }
-
-    public void setLanguage(String language) {
-        this.language = language;
-    }
-
-
     public List<AdditionalDates> getAdditionalDates() {
         return additionalDates;
     }

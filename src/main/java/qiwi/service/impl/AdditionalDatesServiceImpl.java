@@ -43,4 +43,8 @@ public class AdditionalDatesServiceImpl {
     public List<AdditionalDates> findAll() {
         return additionalDatesRepository.findAll();
     }
+
+    public void computeIds() {
+        additionalDatesRepository.computeIds();
+    }
 }

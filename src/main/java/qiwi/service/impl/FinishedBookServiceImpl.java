@@ -6,8 +6,10 @@ import org.springframework.stereotype.Service;
 import qiwi.model.book.FinishedBook;
 import qiwi.repository.FinishedBookRepository;
 import qiwi.service.BookService;
+import qiwi.util.enums.Language;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class FinishedBookServiceImpl implements BookService<FinishedBook> {
@@ -16,6 +18,25 @@ public class FinishedBookServiceImpl implements BookService<FinishedBook> {
 
     public List<FinishedBook> findAllByOrderByIdAsc() {
         return repository.findAll(Sort.by(Sort.Direction.ASC, "id"));
+    }
+
+    public List<FinishedBook> findAllByOrderByIdAsc(Language language) {
+        return repository
+                .findAll(Sort.by(Sort.Direction.ASC, "id"))
+                .stream()
+                .filter(b -> b.getLanguage().equals(language.firstLetterToUpperCase()))
+                .collect(Collectors.toList());
+    }
+
+    /*
+     * Used to remove all the books relating to the specified language
+     * */
+    public void clearLanguage(Language language) {
+        for (FinishedBook book : repository.findAll())
+            if (book.getLanguage().equals(language.firstLetterToUpperCase()))
+                if (repository.existsById(book.getId()))
+                    repository.deleteById(book.getId());
+        repository.computeIds();
     }
 
     public List<FinishedBook> findAllByOrderByIdDesc() {

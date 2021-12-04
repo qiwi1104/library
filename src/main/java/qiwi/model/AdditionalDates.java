@@ -22,18 +22,8 @@ public class AdditionalDates {
     private Date end;
 
     @ManyToOne
-    @JoinColumn(name = "finished_book_id", insertable = false, updatable = false)
+    @JoinColumn(name = "finished_book_id", insertable = false, updatable = false, nullable = false)
     private FinishedBook finishedBook;
-
-    private String language;
-
-    public String getLanguage() {
-        return language;
-    }
-
-    public void setLanguage(String language) {
-        this.language = language;
-    }
 
     public Integer getId() {
         return id;

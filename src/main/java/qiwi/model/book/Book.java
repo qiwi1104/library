@@ -15,6 +15,7 @@ public abstract class Book {
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "M/d/yy")
     protected Date found;
     protected String description;
+    protected String language;
 
     public Integer getId() {
         return id;
@@ -36,6 +37,10 @@ public abstract class Book {
         return description;
     }
 
+    public String getLanguage() {
+        return language;
+    }
+
     public void setId(Integer id) {
         this.id = id;
     }
@@ -54,6 +59,10 @@ public abstract class Book {
 
     public void setDescription(String description) {
         this.description = description;
+    }
+
+    public void setLanguage(String language) {
+        this.language = language;
     }
 
     @Override
