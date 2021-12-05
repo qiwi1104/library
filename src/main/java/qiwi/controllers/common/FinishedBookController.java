@@ -14,9 +14,11 @@ import qiwi.util.enums.Language;
 import qiwi.util.enums.SortBy;
 import qiwi.util.enums.SortType;
 
+import java.util.Collection;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import static qiwi.util.enums.BookType.FINISHED;
 import static qiwi.util.enums.Context.ADD;
@@ -38,10 +40,8 @@ public abstract class FinishedBookController extends BookController {
      * Sets ids to Additional Dates of a book
      * */
     private void setIdsAndDates(List<FinishedBook> books) {
-        additionalDatesService.computeIds();
-
-        int booksCounter = service.findAll().size() == 0 ? 1 : service.findAll().size() + 1;
-        int datesCounter = additionalDatesService.findAll().size() == 0 ? 1 : additionalDatesService.findAll().size() + 1;
+        int booksCounter = service.findAll().size() + 1;
+        int datesCounter = additionalDatesService.findAll().size() + 1;
 
         for (FinishedBook book : books) {
             book.setId(booksCounter);
@@ -167,10 +167,20 @@ public abstract class FinishedBookController extends BookController {
 
         if (finishedBooks.size() != 0) {
             service.clearLanguage(language);
+            additionalDatesService.computeIds();
 
             setIdsAndDates(finishedBooks);
+
+//            List<AdditionalDates> dates = finishedBooks
+//                    .stream()
+//                    .filter(b -> b.getAdditionalDates().size() != 0)
+//                    .map(FinishedBook::getAdditionalDates)
+//                    .flatMap(Collection::stream)
+//                    .collect(Collectors.toList());
+
             // both additional dates table and books table are updated
             service.addAll(finishedBooks);
+//            dates.forEach(d -> additionalDatesService.addDates(d));
         }
     }
 
