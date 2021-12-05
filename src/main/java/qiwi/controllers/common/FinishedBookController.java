@@ -1,7 +1,6 @@
 package qiwi.controllers.common;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import qiwi.model.AdditionalDates;
@@ -14,10 +13,7 @@ import qiwi.util.enums.Language;
 import qiwi.util.enums.SortBy;
 import qiwi.util.enums.SortType;
 
-import java.util.Collection;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.List;
+import java.util.*;
 import java.util.stream.Collectors;
 
 import static qiwi.util.enums.BookType.FINISHED;
@@ -62,16 +58,56 @@ public abstract class FinishedBookController extends BookController {
     }
 
     /*
+     * Returns all the additional dates that books contain
+     * */
+    private List<AdditionalDates> getAdditionalDates(List<FinishedBook> books) {
+        return books
+                .stream()
+                .filter(b -> b.getAdditionalDates().size() != 0)
+                .map(FinishedBook::getAdditionalDates)
+                .flatMap(Collection::stream)
+                .collect(Collectors.toList());
+    }
+
+    /*
+     * Numbers books (and additional dates as well) in the specified language from 1
+     * */
+    private List<FinishedBook> setLocalIds(List<FinishedBook> allBooks, Language language) {
+        List<FinishedBook> books = new ArrayList<>();
+
+        int booksCounter = 1;
+        int datesCounter = 1;
+        for (FinishedBook book : allBooks) {
+            if (book.getLanguage().equals(language.firstLetterToUpperCase())) {
+                FinishedBook newBook = book.clone();
+                newBook.setId(booksCounter);
+
+                for (AdditionalDates date : newBook.getAdditionalDates()) {
+                    date.setFinishedBookId(newBook.getId());
+                    date.setId(datesCounter);
+
+                    datesCounter++;
+                }
+
+                books.add(newBook);
+                booksCounter++;
+            }
+        }
+
+        return books;
+    }
+
+    /*
      * Returns either a redirection link to the respective page (if there are no errors)
      * Or a view name (if there are errors)
      * */
     protected String getRedirectionAddress(Input input, BindingResult result, Model model, Language language, FinishedBook book, AdditionalDates additionalDates) {
         if (result.hasErrors())
-            return showTable(model, language, service.findAll());
+            return showTable(model, language);
 
-        if (add(input, model, book, additionalDates))
+        if (add(input, model, book, additionalDates, language))
             return "redirect:/finishedbooks/" + language.toLowerCase() + "/";
-        else return showTable(model, language, service.findAll());
+        else return showTable(model, language);
     }
 
     protected List<FinishedBook> sortList(List<FinishedBook> list) {
@@ -116,9 +152,9 @@ public abstract class FinishedBookController extends BookController {
         return list;
     }
 
-    protected boolean add(Input input, Model model, FinishedBook book, AdditionalDates additionalDates) {
+    protected boolean add(Input input, Model model, FinishedBook book, AdditionalDates additionalDates, Language language) {
         book.setId(service.findAll().size() + 1);
-        setBookAttributesFromInput(book, input, ADD);
+        setBookAttributesFromInput(book, input, ADD, language);
 
         if (service.exists(book)) {
             book.setId(service.get(book).getId());
@@ -143,11 +179,13 @@ public abstract class FinishedBookController extends BookController {
     }
 
     @Override
-    protected boolean edit(Input input, Model model) {
-        FinishedBook book = service.getBookById(input.getId());
+    protected boolean edit(Input input, Model model, Language language) {
+        List<FinishedBook> books = setLocalIds(service.findAllByOrderByIdAsc(language), language);
+        // exception is thrown here
+        FinishedBook book = books.stream().filter(b -> b.getId().equals(input.getId())).collect(Collectors.toList()).get(0);
 
         if (book != null) {
-            setBookAttributesFromInput(book, input, EDIT);
+            setBookAttributesFromInput(book, input, EDIT, language);
             service.addBook(book);
             return true;
         } else {
@@ -161,7 +199,6 @@ public abstract class FinishedBookController extends BookController {
         this.sortProperty = sortProperty;
     }
 
-    @Transactional
     protected void load(PathInput input, Language language) {
         List<FinishedBook> finishedBooks = JSONHandler.IO.readJSONFile(input.getPath(), FINISHED, language);
 
@@ -171,16 +208,8 @@ public abstract class FinishedBookController extends BookController {
 
             setIdsAndDates(finishedBooks);
 
-//            List<AdditionalDates> dates = finishedBooks
-//                    .stream()
-//                    .filter(b -> b.getAdditionalDates().size() != 0)
-//                    .map(FinishedBook::getAdditionalDates)
-//                    .flatMap(Collection::stream)
-//                    .collect(Collectors.toList());
-
             // both additional dates table and books table are updated
             service.addAll(finishedBooks);
-//            dates.forEach(d -> additionalDatesService.addDates(d));
         }
     }
 
@@ -190,28 +219,14 @@ public abstract class FinishedBookController extends BookController {
     }
 
     @Override
-    protected String showTable(Model model, Language language, List<FinishedBook> books) {
-        List<FinishedBook> bookList = service.findAllByOrderByIdAsc(language);
-        books.clear();
+    protected String showTable(Model model, Language language) {
+        List<FinishedBook> books = setLocalIds(service.findAllByOrderByIdAsc(language), language);
 
-        int i = 1;
-        for (FinishedBook book : bookList) {
-            if (book.getLanguage().equals(language.firstLetterToUpperCase())) {
-                FinishedBook newBook = book.clone();
-                newBook.setId(i);
-
-                for (AdditionalDates date : newBook.getAdditionalDates())
-                    date.setFinishedBookId(newBook.getId());
-
-                books.add(newBook);
-                i++;
-            }
-        }
-
+        // Sorts according to current settings
         books = sortList(books);
 
         model.addAttribute("books", books);
-        model.addAttribute("additionalDates", additionalDatesService.findAll());
+        model.addAttribute("additionalDates", getAdditionalDates(books));
         model.addAttribute("finished" + language.firstLetterToUpperCase() + "Input", new Input());
 
         return "finishedBooks" + language.firstLetterToUpperCase();

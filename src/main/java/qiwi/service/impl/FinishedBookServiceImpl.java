@@ -29,7 +29,7 @@ public class FinishedBookServiceImpl implements BookService<FinishedBook> {
     }
 
     /*
-     * Used to remove all the books relating to the specified language
+     * Removes all the books relating to the specified language
      * */
     public void clearLanguage(Language language) {
         for (FinishedBook book : repository.findAll())
@@ -74,7 +74,11 @@ public class FinishedBookServiceImpl implements BookService<FinishedBook> {
 
     @Override
     public void addAll(List<FinishedBook> bookList) {
-        repository.saveAll(bookList);
+        try {
+            repository.saveAll(bookList);
+        } catch (Exception e) {
+            repository.saveAll(bookList);
+        }
     }
 
     @Override

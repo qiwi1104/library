@@ -163,7 +163,7 @@ public abstract class BookController {
         }
     }
 
-    protected <T extends Book, S extends Input> void setBookAttributesFromInput(T book, S input, Context context) {
+    protected <T extends Book, S extends Input> void setBookAttributesFromInput(T book, S input, Context context, Language language) {
         switch (context) {
             case EDIT:
                 if (book instanceof FinishedBook) {
@@ -207,29 +207,30 @@ public abstract class BookController {
 
                 book.setFound(input.getFound());
                 book.setDescription(input.getDescription());
+                book.setLanguage(language.firstLetterToUpperCase());
                 break;
         }
     }
 
 //    protected abstract <T extends Book> List<T> sortList(List<T> list);
 
-    protected abstract String showTable(Model model, Language language, List<FinishedBook> bookList);
+    protected abstract String showTable(Model model, Language language);
 
-    protected abstract boolean edit(Input input, Model model);
+    protected abstract boolean edit(Input input, Model model, Language language);
 
     protected <T extends Book> String getRedirectionAddress(Input input, BindingResult result, Model model, Language language, String bookType, List<FinishedBook> bookList) {
         if (result.hasErrors()) {
             if (input.getId() == null) {
-                return showTable(model, language, bookList);
+                return showTable(model, language);
             } else {
-                if (edit(input, model))
+                if (edit(input, model, language))
                     return "redirect:/" + bookType + "/" + language.toLowerCase() + "/";
-                else return showTable(model, language, bookList);
+                else return showTable(model, language);
             }
         }
 
-        if (edit(input, model))
+        if (edit(input, model, language))
             return "redirect:/" + bookType + "/" + language.toLowerCase() + "/";
-        else return showTable(model, language, bookList);
+        else return showTable(model, language);
     }
 }

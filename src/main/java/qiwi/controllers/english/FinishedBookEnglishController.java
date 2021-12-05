@@ -1,9 +1,6 @@
 package qiwi.controllers.english;
 
 import org.springframework.stereotype.Controller;
-import org.springframework.transaction.annotation.Isolation;
-import org.springframework.transaction.annotation.Propagation;
-import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
@@ -15,16 +12,12 @@ import qiwi.model.input.PathInput;
 import qiwi.util.enums.Language;
 import qiwi.util.enums.SortBy;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import static qiwi.util.enums.Language.ENGLISH;
 
 @Controller
 @RequestMapping("/finishedbooks/english")
 public class FinishedBookEnglishController extends FinishedBookController {
     private final Language language = ENGLISH;
-    private List<FinishedBook> books = new ArrayList<>();
 
     @PostMapping("/add")
     public String add(@ModelAttribute("finishedEnglishInput") Input input, BindingResult result, Model model) {
@@ -62,6 +55,6 @@ public class FinishedBookEnglishController extends FinishedBookController {
 
     @GetMapping("/")
     public String list(Model model) {
-        return showTable(model, language, books);
+        return showTable(model, language);
     }
 }
