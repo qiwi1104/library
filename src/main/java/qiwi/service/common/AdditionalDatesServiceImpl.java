@@ -27,6 +27,9 @@ public abstract class AdditionalDatesServiceImpl<
         } catch (Exception e) {
             e.printStackTrace();
         }
+
+        if (id != additionalDatesRepository.findAll().size() + 1)
+            additionalDatesRepository.computeIds();
     }
 
     @Override
@@ -45,6 +48,10 @@ public abstract class AdditionalDatesServiceImpl<
         }
 
         return false;
+    }
+
+    public void computeIds() {
+        additionalDatesRepository.computeIds();
     }
 
     @Override
