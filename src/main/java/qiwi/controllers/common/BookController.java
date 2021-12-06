@@ -212,6 +212,56 @@ public abstract class BookController {
         }
     }
 
+    protected <T extends Book, S extends Input> void setBookAttributesFromInput(T book, S input, Integer id, Context context, Language language) {
+        switch (context) {
+            case EDIT:
+                if (book instanceof FinishedBook) {
+                    FinishedBook fb = (FinishedBook) book;
+
+                    if (!input.getStart().equals(java.sql.Date.valueOf("1970-1-1"))) { // дата введена, т.е. ее надо менять
+                        fb.setStart(input.getStart());
+                    }
+
+                    if (!input.getEnd().equals(java.sql.Date.valueOf("1970-1-1"))) { // дата введена, т.е. ее надо менять
+                        fb.setEnd(input.getEnd());
+                    }
+                }
+
+                if (input.getAuthor().length() != 0) {
+                    book.setAuthor(input.getAuthor());
+                }
+
+                if (input.getName().length() != 0) {
+                    book.setName(input.getName());
+                }
+
+                if (!input.getFound().equals(java.sql.Date.valueOf("1970-1-1"))) { // дата введена, т.е. ее надо менять
+                    book.setFound(input.getFound());
+                }
+
+                if (input.getDescription().length() != 0) {
+                    book.setDescription(input.getDescription());
+                }
+                break;
+            case ADD:
+                book.setAuthor(input.getAuthor());
+                book.setName(input.getName());
+
+                if (book instanceof FinishedBook) {
+                    FinishedBook fb = (FinishedBook) book;
+
+                    fb.setStart(input.getStart());
+                    fb.setEnd(input.getEnd());
+                }
+
+                book.setFound(input.getFound());
+                book.setDescription(input.getDescription());
+                book.setLanguage(language.firstLetterToUpperCase());
+                break;
+        }
+        book.setId(id);
+    }
+
 //    protected abstract <T extends Book> List<T> sortList(List<T> list);
 
     protected abstract String showTable(Model model, Language language);

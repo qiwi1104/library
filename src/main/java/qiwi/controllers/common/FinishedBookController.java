@@ -181,17 +181,40 @@ public abstract class FinishedBookController extends BookController {
     @Override
     protected boolean edit(Input input, Model model, Language language) {
         List<FinishedBook> books = setLocalIds(service.findAllByOrderByIdAsc(language), language);
-        // exception is thrown here
+        // exception is thrown here (when book with that id does not exist)
         FinishedBook book = books.stream().filter(b -> b.getId().equals(input.getId())).collect(Collectors.toList()).get(0);
 
+        int id = service
+                .findAll()
+                .stream()
+                .filter(b -> b.equals(book))
+                .collect(Collectors.toList()).get(0)
+                .getId();
+
         if (book != null) {
-            setBookAttributesFromInput(book, input, EDIT, language);
+            setBookAttributesFromInput(book, input, id, EDIT, language);
             service.addBook(book);
             return true;
         } else {
             model.addAttribute("nonExistentMessageEdit", "");
             return false;
         }
+    }
+
+    protected void delete(Integer id, Language language) {
+        List<FinishedBook> books = setLocalIds(service.findAllByOrderByIdAsc(language), language);
+        // exception is thrown here
+        Integer finalId = id;
+        FinishedBook book = books.stream().filter(b -> b.getId().equals(finalId)).collect(Collectors.toList()).get(0);
+
+        id = service
+                .findAll()
+                .stream()
+                .filter(b -> b.equals(book))
+                .collect(Collectors.toList()).get(0)
+                .getId();
+
+        service.deleteBook(id);
     }
 
     protected void sort(SortBy sortProperty) {
