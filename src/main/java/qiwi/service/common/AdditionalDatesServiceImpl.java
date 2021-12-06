@@ -41,13 +41,7 @@ public abstract class AdditionalDatesServiceImpl<
 
     @Override
     public boolean exists(T additionalDate) {
-        for (T date : additionalDatesRepository.findAll()) {
-            if (additionalDate.equals(date)) {
-                return true;
-            }
-        }
-
-        return false;
+        return additionalDatesRepository.findAll().contains(additionalDate);
     }
 
     public void computeIds() {
