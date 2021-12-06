@@ -124,8 +124,7 @@ public abstract class BookController {
         private static String getPathToBackupDirectory(BookType bookType) {
             Properties property = new Properties();
 
-            try {
-                Reader inputStream = new InputStreamReader(Application.class.getResourceAsStream("/config.properties"), StandardCharsets.UTF_8);
+            try (Reader inputStream = new InputStreamReader(Application.class.getResourceAsStream("/config.properties"), StandardCharsets.UTF_8)) {
                 property.load(inputStream);
             } catch (IOException e) {
                 e.printStackTrace();
