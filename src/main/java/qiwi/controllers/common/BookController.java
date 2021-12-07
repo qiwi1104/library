@@ -163,7 +163,7 @@ public abstract class BookController {
         }
     }
 
-    protected <T extends Book, S extends Input> void setBookAttributesFromInput(T book, S input, Context context) {
+    protected <T extends Book, S extends Input> void setBookAttributesFromInput(T book, S input, Context context, Language language) {
         switch (context) {
             case EDIT:
                 if (book instanceof FinishedBook) {
@@ -195,8 +195,15 @@ public abstract class BookController {
                 }
                 break;
             case ADD:
+                if (book instanceof FinishedBook) {
+                    ((FinishedBook) book).setStart(input.getStart());
+                    ((FinishedBook) book).setEnd(input.getEnd());
+                }
                 book.setAuthor(input.getAuthor());
                 book.setName(input.getName());
+                book.setFound(input.getFound());
+                book.setDescription(input.getDescription());
+                book.setLanguage(language.firstLetterToUpperCase());
                 break;
         }
     }

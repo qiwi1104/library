@@ -77,7 +77,7 @@ public abstract class FinishedBookController extends BookController {
         if (result.hasErrors())
             return showTable(model, language);
 
-        if (add(input, model, book, additionalDates))
+        if (add(input, model, book, additionalDates, language))
             return "redirect:/finishedbooks/" + language.toLowerCase() + "/";
         else return showTable(model, language);
     }
@@ -124,8 +124,8 @@ public abstract class FinishedBookController extends BookController {
         return list;
     }
 
-    protected boolean add(Input input, Model model, FinishedBook book, AdditionalDates additionalDates) {
-        setBookAttributesFromInput(book, input, ADD);
+    protected boolean add(Input input, Model model, FinishedBook book, AdditionalDates additionalDates, Language language) {
+        setBookAttributesFromInput(book, input, ADD, language);
 
         if (service.exists(book)) {
             book = service.get(book);
@@ -152,7 +152,7 @@ public abstract class FinishedBookController extends BookController {
         FinishedBook book = service.getBookById(input.getId());
 
         if (book != null) {
-            setBookAttributesFromInput(book, input, EDIT);
+            setBookAttributesFromInput(book, input, EDIT, language);
             service.addBook(book);
             return true;
         } else {
@@ -161,9 +161,9 @@ public abstract class FinishedBookController extends BookController {
         }
     }
 
-    protected void delete(Integer id) {
-        service.deleteBook(id);
-    }
+//    protected void delete(Integer id) {
+//        service.deleteBook(id);
+//    }
 
     protected void sort(SortBy sortProperty) {
         sortDateMethod = sortDateMethod.equals(ASC) ? DESC : ASC;
