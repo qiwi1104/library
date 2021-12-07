@@ -15,6 +15,9 @@ public class FinishedBook extends Book implements Cloneable {
     private Date start;
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "M/d/yy")
     private Date end;
+    @JsonProperty("additional_dates")
+    @OneToMany(mappedBy = "finishedBook", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<AdditionalDates> additionalDates;
 
     public Date getStart() {
         return start;
@@ -22,6 +25,10 @@ public class FinishedBook extends Book implements Cloneable {
 
     public Date getEnd() {
         return end;
+    }
+
+    public List<AdditionalDates> getAdditionalDates() {
+        return additionalDates;
     }
 
     public void setStart(Date start) {
@@ -32,12 +39,8 @@ public class FinishedBook extends Book implements Cloneable {
         this.end = end;
     }
 
-    @JsonProperty("additional_dates")
-    @OneToMany(mappedBy = "finishedBook", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<AdditionalDates> additionalDates;
-
-    public List<AdditionalDates> getAdditionalDates() {
-        return additionalDates;
+    public void setAdditionalDates(List<AdditionalDates> dates) {
+        this.additionalDates = dates;
     }
 
     @Override

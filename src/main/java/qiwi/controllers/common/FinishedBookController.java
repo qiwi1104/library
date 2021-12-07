@@ -175,12 +175,22 @@ public abstract class FinishedBookController extends BookController {
 
         if (finishedBooks.size() != 0) {
             service.clearLanguage(language);
-            additionalDatesService.computeIds();
 
-            setIdsAndDates(finishedBooks);
+            Map<FinishedBook, AdditionalDates> additionalDates = new HashMap<>();
 
-            // both additional dates table and books table are updated
+            for (FinishedBook book : finishedBooks) {
+                if (book.getAdditionalDates().size() != 0) {
+                    book.getAdditionalDates().forEach(d -> additionalDates.put(book, d));
+                    book.setAdditionalDates(new ArrayList<>());
+                }
+                book.setId(null);
+            }
+
             service.addAll(finishedBooks);
+            additionalDates.forEach((book, date) -> {
+                date.setFinishedBookId(book.getId());
+                additionalDatesService.addDates(date);
+            });
         }
     }
 
