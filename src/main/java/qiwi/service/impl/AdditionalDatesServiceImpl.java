@@ -31,13 +31,7 @@ public class AdditionalDatesServiceImpl {
     }
 
     public boolean exists(AdditionalDates additionalDate) {
-        for (AdditionalDates date : additionalDatesRepository.findAll()) {
-            if (additionalDate.equals(date)) {
-                return true;
-            }
-        }
-
-        return false;
+        return additionalDatesRepository.findAll().contains(additionalDate);
     }
 
     public List<AdditionalDates> findAll() {

@@ -2,6 +2,8 @@ package qiwi.model.book;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.MappedSuperclass;
 import java.sql.Date;
@@ -9,6 +11,7 @@ import java.sql.Date;
 @MappedSuperclass
 public abstract class Book {
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     protected Integer id;
     protected String author;
     protected String name;

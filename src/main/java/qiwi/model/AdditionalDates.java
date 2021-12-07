@@ -13,6 +13,7 @@ import java.util.Objects;
 @JsonIgnoreProperties({"id", "finishedBookId"})
 public class AdditionalDates {
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
     @Column(name = "finished_book_id")
     private Integer finishedBookId;

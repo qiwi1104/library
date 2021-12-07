@@ -70,34 +70,6 @@ public abstract class FinishedBookController extends BookController {
     }
 
     /*
-     * Numbers books (and additional dates as well) in the specified language from 1
-     * */
-    private List<FinishedBook> setLocalIds(List<FinishedBook> allBooks, Language language) {
-        List<FinishedBook> books = new ArrayList<>();
-
-        int booksCounter = 1;
-        int datesCounter = 1;
-        for (FinishedBook book : allBooks) {
-            if (book.getLanguage().equals(language.firstLetterToUpperCase())) {
-                FinishedBook newBook = book.clone();
-                newBook.setId(booksCounter);
-
-                for (AdditionalDates date : newBook.getAdditionalDates()) {
-                    date.setFinishedBookId(newBook.getId());
-                    date.setId(datesCounter);
-
-                    datesCounter++;
-                }
-
-                books.add(newBook);
-                booksCounter++;
-            }
-        }
-
-        return books;
-    }
-
-    /*
      * Returns either a redirection link to the respective page (if there are no errors)
      * Or a view name (if there are errors)
      * */
@@ -105,7 +77,7 @@ public abstract class FinishedBookController extends BookController {
         if (result.hasErrors())
             return showTable(model, language);
 
-        if (add(input, model, book, additionalDates, language))
+        if (add(input, model, book, additionalDates))
             return "redirect:/finishedbooks/" + language.toLowerCase() + "/";
         else return showTable(model, language);
     }
@@ -152,18 +124,15 @@ public abstract class FinishedBookController extends BookController {
         return list;
     }
 
-    protected boolean add(Input input, Model model, FinishedBook book, AdditionalDates additionalDates, Language language) {
-        book.setId(service.findAll().size() + 1);
-        setBookAttributesFromInput(book, input, ADD, language);
+    protected boolean add(Input input, Model model, FinishedBook book, AdditionalDates additionalDates) {
+        setBookAttributesFromInput(book, input, ADD);
 
         if (service.exists(book)) {
-            book.setId(service.get(book).getId());
-            book.setFound(service.get(book).getFound());
+            book = service.get(book);
 
-            additionalDates.setId(additionalDatesService.findAll().size() + 1);
             additionalDates.setFinishedBookId(book.getId());
-            additionalDates.setStart(book.getStart());
-            additionalDates.setEnd(book.getEnd());
+            additionalDates.setStart(input.getStart());
+            additionalDates.setEnd(input.getEnd());
 
             if (!additionalDatesService.exists(additionalDates)) {
                 additionalDatesService.addDates(additionalDates);
@@ -180,19 +149,10 @@ public abstract class FinishedBookController extends BookController {
 
     @Override
     protected boolean edit(Input input, Model model, Language language) {
-        List<FinishedBook> books = setLocalIds(service.findAllByOrderByIdAsc(language), language);
-        // exception is thrown here (when book with that id does not exist)
-        FinishedBook book = books.stream().filter(b -> b.getId().equals(input.getId())).collect(Collectors.toList()).get(0);
-
-        int id = service
-                .findAll()
-                .stream()
-                .filter(b -> b.equals(book))
-                .collect(Collectors.toList()).get(0)
-                .getId();
+        FinishedBook book = service.getBookById(input.getId());
 
         if (book != null) {
-            setBookAttributesFromInput(book, input, id, EDIT, language);
+            setBookAttributesFromInput(book, input, EDIT);
             service.addBook(book);
             return true;
         } else {
@@ -201,19 +161,7 @@ public abstract class FinishedBookController extends BookController {
         }
     }
 
-    protected void delete(Integer id, Language language) {
-        List<FinishedBook> books = setLocalIds(service.findAllByOrderByIdAsc(language), language);
-        // exception is thrown here
-        Integer finalId = id;
-        FinishedBook book = books.stream().filter(b -> b.getId().equals(finalId)).collect(Collectors.toList()).get(0);
-
-        id = service
-                .findAll()
-                .stream()
-                .filter(b -> b.equals(book))
-                .collect(Collectors.toList()).get(0)
-                .getId();
-
+    protected void delete(Integer id) {
         service.deleteBook(id);
     }
 
@@ -243,7 +191,7 @@ public abstract class FinishedBookController extends BookController {
 
     @Override
     protected String showTable(Model model, Language language) {
-        List<FinishedBook> books = setLocalIds(service.findAllByOrderByIdAsc(language), language);
+        List<FinishedBook> books = service.findAllByOrderByIdAsc(language);
 
         // Sorts according to current settings
         books = sortList(books);

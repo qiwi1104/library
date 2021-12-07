@@ -36,7 +36,6 @@ public class FinishedBookServiceImpl implements BookService<FinishedBook> {
             if (book.getLanguage().equals(language.firstLetterToUpperCase()))
                 if (repository.existsById(book.getId()))
                     repository.deleteById(book.getId());
-        repository.computeIds();
     }
 
     public List<FinishedBook> findAllByOrderByIdDesc() {
@@ -84,12 +83,6 @@ public class FinishedBookServiceImpl implements BookService<FinishedBook> {
     @Override
     public void deleteBook(Integer id) {
         repository.deleteById(id);
-
-        // Deleted book was not the last one in the list
-        if (id != repository.findAll().size() + 1) {
-            // Computing new IDs for the books whose IDs were greater than that of the deleted book
-            repository.computeIds();
-        }
     }
 
     @Override
@@ -106,13 +99,7 @@ public class FinishedBookServiceImpl implements BookService<FinishedBook> {
 
     @Override
     public boolean exists(FinishedBook book) {
-        for (FinishedBook finishedBook : repository.findAll()) {
-            if (finishedBook.equals(book)) {
-                return true;
-            }
-        }
-
-        return false;
+        return repository.findAll().contains(book);
     }
 
     public FinishedBook get(FinishedBook book) {
