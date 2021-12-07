@@ -33,34 +33,9 @@ public abstract class FinishedBookController extends BookController {
     protected SortBy sortProperty = START;
 
     /*
-     * Sets ids to Additional Dates of a book
-     * */
-    private void setIdsAndDates(List<FinishedBook> books) {
-        int booksCounter = service.findAll().size() + 1;
-        int datesCounter = additionalDatesService.findAll().size() + 1;
-
-        for (FinishedBook book : books) {
-            book.setId(booksCounter);
-
-            if (book.getAdditionalDates().size() != 0) {
-                List<AdditionalDates> dates = book.getAdditionalDates();
-
-                for (AdditionalDates date : dates) {
-                    date.setId(datesCounter);
-                    date.setFinishedBookId(book.getId());
-
-                    datesCounter++;
-                }
-            }
-
-            booksCounter++;
-        }
-    }
-
-    /*
      * Returns all the additional dates that books contain
      * */
-    private List<AdditionalDates> getAdditionalDates(List<FinishedBook> books) {
+    private List<AdditionalDates> getAllAdditionalDates(List<FinishedBook> books) {
         return books
                 .stream()
                 .filter(b -> b.getAdditionalDates().size() != 0)
@@ -87,7 +62,7 @@ public abstract class FinishedBookController extends BookController {
             case ASC:
                 switch (sortProperty) {
                     case ID:
-                        list.sort(Comparator.comparing(FinishedBook::getId).thenComparing(FinishedBook::getId));
+                        list.sort(Comparator.comparing(FinishedBook::getId));
                         break;
                     case START:
                         list.sort(Comparator.comparing(FinishedBook::getStart).thenComparing(FinishedBook::getId));
@@ -103,7 +78,7 @@ public abstract class FinishedBookController extends BookController {
             case DESC:
                 switch (sortProperty) {
                     case ID:
-                        list.sort(Comparator.comparing(FinishedBook::getId).thenComparing(FinishedBook::getId));
+                        list.sort(Comparator.comparing(FinishedBook::getId));
                         Collections.reverse(list);
                         break;
                     case START:
@@ -195,12 +170,7 @@ public abstract class FinishedBookController extends BookController {
     }
 
     protected void save(PathInput input, Language language) {
-        List<FinishedBook> books = service
-                .findAllByOrderByIdAsc()
-                .stream()
-                .filter(b -> b.getLanguage().equals(language.firstLetterToUpperCase()))
-                .collect(Collectors.toList());
-
+        List<FinishedBook> books = service.findAllByOrderByIdAsc(language);
         JSONHandler.IO.saveTableToJSON(books, input.getPath(), language, FINISHED);
     }
 
@@ -212,7 +182,7 @@ public abstract class FinishedBookController extends BookController {
         books = sortList(books);
 
         model.addAttribute("books", books);
-        model.addAttribute("additionalDates", getAdditionalDates(books));
+        model.addAttribute("additionalDates", getAllAdditionalDates(books));
         model.addAttribute("finished" + language.firstLetterToUpperCase() + "Input", new Input());
 
         return "finishedBooks" + language.firstLetterToUpperCase();

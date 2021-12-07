@@ -1,81 +1,85 @@
-//package qiwi.service.impl;
-//
-//import org.springframework.beans.factory.annotation.Autowired;
-//import org.springframework.data.domain.Sort;
-//import qiwi.model.impl.book.BookToRead;
-//import qiwi.repository.impl.BookToReadRepository;
-//import qiwi.service.BookService;
-//
-//import java.util.List;
-//
-//public abstract class BookToReadServiceImpl<
-//        T extends BookToRead,
-//        S extends BookToReadRepository<T>> implements BookService<T> {
-//    @Autowired
-//    private S repository;
-//
-//    public List<T> findAllByOrderByIdAsc() {
-//        return repository.findAll(Sort.by(Sort.Direction.ASC, "id"));
-//    }
-//
-//    public List<T> findAllByOrderByIdDesc() {
-//        return repository.findAll(Sort.by(Sort.Direction.DESC, "id"));
-//    }
-//
-//    public List<T> findAllByOrderByFoundByIdAsc() {
-//        return repository.findAll(Sort.by(Sort.Direction.ASC, "found", "id"));
-//    }
-//
-//    public List<T> findAllByOrderByFoundByIdDesc() {
-//        return repository.findAll(Sort.by(Sort.Direction.DESC, "found", "id"));
-//    }
-//
-//    @Override
-//    public void addBook(T book) {
-//        repository.save(book);
-//    }
-//
-//    @Override
-//    public void addAll(List<T> booksList) {
-//        repository.saveAll(booksList);
-//    }
-//
-//    @Override
-//    public void deleteBook(Integer id) {
-//        repository.deleteById(id);
-//
-//        // Deleted book was not the last one in the list
-//        if (id != repository.findAll().size() + 1) {
-//            // Computing new IDs for the books whose IDs were greater than that of the deleted book
-//            repository.computeIds();
-//        }
-//    }
-//
-//    @Override
-//    public void clearAll() {
-//        repository.deleteAll();
-//    }
-//
-//    @Override
-//    public T getBookById(Integer id) {
-//        if (id <= repository.count())
-//            return repository.getOne(id);
-//        else return null;
-//    }
-//
-//    @Override
-//    public boolean exists(T book) {
-//        for (T bookToRead : repository.findAll()) {
-//            if (bookToRead.equals(book)) {
-//                return true;
-//            }
-//        }
-//
-//        return false;
-//    }
-//
-//    @Override
-//    public List<T> findAll() {
-//        return repository.findAll();
-//    }
-//}
+package qiwi.service.impl;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Sort;
+import org.springframework.stereotype.Service;
+import qiwi.model.book.BookToRead;
+import qiwi.repository.BookToReadRepository;
+import qiwi.service.BookService;
+import qiwi.util.enums.Language;
+
+import java.util.List;
+import java.util.stream.Collectors;
+
+@Service
+public class BookToReadServiceImpl implements BookService<BookToRead> {
+    @Autowired
+    private BookToReadRepository repository;
+
+    public List<BookToRead> findAllByOrderByIdAsc() {
+        return repository.findAll(Sort.by(Sort.Direction.ASC, "id"));
+    }
+
+    public List<BookToRead> findAllByOrderByIdAsc(Language language) {
+        return repository
+                .findAll(Sort.by(Sort.Direction.ASC, "id"))
+                .stream()
+                .filter(b -> b.getLanguage().equals(language.firstLetterToUpperCase()))
+                .collect(Collectors.toList());
+    }
+
+    public List<BookToRead> findAllByOrderByIdDesc() {
+        return repository.findAll(Sort.by(Sort.Direction.DESC, "id"));
+    }
+
+    public List<BookToRead> findAllByOrderByFoundByIdAsc() {
+        return repository.findAll(Sort.by(Sort.Direction.ASC, "found", "id"));
+    }
+
+    public List<BookToRead> findAllByOrderByFoundByIdDesc() {
+        return repository.findAll(Sort.by(Sort.Direction.DESC, "found", "id"));
+    }
+
+    @Override
+    public void addBook(BookToRead book) {
+        repository.save(book);
+    }
+
+    @Override
+    public void addAll(List<BookToRead> booksList) {
+        repository.saveAll(booksList);
+    }
+
+    @Override
+    public void deleteBook(Integer id) {
+        repository.deleteById(id);
+    }
+
+    @Override
+    public void clearAll() {
+        repository.deleteAll();
+    }
+
+    @Override
+    public void clearLanguage(Language language) {
+        for (BookToRead book : repository.findAll())
+            if (book.getLanguage().equals(language.firstLetterToUpperCase()))
+                if (repository.existsById(book.getId()))
+                    repository.deleteById(book.getId());
+    }
+
+    @Override
+    public BookToRead getBookById(Integer id) {
+        return repository.getOne(id);
+    }
+
+    @Override
+    public boolean exists(BookToRead book) {
+        return repository.findAll().contains(book);
+    }
+
+    @Override
+    public List<BookToRead> findAll() {
+        return repository.findAll();
+    }
+}

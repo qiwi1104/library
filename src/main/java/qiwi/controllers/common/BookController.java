@@ -6,6 +6,7 @@ import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import qiwi.Application;
 import qiwi.model.book.Book;
+import qiwi.model.book.BookToRead;
 import qiwi.model.book.FinishedBook;
 import qiwi.model.input.Input;
 import qiwi.util.enums.BookType;
@@ -66,31 +67,13 @@ public abstract class BookController {
                             e.printStackTrace();
                         }
                         break;
-//                    case TO_READ:
-//                        switch (language) {
-//                            case ENGLISH:
-//                                try {
-//                                    books = (List<T>) Arrays.asList(mapper.readValue(Paths.get(path).toFile(), BookToReadEnglish[].class));
-//                                } catch (IOException e) {
-//                                    e.printStackTrace();
-//                                }
-//                                break;
-//                            case RUSSIAN:
-//                                try {
-//                                    books = (List<T>) Arrays.asList(mapper.readValue(Paths.get(path).toFile(), BookToReadRussian[].class));
-//                                } catch (IOException e) {
-//                                    e.printStackTrace();
-//                                }
-//                                break;
-//                            case SPANISH:
-//                                try {
-//                                    books = (List<T>) Arrays.asList(mapper.readValue(Paths.get(path).toFile(), BookToReadSpanish[].class));
-//                                } catch (IOException e) {
-//                                    e.printStackTrace();
-//                                }
-//                                break;
-//                        }
-//                        break;
+                    case TO_READ:
+                        try {
+                            books = (List<T>) Arrays.asList(mapper.readValue(Paths.get(path).toFile(), BookToRead[].class));
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        }
+                        break;
                 }
 
                 return books;
@@ -208,13 +191,11 @@ public abstract class BookController {
         }
     }
 
-//    protected abstract <T extends Book> List<T> sortList(List<T> list);
-
     protected abstract String showTable(Model model, Language language);
 
     protected abstract boolean edit(Input input, Model model, Language language);
 
-    protected <T extends Book> String getRedirectionAddress(Input input, BindingResult result, Model model, Language language, String bookType, List<FinishedBook> bookList) {
+    protected String getRedirectionAddress(Input input, BindingResult result, Model model, Language language, String bookType) {
         if (result.hasErrors()) {
             if (input.getId() == null) {
                 return showTable(model, language);

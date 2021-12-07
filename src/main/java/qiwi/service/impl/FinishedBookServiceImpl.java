@@ -28,16 +28,6 @@ public class FinishedBookServiceImpl implements BookService<FinishedBook> {
                 .collect(Collectors.toList());
     }
 
-    /*
-     * Removes all the books relating to the specified language
-     * */
-    public void clearLanguage(Language language) {
-        for (FinishedBook book : repository.findAll())
-            if (book.getLanguage().equals(language.firstLetterToUpperCase()))
-                if (repository.existsById(book.getId()))
-                    repository.deleteById(book.getId());
-    }
-
     public List<FinishedBook> findAllByOrderByIdDesc() {
         return repository.findAll(Sort.by(Sort.Direction.DESC, "id"));
     }
@@ -88,6 +78,17 @@ public class FinishedBookServiceImpl implements BookService<FinishedBook> {
     @Override
     public void clearAll() {
         repository.deleteAll();
+    }
+
+    /*
+     * Removes all the books relating to the specified language
+     * */
+    @Override
+    public void clearLanguage(Language language) {
+        for (FinishedBook book : repository.findAll())
+            if (book.getLanguage().equals(language.firstLetterToUpperCase()))
+                if (repository.existsById(book.getId()))
+                    repository.deleteById(book.getId());
     }
 
     @Override
