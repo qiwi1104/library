@@ -195,8 +195,13 @@ public abstract class FinishedBookController extends BookController {
     }
 
     protected void save(PathInput input, Language language) {
-        List<FinishedBook> bookToReadList = service.findAll();
-        JSONHandler.IO.saveTableToJSON(bookToReadList, input.getPath(), language, FINISHED);
+        List<FinishedBook> books = service
+                .findAllByOrderByIdAsc()
+                .stream()
+                .filter(b -> b.getLanguage().equals(language.firstLetterToUpperCase()))
+                .collect(Collectors.toList());
+
+        JSONHandler.IO.saveTableToJSON(books, input.getPath(), language, FINISHED);
     }
 
     @Override

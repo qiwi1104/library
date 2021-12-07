@@ -1,6 +1,7 @@
 package qiwi.model.book;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -9,6 +10,7 @@ import javax.persistence.MappedSuperclass;
 import java.sql.Date;
 
 @MappedSuperclass
+@JsonIgnoreProperties({"id"})
 public abstract class Book {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

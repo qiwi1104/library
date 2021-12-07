@@ -92,9 +92,7 @@ public class FinishedBookServiceImpl implements BookService<FinishedBook> {
 
     @Override
     public FinishedBook getBookById(Integer id) {
-        if (id <= repository.count())
-            return repository.getOne(id);
-        else return null;
+        return repository.getOne(id);
     }
 
     @Override
