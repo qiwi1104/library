@@ -1,20 +1,26 @@
-package qiwi.model.common.book;
+package qiwi.model.book;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.MappedSuperclass;
 import java.sql.Date;
 
 @MappedSuperclass
+@JsonIgnoreProperties({"id"})
 public abstract class Book {
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     protected Integer id;
     protected String author;
     protected String name;
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "M/d/yy")
     protected Date found;
     protected String description;
+    protected String language;
 
     public Integer getId() {
         return id;
@@ -36,6 +42,10 @@ public abstract class Book {
         return description;
     }
 
+    public String getLanguage() {
+        return language;
+    }
+
     public void setId(Integer id) {
         this.id = id;
     }
@@ -54,6 +64,10 @@ public abstract class Book {
 
     public void setDescription(String description) {
         this.description = description;
+    }
+
+    public void setLanguage(String language) {
+        this.language = language;
     }
 
     @Override

@@ -3,18 +3,18 @@ package qiwi.controllers.common;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
-import qiwi.model.common.book.BookToRead;
-import qiwi.model.common.book.FinishedBook;
-import qiwi.model.common.input.Input;
-import qiwi.model.common.input.PathInput;
-import qiwi.repository.common.BookToReadRepository;
-import qiwi.repository.common.FinishedBookRepository;
-import qiwi.service.common.BookToReadServiceImpl;
-import qiwi.service.common.FinishedBookServiceImpl;
+import qiwi.model.book.BookToRead;
+import qiwi.model.book.FinishedBook;
+import qiwi.model.input.Input;
+import qiwi.model.input.PathInput;
+import qiwi.service.impl.BookToReadServiceImpl;
+import qiwi.service.impl.FinishedBookServiceImpl;
 import qiwi.util.enums.Language;
 import qiwi.util.enums.SortBy;
 import qiwi.util.enums.SortType;
 
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 
 import static qiwi.util.enums.BookType.TO_READ;
@@ -24,72 +24,58 @@ import static qiwi.util.enums.SortBy.FOUND;
 import static qiwi.util.enums.SortType.ASC;
 import static qiwi.util.enums.SortType.DESC;
 
-public abstract class BookToReadController<
-        T extends BookToRead,
-        S extends BookToReadServiceImpl<T, ? extends BookToReadRepository<T>>,
-        U extends FinishedBook,
-        V extends FinishedBookServiceImpl<U, ? extends FinishedBookRepository<U>>> extends BookController {
+public abstract class BookToReadController extends BookController {
     @Autowired
-    protected S service;
+    protected BookToReadServiceImpl service;
     @Autowired
-    protected V finishedBookService;
+    protected FinishedBookServiceImpl finishedBookService;
 
     protected SortType sortDateMethod = ASC;
     protected SortBy sortProperty = FOUND;
-
-    private void setIds(List<T> books) {
-        int i = service.findAll().size() + 1;
-        for (T book : books) {
-            book.setId(i);
-            i++;
-        }
-    }
 
     /*
      * Returns either a redirection link to the respective page (if there are no errors)
      * Or a view name (if there are errors)
      * */
-    protected String getRedirectionAddress(Input input, BindingResult result, Model model, Language language, T book) {
+    protected String getRedirectionAddress(Input input, BindingResult result, Model model, Language language, BookToRead book) {
         if (result.hasErrors())
-            return showTable(input, model, language);
+            return showTable(model, language);
 
-        if (add(input, model, book))
+        if (add(input, model, book, language))
             return "redirect:/bookstoread/" + language.toLowerCase() + "/";
-        else return showTable(input, model, language);
+        else return showTable(model, language);
     }
 
-    @Override
-    protected List<T> filterAndSort() {
-        List<T> books = null;
-
+    protected List<BookToRead> sortList(List<BookToRead> list) {
         switch (sortDateMethod) {
             case ASC:
                 switch (sortProperty) {
                     case ID:
-                        books = service.findAllByOrderByIdAsc();
+                        list.sort(Comparator.comparing(BookToRead::getId));
                         break;
                     case FOUND:
-                        books = service.findAllByOrderByFoundByIdAsc();
+                        list.sort(Comparator.comparing(BookToRead::getFound).thenComparing(BookToRead::getId));
                         break;
                 }
                 break;
             case DESC:
                 switch (sortProperty) {
                     case ID:
-                        books = service.findAllByOrderByIdDesc();
+                        list.sort(Comparator.comparing(BookToRead::getId));
+                        Collections.reverse(list);
                         break;
                     case FOUND:
-                        books = service.findAllByOrderByFoundByIdDesc();
+                        list.sort(Comparator.comparing(BookToRead::getFound).thenComparing(BookToRead::getId));
+                        Collections.reverse(list);
                         break;
                 }
                 break;
         }
-        return books;
+        return list;
     }
 
-    protected boolean add(Input input, Model model, T book) {
-        book.setId(service.findAll().size() + 1);
-        setBookAttributesFromInput(book, input, ADD);
+    protected boolean add(Input input, Model model, BookToRead book, Language language) {
+        setBookAttributesFromInput(book, input, ADD, language);
 
         if (!service.exists(book)) {
             service.addBook(book);
@@ -101,11 +87,11 @@ public abstract class BookToReadController<
     }
 
     @Override
-    protected boolean edit(Input input, Model model) {
-        T book = service.getBookById(input.getId());
+    protected boolean edit(Input input, Model model, Language language) {
+        BookToRead book = service.getBookById(input.getId());
 
         if (book != null) {
-            setBookAttributesFromInput(book, input, EDIT);
+            setBookAttributesFromInput(book, input, EDIT, language);
             service.addBook(book);
             return true;
         } else {
@@ -114,20 +100,20 @@ public abstract class BookToReadController<
         }
     }
 
-    protected boolean finish(Input input, Model model, U finishedBook) {
-        T bookToRead = service.getBookById(input.getId());
+    protected boolean finish(Input input, Model model, FinishedBook finishedBook) {
+        BookToRead bookToRead = service.getBookById(input.getId());
 
         if (bookToRead != null) {
-            finishedBook.setId(finishedBookService.findAll().size() + 1);
             finishedBook.setAuthor(bookToRead.getAuthor());
             finishedBook.setName(bookToRead.getName());
             finishedBook.setStart(input.getStart());
             finishedBook.setEnd(input.getEnd());
             finishedBook.setFound(bookToRead.getFound());
             finishedBook.setDescription(bookToRead.getDescription());
+            finishedBook.setLanguage(bookToRead.getLanguage());
 
             finishedBookService.addBook(finishedBook);
-            service.deleteBook(bookToRead.getId());
+            service.deleteBookById(bookToRead.getId());
             return true;
         } else {
             model.addAttribute("nonExistentMessage", "");
@@ -141,19 +127,18 @@ public abstract class BookToReadController<
     }
 
     protected void load(PathInput input, Language language) {
-        List<T> books = JSONHandler.IO.readJSONFile(input.getPath(), TO_READ, language);
+        List<BookToRead> books = JSONHandler.IO.readJSONFile(input.getPath(), TO_READ, language);
 
         if (books.size() != 0) {
-            service.clearAll();
+            service.clearLanguage(language);
             service.addAll(books);
         }
     }
 
     protected void loadBatch(PathInput input, Language language) {
-        List<T> books = JSONHandler.IO.readJSONFile(input.getPath(), TO_READ, language);
+        List<BookToRead> books = JSONHandler.IO.readJSONFile(input.getPath(), TO_READ, language);
 
         if (books.size() != 0) {
-            setIds(books);
             service.addAll(books);
         } else {
             System.out.println("The list is empty :(");
@@ -161,14 +146,17 @@ public abstract class BookToReadController<
     }
 
     protected void save(PathInput input, Language language) {
-        List<T> bookToReadList = service.findAll();
+        List<BookToRead> bookToReadList = service.findAllByOrderByIdAsc(language);
         JSONHandler.IO.saveTableToJSON(bookToReadList, input.getPath(), language, TO_READ);
     }
 
-    protected String showTable(Input input, Model model, Language language) {
-        List<T> bookList = filterAndSort();
+    @Override
+    protected String showTable(Model model, Language language) {
+        List<BookToRead> bookList = service.findAllByOrderByIdAsc(language);
 
-        model.addAttribute("booksToRead" + language.firstLetterToUpperCase() + "Input", input);
+        bookList = sortList(bookList);
+
+        model.addAttribute("booksToRead" + language.firstLetterToUpperCase() + "Input", new Input());
         model.addAttribute("booksToRead", bookList);
 
         return "booksToRead" + language.firstLetterToUpperCase();

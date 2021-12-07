@@ -5,27 +5,21 @@ import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import qiwi.controllers.common.BookToReadController;
-import qiwi.model.common.input.Input;
-import qiwi.model.common.input.PathInput;
-import qiwi.model.english.BookToReadEnglish;
-import qiwi.model.english.FinishedBookEnglish;
-import qiwi.service.english.BookToReadEnglishServiceImpl;
-import qiwi.service.english.FinishedBookEnglishServiceImpl;
+import qiwi.model.book.BookToRead;
+import qiwi.model.book.FinishedBook;
+import qiwi.model.input.Input;
+import qiwi.model.input.PathInput;
 import qiwi.util.enums.SortBy;
 
 import static qiwi.util.enums.Language.ENGLISH;
 
 @Controller
 @RequestMapping("/bookstoread/english")
-public class BookToReadEnglishController extends BookToReadController<
-        BookToReadEnglish,
-        BookToReadEnglishServiceImpl,
-        FinishedBookEnglish,
-        FinishedBookEnglishServiceImpl> {
+public class BookToReadEnglishController extends BookToReadController {
 
     @PostMapping("/add")
     public String add(@ModelAttribute("booksToReadEnglishInput") Input input, BindingResult result, Model model) {
-        return getRedirectionAddress(input, result, model, ENGLISH, new BookToReadEnglish());
+        return getRedirectionAddress(input, result, model, ENGLISH, new BookToRead());
     }
 
     @PostMapping("/edit/{id}")
@@ -35,20 +29,20 @@ public class BookToReadEnglishController extends BookToReadController<
 
     @GetMapping("/delete/{id}")
     public String delete(@PathVariable Integer id) {
-        service.deleteBook(id);
+        service.deleteBookById(id);
         return "redirect:/bookstoread/english/";
     }
 
     @PostMapping("/finish/{id}")
     public String finish(@ModelAttribute("booksToReadEnglishInput") Input input, BindingResult result, Model model) {
         if (result.hasErrors()) {
-            return showTable(input, model, ENGLISH);
+            return showTable(model, ENGLISH);
         }
 
-        if (super.finish(input, model, new FinishedBookEnglish())) {
+        if (super.finish(input, model, new FinishedBook())) {
             return "redirect:/bookstoread/english/";
         } else {
-            return showTable(input, model, ENGLISH);
+            return showTable(model, ENGLISH);
         }
     }
 
@@ -78,6 +72,6 @@ public class BookToReadEnglishController extends BookToReadController<
 
     @GetMapping("/")
     public String list(Model model) {
-        return showTable(new Input(), model, ENGLISH);
+        return showTable(model, ENGLISH);
     }
 }

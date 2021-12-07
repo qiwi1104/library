@@ -1,8 +1,10 @@
-package qiwi.model.common.book;
+package qiwi.model.book;
 
-import javax.persistence.MappedSuperclass;
+import javax.persistence.Entity;
+import javax.persistence.Table;
 
-@MappedSuperclass
+@Entity
+@Table(name = "books_to_read")
 public class BookToRead extends Book implements Cloneable {
     @Override
     public boolean equals(Object o) {

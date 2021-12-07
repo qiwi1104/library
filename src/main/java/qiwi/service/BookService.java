@@ -1,6 +1,7 @@
 package qiwi.service;
 
-import qiwi.model.common.book.Book;
+import qiwi.model.book.Book;
+import qiwi.util.enums.Language;
 
 import java.util.List;
 
@@ -9,9 +10,11 @@ public interface BookService<T extends Book> {
 
     void addAll(List<T> booksList);
 
-    void deleteBook(Integer id);
+    void deleteBookById(Integer id);
 
     void clearAll();
+
+    void clearLanguage(Language language);
 
     T getBookById(Integer id);
 

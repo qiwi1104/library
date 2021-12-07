@@ -5,15 +5,10 @@ import com.fasterxml.jackson.databind.ObjectWriter;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import qiwi.Application;
-import qiwi.model.common.book.Book;
-import qiwi.model.common.book.FinishedBook;
-import qiwi.model.common.input.Input;
-import qiwi.model.english.BookToReadEnglish;
-import qiwi.model.english.FinishedBookEnglish;
-import qiwi.model.russian.BookToReadRussian;
-import qiwi.model.russian.FinishedBookRussian;
-import qiwi.model.spanish.BookToReadSpanish;
-import qiwi.model.spanish.FinishedBookSpanish;
+import qiwi.model.book.Book;
+import qiwi.model.book.BookToRead;
+import qiwi.model.book.FinishedBook;
+import qiwi.model.input.Input;
 import qiwi.util.enums.BookType;
 import qiwi.util.enums.Context;
 import qiwi.util.enums.Language;
@@ -66,53 +61,17 @@ public abstract class BookController {
 
                 switch (bookType) {
                     case FINISHED:
-                        switch (language) {
-                            case ENGLISH:
-                                try {
-                                    books = (List<T>) Arrays.asList(mapper.readValue(Paths.get(path).toFile(), FinishedBookEnglish[].class));
-                                } catch (IOException e) {
-                                    e.printStackTrace();
-                                }
-                                break;
-                            case RUSSIAN:
-                                try {
-                                    books = (List<T>) Arrays.asList(mapper.readValue(Paths.get(path).toFile(), FinishedBookRussian[].class));
-                                } catch (IOException e) {
-                                    e.printStackTrace();
-                                }
-                                break;
-                            case SPANISH:
-                                try {
-                                    books = (List<T>) Arrays.asList(mapper.readValue(Paths.get(path).toFile(), FinishedBookSpanish[].class));
-                                } catch (IOException e) {
-                                    e.printStackTrace();
-                                }
-                                break;
+                        try {
+                            books = (List<T>) Arrays.asList(mapper.readValue(Paths.get(path).toFile(), FinishedBook[].class));
+                        } catch (IOException e) {
+                            e.printStackTrace();
                         }
                         break;
                     case TO_READ:
-                        switch (language) {
-                            case ENGLISH:
-                                try {
-                                    books = (List<T>) Arrays.asList(mapper.readValue(Paths.get(path).toFile(), BookToReadEnglish[].class));
-                                } catch (IOException e) {
-                                    e.printStackTrace();
-                                }
-                                break;
-                            case RUSSIAN:
-                                try {
-                                    books = (List<T>) Arrays.asList(mapper.readValue(Paths.get(path).toFile(), BookToReadRussian[].class));
-                                } catch (IOException e) {
-                                    e.printStackTrace();
-                                }
-                                break;
-                            case SPANISH:
-                                try {
-                                    books = (List<T>) Arrays.asList(mapper.readValue(Paths.get(path).toFile(), BookToReadSpanish[].class));
-                                } catch (IOException e) {
-                                    e.printStackTrace();
-                                }
-                                break;
+                        try {
+                            books = (List<T>) Arrays.asList(mapper.readValue(Paths.get(path).toFile(), BookToRead[].class));
+                        } catch (IOException e) {
+                            e.printStackTrace();
                         }
                         break;
                 }
@@ -186,7 +145,7 @@ public abstract class BookController {
         }
     }
 
-    protected <T extends Book, S extends Input> void setBookAttributesFromInput(T book, S input, Context context) {
+    protected <T extends Book, S extends Input> void setBookAttributesFromInput(T book, S input, Context context, Language language) {
         switch (context) {
             case EDIT:
                 if (book instanceof FinishedBook) {
@@ -218,41 +177,36 @@ public abstract class BookController {
                 }
                 break;
             case ADD:
+                if (book instanceof FinishedBook) {
+                    ((FinishedBook) book).setStart(input.getStart());
+                    ((FinishedBook) book).setEnd(input.getEnd());
+                }
                 book.setAuthor(input.getAuthor());
                 book.setName(input.getName());
-
-                if (book instanceof FinishedBook) {
-                    FinishedBook fb = (FinishedBook) book;
-
-                    fb.setStart(input.getStart());
-                    fb.setEnd(input.getEnd());
-                }
-
                 book.setFound(input.getFound());
                 book.setDescription(input.getDescription());
+                book.setLanguage(language.firstLetterToUpperCase());
                 break;
         }
     }
 
-    protected abstract <T extends Book> List<T> filterAndSort();
+    protected abstract String showTable(Model model, Language language);
 
-    protected abstract String showTable(Input input, Model model, Language language);
-
-    protected abstract boolean edit(Input input, Model model);
+    protected abstract boolean edit(Input input, Model model, Language language);
 
     protected String getRedirectionAddress(Input input, BindingResult result, Model model, Language language, String bookType) {
         if (result.hasErrors()) {
             if (input.getId() == null) {
-                return showTable(input, model, language);
+                return showTable(model, language);
             } else {
-                if (edit(input, model))
+                if (edit(input, model, language))
                     return "redirect:/" + bookType + "/" + language.toLowerCase() + "/";
-                else return showTable(input, model, language);
+                else return showTable(model, language);
             }
         }
 
-        if (edit(input, model))
+        if (edit(input, model, language))
             return "redirect:/" + bookType + "/" + language.toLowerCase() + "/";
-        else return showTable(input, model, language);
+        else return showTable(model, language);
     }
 }

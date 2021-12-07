@@ -59,6 +59,10 @@
     <form action="#" th:action="@{'/finishedbooks/english/save'}" th:object="${finishedEnglishInput}" method="post">
         <table th:replace="fragments/IO :: save"></table>
     </form>
+
+    <form action="#" th:action="@{'/finishedbooks/english/verify'}" th:object="${finishedEnglishInput}" method="post">
+        <button class="hiddenPanel" hidden th:fragment="verify" id="verify">Click me</button>
+    </form>
 </div>
 <br/>
 <div>

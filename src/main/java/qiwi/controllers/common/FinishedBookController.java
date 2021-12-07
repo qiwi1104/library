@@ -3,19 +3,18 @@ package qiwi.controllers.common;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
-import qiwi.model.common.AdditionalDates;
-import qiwi.model.common.book.FinishedBook;
-import qiwi.model.common.input.Input;
-import qiwi.model.common.input.PathInput;
-import qiwi.repository.common.AdditionalDatesRepository;
-import qiwi.repository.common.FinishedBookRepository;
-import qiwi.service.common.AdditionalDatesServiceImpl;
-import qiwi.service.common.FinishedBookServiceImpl;
+import qiwi.model.AdditionalDates;
+import qiwi.model.book.FinishedBook;
+import qiwi.model.input.Input;
+import qiwi.model.input.PathInput;
+import qiwi.service.impl.AdditionalDatesServiceImpl;
+import qiwi.service.impl.FinishedBookServiceImpl;
 import qiwi.util.enums.Language;
 import qiwi.util.enums.SortBy;
 import qiwi.util.enums.SortType;
 
-import java.util.List;
+import java.util.*;
+import java.util.stream.Collectors;
 
 import static qiwi.util.enums.BookType.FINISHED;
 import static qiwi.util.enums.Context.ADD;
@@ -24,108 +23,95 @@ import static qiwi.util.enums.SortBy.START;
 import static qiwi.util.enums.SortType.ASC;
 import static qiwi.util.enums.SortType.DESC;
 
-public abstract class FinishedBookController<
-        T extends FinishedBook,
-        S extends FinishedBookServiceImpl<T, ? extends FinishedBookRepository<T>>,
-        U extends AdditionalDates,
-        V extends AdditionalDatesServiceImpl<U, ? extends AdditionalDatesRepository<U>>> extends BookController {
+public abstract class FinishedBookController extends BookController {
     @Autowired
-    protected S service;
+    protected FinishedBookServiceImpl service;
     @Autowired
-    protected V additionalDatesService;
+    protected AdditionalDatesServiceImpl additionalDatesService;
 
     protected SortType sortDateMethod = ASC;
     protected SortBy sortProperty = START;
 
     /*
-     * Sets ids to Additional Dates of a book
+     * Returns all the additional dates that books contain
      * */
-    private void setIdsAndDates(List<T> books) {
-        int additionalDatesCounter = 0;
-
-        for (T book : books) {
-            List<U> additionalDatesList = (List<U>) book.getAdditionalDates();
-
-            if (additionalDatesList.size() != 0) {
-                for (int j = 0; j < additionalDatesList.size(); j++) {
-                    additionalDatesCounter++;
-
-                    U additionalDates = additionalDatesList.get(j);
-                    additionalDates.setFinishedBookId(book.getId());
-                    additionalDates.setId(additionalDatesCounter);
-                }
-            }
-        }
+    private List<AdditionalDates> getAllAdditionalDates(List<FinishedBook> books) {
+        return books
+                .stream()
+                .filter(b -> b.getAdditionalDates().size() != 0)
+                .map(FinishedBook::getAdditionalDates)
+                .flatMap(Collection::stream)
+                .collect(Collectors.toList());
     }
 
     /*
      * Returns either a redirection link to the respective page (if there are no errors)
      * Or a view name (if there are errors)
      * */
-    protected String getRedirectionAddress(Input input, BindingResult result, Model model, Language language, T book, U additionalDates) {
+    protected String getRedirectionAddress(Input input, BindingResult result, Model model, Language language, FinishedBook book, AdditionalDates additionalDates) {
         if (result.hasErrors())
-            return showTable(input, model, language);
+            return showTable(model, language);
 
-        if (add(input, model, book, additionalDates))
+        if (add(input, model, book, additionalDates, language))
             return "redirect:/finishedbooks/" + language.toLowerCase() + "/";
-        else return showTable(input, model, language);
+        else return showTable(model, language);
     }
 
-    @Override
-    protected List<T> filterAndSort() {
-        List<T> books = null;
-
+    protected List<FinishedBook> sortList(List<FinishedBook> list) {
         switch (sortDateMethod) {
             case ASC:
                 switch (sortProperty) {
                     case ID:
-                        books = service.findAllByOrderByIdAsc();
+                        list.sort(Comparator.comparing(FinishedBook::getId));
                         break;
                     case START:
-                        books = service.findAllByOrderByStartAsc();
+                        list.sort(Comparator.comparing(FinishedBook::getStart).thenComparing(FinishedBook::getId));
                         break;
                     case END:
-                        books = service.findAllByOrderByEndAsc();
+                        list.sort(Comparator.comparing(FinishedBook::getEnd).thenComparing(FinishedBook::getId));
                         break;
                     case FOUND:
-                        books = service.findAllByOrderByFoundByIdAsc();
+                        list.sort(Comparator.comparing(FinishedBook::getFound).thenComparing(FinishedBook::getId));
                         break;
                 }
                 break;
             case DESC:
                 switch (sortProperty) {
                     case ID:
-                        books = service.findAllByOrderByIdDesc();
+                        list.sort(Comparator.comparing(FinishedBook::getId));
+                        Collections.reverse(list);
                         break;
                     case START:
-                        books = service.findAllByOrderByStartDesc();
+                        list.sort(Comparator.comparing(FinishedBook::getStart).thenComparing(FinishedBook::getId));
+                        Collections.reverse(list);
                         break;
                     case END:
-                        books = service.findAllByOrderByEndDesc();
+                        list.sort(Comparator.comparing(FinishedBook::getEnd).thenComparing(FinishedBook::getId));
+                        Collections.reverse(list);
                         break;
                     case FOUND:
-                        books = service.findAllByOrderByFoundByIdDesc();
+                        list.sort(Comparator.comparing(FinishedBook::getFound).thenComparing(FinishedBook::getId));
+                        Collections.reverse(list);
                         break;
                 }
                 break;
         }
-        return books;
+        return list;
     }
 
-    protected boolean add(Input input, Model model, T book, U additionalDates) {
-        book.setId(service.findAll().size() + 1);
-        setBookAttributesFromInput(book, input, ADD);
+    protected boolean add(Input input, Model model, FinishedBook book, AdditionalDates additionalDates, Language language) {
+        setBookAttributesFromInput(book, input, ADD, language);
 
         if (service.exists(book)) {
-            book.setId(service.get(book).getId());
-            book.setFound(service.get(book).getFound());
+            book = service.get(book);
 
-            additionalDates.setId(additionalDatesService.findAll().size() + 1);
             additionalDates.setFinishedBookId(book.getId());
-            additionalDates.setStart(book.getStart());
-            additionalDates.setEnd(book.getEnd());
+            additionalDates.setStart(input.getStart());
+            additionalDates.setEnd(input.getEnd());
 
-            if (!additionalDatesService.exists(additionalDates)) {
+            if (!additionalDatesService.exists(additionalDates)
+                    && !additionalDates.getStart().equals(book.getStart())
+                    && !additionalDates.getEnd().equals(book.getEnd())) {
                 additionalDatesService.addDates(additionalDates);
                 return true;
             }
@@ -139,11 +125,11 @@ public abstract class FinishedBookController<
     }
 
     @Override
-    protected boolean edit(Input input, Model model) {
-        T book = service.getBookById(input.getId());
+    protected boolean edit(Input input, Model model, Language language) {
+        FinishedBook book = service.getBookById(input.getId());
 
         if (book != null) {
-            setBookAttributesFromInput(book, input, EDIT);
+            setBookAttributesFromInput(book, input, EDIT, language);
             service.addBook(book);
             return true;
         } else {
@@ -164,29 +150,44 @@ public abstract class FinishedBookController<
     }
 
     protected void load(PathInput input, Language language) {
-        List<T> finishedBooks = JSONHandler.IO.readJSONFile(input.getPath(), FINISHED, language);
+        List<FinishedBook> finishedBooks = JSONHandler.IO.readJSONFile(input.getPath(), FINISHED, language);
 
         if (finishedBooks.size() != 0) {
-            setIdsAndDates(finishedBooks);
+            service.clearLanguage(language);
 
-            service.clearAll();
-            // both additional dates table and books table are updated
+            Map<FinishedBook, AdditionalDates> additionalDates = new HashMap<>();
+
+            for (FinishedBook book : finishedBooks) {
+                if (book.getAdditionalDates().size() != 0) {
+                    book.getAdditionalDates().forEach(d -> additionalDates.put(book, d));
+                    book.setAdditionalDates(new ArrayList<>());
+                }
+                book.setId(null);
+            }
+
             service.addAll(finishedBooks);
+            additionalDates.forEach((book, date) -> {
+                date.setFinishedBookId(book.getId());
+                additionalDatesService.addDates(date);
+            });
         }
     }
 
     protected void save(PathInput input, Language language) {
-        List<T> bookToReadList = service.findAll();
-        JSONHandler.IO.saveTableToJSON(bookToReadList, input.getPath(), language, FINISHED);
+        List<FinishedBook> books = service.findAllByOrderByIdAsc(language);
+        JSONHandler.IO.saveTableToJSON(books, input.getPath(), language, FINISHED);
     }
 
     @Override
-    protected String showTable(Input input, Model model, Language language) {
-        List<T> bookList = filterAndSort();
+    protected String showTable(Model model, Language language) {
+        List<FinishedBook> books = service.findAllByOrderByIdAsc(language);
 
-        model.addAttribute("books", bookList);
-        model.addAttribute("additionalDates", additionalDatesService.findAll());
-        model.addAttribute("finished" + language.firstLetterToUpperCase() + "Input", input);
+        // Sorts according to current settings
+        books = sortList(books);
+
+        model.addAttribute("books", books);
+        model.addAttribute("additionalDates", getAllAdditionalDates(books));
+        model.addAttribute("finished" + language.firstLetterToUpperCase() + "Input", new Input());
 
         return "finishedBooks" + language.firstLetterToUpperCase();
     }
