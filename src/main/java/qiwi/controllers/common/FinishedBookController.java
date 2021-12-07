@@ -109,7 +109,9 @@ public abstract class FinishedBookController extends BookController {
             additionalDates.setStart(input.getStart());
             additionalDates.setEnd(input.getEnd());
 
-            if (!additionalDatesService.exists(additionalDates)) {
+            if (!additionalDatesService.exists(additionalDates)
+                    && !additionalDates.getStart().equals(book.getStart())
+                    && !additionalDates.getEnd().equals(book.getEnd())) {
                 additionalDatesService.addDates(additionalDates);
                 return true;
             }
@@ -135,10 +137,6 @@ public abstract class FinishedBookController extends BookController {
             return false;
         }
     }
-
-//    protected void delete(Integer id) {
-//        service.deleteBook(id);
-//    }
 
     protected void sort(SortBy sortProperty) {
         sortDateMethod = sortDateMethod.equals(ASC) ? DESC : ASC;

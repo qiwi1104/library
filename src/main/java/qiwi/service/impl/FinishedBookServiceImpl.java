@@ -16,44 +16,12 @@ public class FinishedBookServiceImpl implements BookService<FinishedBook> {
     @Autowired
     private FinishedBookRepository repository;
 
-    public List<FinishedBook> findAllByOrderByIdAsc() {
-        return repository.findAll(Sort.by(Sort.Direction.ASC, "id"));
-    }
-
     public List<FinishedBook> findAllByOrderByIdAsc(Language language) {
         return repository
                 .findAll(Sort.by(Sort.Direction.ASC, "id"))
                 .stream()
                 .filter(b -> b.getLanguage().equals(language.firstLetterToUpperCase()))
                 .collect(Collectors.toList());
-    }
-
-    public List<FinishedBook> findAllByOrderByIdDesc() {
-        return repository.findAll(Sort.by(Sort.Direction.DESC, "id"));
-    }
-
-    public List<FinishedBook> findAllByOrderByStartAsc() {
-        return repository.findAll(Sort.by(Sort.Direction.ASC, "start"));
-    }
-
-    public List<FinishedBook> findAllByOrderByStartDesc() {
-        return repository.findAll(Sort.by(Sort.Direction.DESC, "start"));
-    }
-
-    public List<FinishedBook> findAllByOrderByEndAsc() {
-        return repository.findAll(Sort.by(Sort.Direction.ASC, "end"));
-    }
-
-    public List<FinishedBook> findAllByOrderByEndDesc() {
-        return repository.findAll(Sort.by(Sort.Direction.DESC, "end"));
-    }
-
-    public List<FinishedBook> findAllByOrderByFoundByIdAsc() {
-        return repository.findAll(Sort.by(Sort.Direction.ASC, "found", "id"));
-    }
-
-    public List<FinishedBook> findAllByOrderByFoundByIdDesc() {
-        return repository.findAll(Sort.by(Sort.Direction.DESC, "found", "id"));
     }
 
     @Override
@@ -71,7 +39,7 @@ public class FinishedBookServiceImpl implements BookService<FinishedBook> {
     }
 
     @Override
-    public void deleteBook(Integer id) {
+    public void deleteBookById(Integer id) {
         repository.deleteById(id);
     }
 
@@ -102,13 +70,7 @@ public class FinishedBookServiceImpl implements BookService<FinishedBook> {
     }
 
     public FinishedBook get(FinishedBook book) {
-        for (FinishedBook finishedBook : repository.findAll()) {
-            if (finishedBook.equals(book)) {
-                return finishedBook;
-            }
-        }
-
-        return null;
+        return repository.findAll().contains(book) ? repository.findAll().get(repository.findAll().indexOf(book)) : null;
     }
 
     @Override

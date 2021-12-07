@@ -104,16 +104,16 @@ public abstract class BookToReadController extends BookController {
         BookToRead bookToRead = service.getBookById(input.getId());
 
         if (bookToRead != null) {
-            finishedBook.setId(finishedBookService.findAll().size() + 1);
             finishedBook.setAuthor(bookToRead.getAuthor());
             finishedBook.setName(bookToRead.getName());
             finishedBook.setStart(input.getStart());
             finishedBook.setEnd(input.getEnd());
             finishedBook.setFound(bookToRead.getFound());
             finishedBook.setDescription(bookToRead.getDescription());
+            finishedBook.setLanguage(bookToRead.getLanguage());
 
             finishedBookService.addBook(finishedBook);
-            service.deleteBook(bookToRead.getId());
+            service.deleteBookById(bookToRead.getId());
             return true;
         } else {
             model.addAttribute("nonExistentMessage", "");

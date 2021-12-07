@@ -16,28 +16,12 @@ public class BookToReadServiceImpl implements BookService<BookToRead> {
     @Autowired
     private BookToReadRepository repository;
 
-    public List<BookToRead> findAllByOrderByIdAsc() {
-        return repository.findAll(Sort.by(Sort.Direction.ASC, "id"));
-    }
-
     public List<BookToRead> findAllByOrderByIdAsc(Language language) {
         return repository
                 .findAll(Sort.by(Sort.Direction.ASC, "id"))
                 .stream()
                 .filter(b -> b.getLanguage().equals(language.firstLetterToUpperCase()))
                 .collect(Collectors.toList());
-    }
-
-    public List<BookToRead> findAllByOrderByIdDesc() {
-        return repository.findAll(Sort.by(Sort.Direction.DESC, "id"));
-    }
-
-    public List<BookToRead> findAllByOrderByFoundByIdAsc() {
-        return repository.findAll(Sort.by(Sort.Direction.ASC, "found", "id"));
-    }
-
-    public List<BookToRead> findAllByOrderByFoundByIdDesc() {
-        return repository.findAll(Sort.by(Sort.Direction.DESC, "found", "id"));
     }
 
     @Override
@@ -51,7 +35,7 @@ public class BookToReadServiceImpl implements BookService<BookToRead> {
     }
 
     @Override
-    public void deleteBook(Integer id) {
+    public void deleteBookById(Integer id) {
         repository.deleteById(id);
     }
 

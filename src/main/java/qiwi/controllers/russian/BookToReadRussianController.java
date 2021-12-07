@@ -29,7 +29,7 @@ public class BookToReadRussianController extends BookToReadController {
 
     @GetMapping("/delete/{id}")
     public String delete(@PathVariable Integer id) {
-        service.deleteBook(id);
+        service.deleteBookById(id);
         return "redirect:/bookstoread/russian/";
     }
 

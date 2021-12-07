@@ -31,7 +31,7 @@ public class FinishedBookEnglishController extends FinishedBookController {
 
     @GetMapping("/delete/{id}")
     public String delete(@PathVariable Integer id) {
-        service.deleteBook(id);
+        service.deleteBookById(id);
         return "redirect:/finishedbooks/english/";
     }
 

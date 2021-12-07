@@ -10,7 +10,7 @@ public interface BookService<T extends Book> {
 
     void addAll(List<T> booksList);
 
-    void deleteBook(Integer id);
+    void deleteBookById(Integer id);
 
     void clearAll();
 
