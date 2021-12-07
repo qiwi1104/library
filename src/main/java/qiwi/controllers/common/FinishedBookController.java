@@ -138,12 +138,6 @@ public abstract class FinishedBookController extends BookController {
         }
     }
 
-    protected boolean deleteBook(Integer id) {
-        boolean exist = service.getBookById(id).getAdditionalDates().size() != 0;
-        service.deleteBook(id);
-        return exist;
-    }
-
     protected void sort(SortBy sortProperty) {
         sortDateMethod = sortDateMethod.equals(ASC) ? DESC : ASC;
         this.sortProperty = sortProperty;
