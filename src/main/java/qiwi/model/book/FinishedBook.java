@@ -43,6 +43,10 @@ public class FinishedBook extends Book implements Cloneable {
         this.additionalDates = dates;
     }
 
+    public boolean hasDates(AdditionalDates dates) {
+        return additionalDates.contains(dates);
+    }
+
     @Override
     public boolean equals(Object o) {
         if (o == this) {

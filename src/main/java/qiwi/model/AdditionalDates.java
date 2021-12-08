@@ -23,7 +23,7 @@ public class AdditionalDates {
     private Date end;
 
     @ManyToOne
-    @JoinColumn(name = "finished_book_id", insertable = false, updatable = false)
+    @JoinColumn(name = "finished_book_id", insertable = false, updatable = false, nullable = false)
     private FinishedBook finishedBook;
 
     public Integer getId() {

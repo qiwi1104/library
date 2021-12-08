@@ -7,7 +7,6 @@ import qiwi.model.AdditionalDates;
 import qiwi.model.book.FinishedBook;
 import qiwi.model.input.Input;
 import qiwi.model.input.PathInput;
-import qiwi.service.impl.AdditionalDatesServiceImpl;
 import qiwi.service.impl.FinishedBookServiceImpl;
 import qiwi.util.enums.Language;
 import qiwi.util.enums.SortBy;
@@ -26,8 +25,6 @@ import static qiwi.util.enums.SortType.DESC;
 public abstract class FinishedBookController extends BookController {
     @Autowired
     protected FinishedBookServiceImpl service;
-    @Autowired
-    protected AdditionalDatesServiceImpl additionalDatesService;
 
     protected SortType sortDateMethod = ASC;
     protected SortBy sortProperty = START;
@@ -109,10 +106,8 @@ public abstract class FinishedBookController extends BookController {
             additionalDates.setStart(input.getStart());
             additionalDates.setEnd(input.getEnd());
 
-            if (!additionalDatesService.exists(additionalDates)
-                    && !additionalDates.getStart().equals(book.getStart())
-                    && !additionalDates.getEnd().equals(book.getEnd())) {
-                additionalDatesService.addDates(additionalDates);
+            if (!book.hasDates(additionalDates)) {
+                service.addDates(additionalDates);
                 return true;
             }
 
@@ -162,7 +157,7 @@ public abstract class FinishedBookController extends BookController {
             service.addAll(finishedBooks);
             additionalDates.forEach((book, date) -> {
                 date.setFinishedBookId(book.getId());
-                additionalDatesService.addDates(date);
+                service.addDates(date);
             });
         }
     }
