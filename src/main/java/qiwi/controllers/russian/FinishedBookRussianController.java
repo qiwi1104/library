@@ -42,13 +42,13 @@ public class FinishedBookRussianController extends FinishedBookController {
     }
 
     @PostMapping("/load")
-    public String load(@ModelAttribute("finishedRussianInput") PathInput input, BindingResult result, Model model) {
+    public String load(@ModelAttribute("finishedRussianInput") PathInput input) {
         super.load(input, language);
         return "redirect:/finishedbooks/russian/";
     }
 
     @PostMapping("/save")
-    public String save(@ModelAttribute("finishedRussianInput") PathInput input, BindingResult result, Model model) {
+    public String save(@ModelAttribute("finishedRussianInput") PathInput input) {
         super.save(input, language);
         return "redirect:/finishedbooks/russian/";
     }

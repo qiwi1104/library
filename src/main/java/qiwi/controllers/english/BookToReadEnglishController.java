@@ -53,19 +53,19 @@ public class BookToReadEnglishController extends BookToReadController {
     }
 
     @PostMapping("/load")
-    public String load(@ModelAttribute("booksToReadEnglishInput") PathInput input, BindingResult result, Model model) {
+    public String load(@ModelAttribute("booksToReadEnglishInput") PathInput input) {
         super.load(input, ENGLISH);
         return "redirect:/bookstoread/english/";
     }
 
     @PostMapping("/loadBatch")
-    public String loadBatch(@ModelAttribute("booksToReadEnglishInput") PathInput input, BindingResult result, Model model) {
+    public String loadBatch(@ModelAttribute("booksToReadEnglishInput") PathInput input) {
         super.loadBatch(input, ENGLISH);
         return "redirect:/bookstoread/english/";
     }
 
     @PostMapping("/save")
-    public String save(@ModelAttribute("booksToReadEnglishInput") PathInput input, BindingResult result, Model model) {
+    public String save(@ModelAttribute("booksToReadEnglishInput") PathInput input) {
         super.save(input, ENGLISH);
         return "redirect:/bookstoread/english/";
     }
