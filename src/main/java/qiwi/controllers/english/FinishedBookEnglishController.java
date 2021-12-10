@@ -5,8 +5,6 @@ import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import qiwi.controllers.common.FinishedBookController;
-import qiwi.model.AdditionalDates;
-import qiwi.model.book.FinishedBook;
 import qiwi.model.input.Input;
 import qiwi.model.input.PathInput;
 import qiwi.util.enums.Language;
