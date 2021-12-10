@@ -2,8 +2,6 @@ package qiwi.controllers.common;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.ObjectWriter;
-import org.springframework.ui.Model;
-import org.springframework.validation.BindingResult;
 import qiwi.Application;
 import qiwi.model.book.Book;
 import qiwi.model.book.BookToRead;
@@ -21,8 +19,6 @@ import java.nio.charset.StandardCharsets;
 import java.nio.file.Paths;
 import java.text.SimpleDateFormat;
 import java.util.*;
-
-import static qiwi.util.enums.Action.ADD;
 
 public abstract class BookController {
     protected static class JSONHandler {
@@ -190,39 +186,5 @@ public abstract class BookController {
                 book.setLanguage(language.firstLetterToUpperCase());
                 break;
         }
-    }
-
-    protected abstract String showTable(Model model, Language language);
-
-    protected abstract boolean add(Input input, Model model, Language language);
-
-    protected abstract boolean edit(Input input, Model model, Language language);
-
-    protected String getRedirectionAddress(Input input, BindingResult result, Model model, Language language, Action action, String bookType) {
-        String redirectTo = "redirect:/" + bookType + "/" + language.toLowerCase() + "/";
-
-        if (result.hasErrors()) {
-            if (action.equals(ADD)) {
-                if (input.getFound().equals(java.sql.Date.valueOf("1970-01-01")))
-                    model.addAttribute("emptyDatesMessage", "");
-
-                return showTable(model, language);
-            }
-
-            if (input.getId() == null) {
-                return showTable(model, language);
-            } else {
-                return edit(input, model, language) ? redirectTo : showTable(model, language);
-            }
-        }
-
-        switch (action) {
-            case ADD:
-                return add(input, model, language) ? redirectTo : showTable(model, language);
-            case EDIT:
-                return edit(input, model, language) ? redirectTo : showTable(model, language);
-        }
-
-        return showTable(model, language);
     }
 }

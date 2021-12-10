@@ -8,10 +8,12 @@ import qiwi.model.input.Input;
 import qiwi.model.input.PathInput;
 import qiwi.service.impl.BookToReadServiceImpl;
 import qiwi.service.impl.FinishedBookServiceImpl;
+import qiwi.util.enums.Action;
 import qiwi.util.enums.Language;
 import qiwi.util.enums.SortBy;
 import qiwi.util.enums.SortType;
 
+import java.sql.Date;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
@@ -60,7 +62,46 @@ public abstract class BookToReadController extends BookController {
         return list;
     }
 
-    @Override
+    protected String getRedirectionAddress(Input input, Model model, Language language, Action action) {
+        String redirectTo = "redirect:/bookstoread/" + language.toLowerCase() + "/";
+
+        BookToRead book = new BookToRead();
+
+        switch (action) {
+            case ADD:
+                setBookAttributesFromInput(book, input, ADD, language);
+
+                if (!service.exists(book)) {
+                    if (!input.getFound().equals(Date.valueOf("1970-01-01"))) {
+                        service.addBook(book);
+                        return redirectTo;
+                    } else {
+                        model.addAttribute("emptyDatesMessage", "");
+                        return showTable(model, language);
+                    }
+                } else {
+                    model.addAttribute("alreadyExistsMessage", "");
+                    return showTable(model, language);
+                }
+            case EDIT:
+                if (input.getId() != null) {
+                    book = service.getBookById(input.getId());
+
+                    if (book.getLanguage().equals(language.firstLetterToUpperCase())) {
+                        setBookAttributesFromInput(book, input, EDIT, language);
+                    } else {
+                        model.addAttribute("nonExistentMessageEdit", "");
+                        return showTable(model, language);
+                    }
+                } else {
+                    model.addAttribute("nonExistentMessageEdit", "");
+                    return showTable(model, language);
+                }
+        }
+
+        return showTable(model, language);
+    }
+
     protected boolean add(Input input, Model model, Language language) {
         BookToRead book = new BookToRead();
         setBookAttributesFromInput(book, input, ADD, language);
@@ -74,7 +115,6 @@ public abstract class BookToReadController extends BookController {
         }
     }
 
-    @Override
     protected boolean edit(Input input, Model model, Language language) {
         BookToRead book = service.getBookById(input.getId());
 
@@ -138,7 +178,6 @@ public abstract class BookToReadController extends BookController {
         JSONHandler.IO.saveTableToJSON(bookToReadList, input.getPath(), language, TO_READ);
     }
 
-    @Override
     protected String showTable(Model model, Language language) {
         List<BookToRead> bookList = service.findAllByOrderByIdAsc(language);
 
