@@ -202,7 +202,12 @@ public abstract class BookController {
         String redirectTo = "redirect:/" + bookType + "/" + language.toLowerCase() + "/";
 
         if (result.hasErrors()) {
-            if (action.equals(ADD)) return showTable(model, language);
+            if (action.equals(ADD)) {
+                if (input.getFound().equals(java.sql.Date.valueOf("1970-01-01")))
+                    model.addAttribute("emptyDatesMessage", "");
+
+                return showTable(model, language);
+            }
 
             if (input.getId() == null) {
                 return showTable(model, language);

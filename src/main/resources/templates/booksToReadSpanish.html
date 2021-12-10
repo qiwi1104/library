@@ -17,12 +17,7 @@
                 <td>
                     <input type="submit" value="add book">
                     <div th:replace="fragments/errorMessages :: alreadyExists"></div>
-                </td>
-                <td th:if="${#fields.hasErrors('found')}">
-                    <script>
-                        let table = document.body.getElementsByClassName("hiddenPanel").add;
-                        table.children[0].children[2].firstElementChild.append("Please enter the date.");
-                    </script>
+                    <div th:replace="fragments/errorMessages :: emptyDates"></div>
                 </td>
             </tr>
         </table>

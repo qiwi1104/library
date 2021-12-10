@@ -11,6 +11,14 @@
         </script>
     </div>
 </div>
+<div th:fragment="emptyDatesFinished" th:object="${emptyDatesMessage}" hidden>
+    <div th:if="${emptyDatesMessage}">
+        <script>
+            let table = document.body.getElementsByClassName("hiddenPanel").add;
+            table.children[0].children[3].firstElementChild.append("Please enter the dates.");
+        </script>
+    </div>
+</div>
 <div th:fragment="nonExistentEditFinished" th:object="${nonExistentMessageEdit}" hidden>
     <div th:if="${nonExistentMessageEdit}">
         <script th:src="@{/js/src/actionsHandler.js}"></script>
@@ -30,6 +38,15 @@
         table = document.body.getElementsByClassName("hiddenPanel").add;
         table.children[0].children[2].firstElementChild.append("This book already exists.");
 
+
+        </script>
+    </div>
+</div>
+<div th:fragment="emptyDates" th:object="${emptyDatesMessage}" hidden>
+    <div th:if="${emptyDatesMessage}">
+        <script>
+            let table = document.body.getElementsByClassName("hiddenPanel").add;
+            table.children[0].children[2].firstElementChild.append("Please enter the date.");
         </script>
     </div>
 </div>
@@ -41,6 +58,7 @@
         table = document.body.getElementsByClassName("hiddenPanel").finish;
         table.children[0].children[1].firstElementChild.append("This book doesn't exist.");
 
+
         </script>
     </div>
 </div>
@@ -51,6 +69,7 @@
         actionsHandler("edit");
         table = document.body.getElementsByClassName("hiddenPanel").edit;
         table.children[0].children[3].firstElementChild.append("This book doesn't exist.");
+
 
         </script>
     </div>
