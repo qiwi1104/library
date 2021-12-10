@@ -45,11 +45,11 @@ public abstract class FinishedBookController extends BookController {
      * Returns either a redirection link to the respective page (if there are no errors)
      * Or a view name (if there are errors)
      * */
-    protected String getRedirectionAddress(Input input, BindingResult result, Model model, Language language, FinishedBook book, AdditionalDates additionalDates) {
+    protected String getRedirectionAddress(Input input, BindingResult result, Model model, Language language) {
         if (result.hasErrors())
             return showTable(model, language);
 
-        if (add(input, model, book, additionalDates, language))
+        if (add(input, model, language))
             return "redirect:/finishedbooks/" + language.toLowerCase() + "/";
         else return showTable(model, language);
     }
@@ -96,7 +96,10 @@ public abstract class FinishedBookController extends BookController {
         return list;
     }
 
-    protected boolean add(Input input, Model model, FinishedBook book, AdditionalDates additionalDates, Language language) {
+    protected boolean add(Input input, Model model, Language language) {
+        FinishedBook book = new FinishedBook();
+        AdditionalDates additionalDates = new AdditionalDates();
+
         setBookAttributesFromInput(book, input, ADD, language);
 
         if (service.exists(book)) {

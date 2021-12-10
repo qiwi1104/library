@@ -21,7 +21,7 @@ public class FinishedBookEnglishController extends FinishedBookController {
 
     @PostMapping("/add")
     public String add(@ModelAttribute("finishedEnglishInput") Input input, BindingResult result, Model model) {
-        return getRedirectionAddress(input, result, model, language, new FinishedBook(), new AdditionalDates());
+        return getRedirectionAddress(input, result, model, language);
     }
 
     @PostMapping("/edit/{id}")

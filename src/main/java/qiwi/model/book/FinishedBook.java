@@ -44,7 +44,7 @@ public class FinishedBook extends Book implements Cloneable {
     }
 
     public boolean hasDates(AdditionalDates dates) {
-        return additionalDates.contains(dates);
+        return additionalDates.contains(dates) || dates.getStart().equals(start) || dates.getEnd().equals(end);
     }
 
     @Override
