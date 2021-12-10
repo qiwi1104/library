@@ -144,7 +144,6 @@ public abstract class FinishedBookController extends BookController {
         return showTable(model, language);
     }
 
-    @Override
     protected boolean add(Input input, Model model, Language language) {
         FinishedBook book = new FinishedBook();
         AdditionalDates additionalDates = new AdditionalDates();
@@ -171,7 +170,6 @@ public abstract class FinishedBookController extends BookController {
         }
     }
 
-    @Override
     protected boolean edit(Input input, Model model, Language language) {
         FinishedBook book = service.getBookById(input.getId());
 
@@ -219,7 +217,6 @@ public abstract class FinishedBookController extends BookController {
         JSONHandler.IO.saveTableToJSON(books, input.getPath(), language, FINISHED);
     }
 
-    @Override
     protected String showTable(Model model, Language language) {
         List<FinishedBook> books = service.findAllByOrderByIdAsc(language);
 

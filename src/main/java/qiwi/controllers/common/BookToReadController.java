@@ -177,7 +177,7 @@ public abstract class BookToReadController extends BookController {
         List<BookToRead> bookToReadList = service.findAllByOrderByIdAsc(language);
         JSONHandler.IO.saveTableToJSON(bookToReadList, input.getPath(), language, TO_READ);
     }
-    
+
     protected String showTable(Model model, Language language) {
         List<BookToRead> bookList = service.findAllByOrderByIdAsc(language);
 
