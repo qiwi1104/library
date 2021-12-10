@@ -21,12 +21,12 @@ public class FinishedBookSpanishController extends FinishedBookController {
 
     @PostMapping("/add")
     public String add(@ModelAttribute("finishedSpanishInput") Input input, BindingResult result, Model model) {
-        return getRedirectionAddress(input, result, model, language, ADD, "finishedbooks");
+        return getRedirectionAddress(input, model, language, ADD);
     }
 
     @PostMapping("/edit/{id}")
     public String edit(@ModelAttribute("finishedSpanishInput") Input input, BindingResult result, Model model) {
-        return getRedirectionAddress(input, result, model, language, EDIT, "finishedbooks");
+        return getRedirectionAddress(input, model, language, EDIT);
     }
 
     @GetMapping("/delete/{id}")

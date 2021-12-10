@@ -7,10 +7,12 @@ import qiwi.model.book.FinishedBook;
 import qiwi.model.input.Input;
 import qiwi.model.input.PathInput;
 import qiwi.service.impl.FinishedBookServiceImpl;
+import qiwi.util.enums.Action;
 import qiwi.util.enums.Language;
 import qiwi.util.enums.SortBy;
 import qiwi.util.enums.SortType;
 
+import java.sql.Date;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -80,6 +82,66 @@ public abstract class FinishedBookController extends BookController {
                 break;
         }
         return list;
+    }
+
+    protected String getRedirectionAddress(Input input, Model model, Language language, Action action) {
+        String redirectTo = "redirect:/finishedbooks/" + language.toLowerCase() + "/";
+
+        FinishedBook book = new FinishedBook();
+        AdditionalDates additionalDates = new AdditionalDates();
+
+        switch (action) {
+            case ADD:
+                setBookAttributesFromInput(book, input, ADD, language);
+
+                if (input.getStart().equals(Date.valueOf("1970-01-01"))
+                        || input.getEnd().equals(Date.valueOf("1970-01-01"))) {
+                    model.addAttribute("emptyDatesMessage", "");
+                    return showTable(model, language);
+                }
+
+                if (service.exists(book)) {
+                    book = service.get(book);
+
+                    additionalDates.setFinishedBookId(book.getId());
+                    additionalDates.setStart(input.getStart());
+                    additionalDates.setEnd(input.getEnd());
+
+                    if (!book.hasDates(additionalDates)) {
+                        service.addDates(additionalDates);
+                        return redirectTo;
+                    } else {
+                        model.addAttribute("alreadyExistsMessage", "");
+                        return showTable(model, language);
+                    }
+
+                } else {
+                    if (input.getFound().equals(Date.valueOf("1970-01-01"))) {
+                        model.addAttribute("emptyDatesMessage", "");
+                        return showTable(model, language);
+                    } else {
+                        service.addBook(book);
+                        return redirectTo;
+                    }
+                }
+            case EDIT:
+                if (input.getId() != null) {
+                    book = service.getBookById(input.getId());
+                    if (book.getLanguage().equals(language.firstLetterToUpperCase())) {
+                        setBookAttributesFromInput(book, input, EDIT, language);
+                    } else {
+                        model.addAttribute("nonExistentMessageEdit", "");
+                        return showTable(model, language);
+                    }
+
+                    return edit(input, model, language) ? redirectTo : showTable(model, language);
+                } else {
+                    model.addAttribute("nonExistentMessageEdit", "");
+                    return showTable(model, language);
+                }
+        }
+
+        return showTable(model, language);
     }
 
     @Override
