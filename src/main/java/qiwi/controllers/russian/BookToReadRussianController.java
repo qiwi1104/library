@@ -20,12 +20,12 @@ public class BookToReadRussianController extends BookToReadController {
 
     @PostMapping("/add")
     public String add(@ModelAttribute("booksToReadRussianInput") Input input, BindingResult result, Model model) {
-        return getRedirectionAddress(input, result, model, RUSSIAN, ADD, "bookstoread");
+        return getRedirectionAddress(input, model, RUSSIAN, ADD);
     }
 
     @PostMapping("/edit/{id}")
     public String edit(@ModelAttribute("booksToReadRussianInput") Input input, BindingResult result, Model model) {
-        return getRedirectionAddress(input, result, model, RUSSIAN, EDIT, "bookstoread");
+        return getRedirectionAddress(input, model, RUSSIAN, EDIT);
     }
 
     @GetMapping("/delete/{id}")
