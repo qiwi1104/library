@@ -1,5 +1,5 @@
 package qiwi.util.enums;
 
-public enum Context {
+public enum Action {
     EDIT, ADD
 }

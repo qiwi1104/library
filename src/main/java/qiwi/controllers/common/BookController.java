@@ -9,8 +9,8 @@ import qiwi.model.book.Book;
 import qiwi.model.book.BookToRead;
 import qiwi.model.book.FinishedBook;
 import qiwi.model.input.Input;
+import qiwi.util.enums.Action;
 import qiwi.util.enums.BookType;
-import qiwi.util.enums.Context;
 import qiwi.util.enums.Language;
 
 import java.io.File;
@@ -21,6 +21,8 @@ import java.nio.charset.StandardCharsets;
 import java.nio.file.Paths;
 import java.text.SimpleDateFormat;
 import java.util.*;
+
+import static qiwi.util.enums.Action.ADD;
 
 public abstract class BookController {
     protected static class JSONHandler {
@@ -145,8 +147,8 @@ public abstract class BookController {
         }
     }
 
-    protected <T extends Book, S extends Input> void setBookAttributesFromInput(T book, S input, Context context, Language language) {
-        switch (context) {
+    protected <T extends Book, S extends Input> void setBookAttributesFromInput(T book, S input, Action action, Language language) {
+        switch (action) {
             case EDIT:
                 if (book instanceof FinishedBook) {
                     FinishedBook fb = (FinishedBook) book;
@@ -192,21 +194,30 @@ public abstract class BookController {
 
     protected abstract String showTable(Model model, Language language);
 
+    protected abstract boolean add(Input input, Model model, Language language);
+
     protected abstract boolean edit(Input input, Model model, Language language);
 
-    protected String getRedirectionAddress(Input input, BindingResult result, Model model, Language language, String bookType) {
+    protected String getRedirectionAddress(Input input, BindingResult result, Model model, Language language, Action action, String bookType) {
+        String redirectTo = "redirect:/" + bookType + "/" + language.toLowerCase() + "/";
+
         if (result.hasErrors()) {
+            if (action.equals(ADD)) return showTable(model, language);
+
             if (input.getId() == null) {
                 return showTable(model, language);
             } else {
-                if (edit(input, model, language))
-                    return "redirect:/" + bookType + "/" + language.toLowerCase() + "/";
-                else return showTable(model, language);
+                return edit(input, model, language) ? redirectTo : showTable(model, language);
             }
         }
 
-        if (edit(input, model, language))
-            return "redirect:/" + bookType + "/" + language.toLowerCase() + "/";
-        else return showTable(model, language);
+        switch (action) {
+            case ADD:
+                return add(input, model, language) ? redirectTo : showTable(model, language);
+            case EDIT:
+                return edit(input, model, language) ? redirectTo : showTable(model, language);
+        }
+
+        return showTable(model, language);
     }
 }

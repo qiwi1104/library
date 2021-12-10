@@ -5,12 +5,13 @@ import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import qiwi.controllers.common.BookToReadController;
-import qiwi.model.book.BookToRead;
 import qiwi.model.book.FinishedBook;
 import qiwi.model.input.Input;
 import qiwi.model.input.PathInput;
 import qiwi.util.enums.SortBy;
 
+import static qiwi.util.enums.Action.ADD;
+import static qiwi.util.enums.Action.EDIT;
 import static qiwi.util.enums.Language.ENGLISH;
 
 @Controller
@@ -19,12 +20,12 @@ public class BookToReadEnglishController extends BookToReadController {
 
     @PostMapping("/add")
     public String add(@ModelAttribute("booksToReadEnglishInput") Input input, BindingResult result, Model model) {
-        return getRedirectionAddress(input, result, model, ENGLISH, new BookToRead());
+        return getRedirectionAddress(input, result, model, ENGLISH, ADD, "bookstoread");
     }
 
     @PostMapping("/edit/{id}")
     public String edit(@ModelAttribute("booksToReadEnglishInput") Input input, BindingResult result, Model model) {
-        return getRedirectionAddress(input, result, model, ENGLISH, "bookstoread");
+        return getRedirectionAddress(input, result, model, ENGLISH, EDIT, "bookstoread");
     }
 
     @GetMapping("/delete/{id}")

@@ -2,7 +2,6 @@ package qiwi.controllers.common;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.ui.Model;
-import org.springframework.validation.BindingResult;
 import qiwi.model.AdditionalDates;
 import qiwi.model.book.FinishedBook;
 import qiwi.model.input.Input;
@@ -15,9 +14,9 @@ import qiwi.util.enums.SortType;
 import java.util.*;
 import java.util.stream.Collectors;
 
+import static qiwi.util.enums.Action.ADD;
+import static qiwi.util.enums.Action.EDIT;
 import static qiwi.util.enums.BookType.FINISHED;
-import static qiwi.util.enums.Context.ADD;
-import static qiwi.util.enums.Context.EDIT;
 import static qiwi.util.enums.SortBy.START;
 import static qiwi.util.enums.SortType.ASC;
 import static qiwi.util.enums.SortType.DESC;
@@ -39,19 +38,6 @@ public abstract class FinishedBookController extends BookController {
                 .map(FinishedBook::getAdditionalDates)
                 .flatMap(Collection::stream)
                 .collect(Collectors.toList());
-    }
-
-    /*
-     * Returns either a redirection link to the respective page (if there are no errors)
-     * Or a view name (if there are errors)
-     * */
-    protected String getRedirectionAddress(Input input, BindingResult result, Model model, Language language) {
-        if (result.hasErrors())
-            return showTable(model, language);
-
-        if (add(input, model, language))
-            return "redirect:/finishedbooks/" + language.toLowerCase() + "/";
-        else return showTable(model, language);
     }
 
     protected List<FinishedBook> sortList(List<FinishedBook> list) {
@@ -96,6 +82,7 @@ public abstract class FinishedBookController extends BookController {
         return list;
     }
 
+    @Override
     protected boolean add(Input input, Model model, Language language) {
         FinishedBook book = new FinishedBook();
         AdditionalDates additionalDates = new AdditionalDates();

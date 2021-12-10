@@ -2,7 +2,6 @@ package qiwi.controllers.common;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.ui.Model;
-import org.springframework.validation.BindingResult;
 import qiwi.model.book.BookToRead;
 import qiwi.model.book.FinishedBook;
 import qiwi.model.input.Input;
@@ -17,9 +16,9 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 
+import static qiwi.util.enums.Action.ADD;
+import static qiwi.util.enums.Action.EDIT;
 import static qiwi.util.enums.BookType.TO_READ;
-import static qiwi.util.enums.Context.ADD;
-import static qiwi.util.enums.Context.EDIT;
 import static qiwi.util.enums.SortBy.FOUND;
 import static qiwi.util.enums.SortType.ASC;
 import static qiwi.util.enums.SortType.DESC;
@@ -32,19 +31,6 @@ public abstract class BookToReadController extends BookController {
 
     protected SortType sortDateMethod = ASC;
     protected SortBy sortProperty = FOUND;
-
-    /*
-     * Returns either a redirection link to the respective page (if there are no errors)
-     * Or a view name (if there are errors)
-     * */
-    protected String getRedirectionAddress(Input input, BindingResult result, Model model, Language language, BookToRead book) {
-        if (result.hasErrors())
-            return showTable(model, language);
-
-        if (add(input, model, book, language))
-            return "redirect:/bookstoread/" + language.toLowerCase() + "/";
-        else return showTable(model, language);
-    }
 
     protected List<BookToRead> sortList(List<BookToRead> list) {
         switch (sortDateMethod) {
@@ -74,7 +60,9 @@ public abstract class BookToReadController extends BookController {
         return list;
     }
 
-    protected boolean add(Input input, Model model, BookToRead book, Language language) {
+    @Override
+    protected boolean add(Input input, Model model, Language language) {
+        BookToRead book = new BookToRead();
         setBookAttributesFromInput(book, input, ADD, language);
 
         if (!service.exists(book)) {

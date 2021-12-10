@@ -10,6 +10,8 @@ import qiwi.model.input.PathInput;
 import qiwi.util.enums.Language;
 import qiwi.util.enums.SortBy;
 
+import static qiwi.util.enums.Action.ADD;
+import static qiwi.util.enums.Action.EDIT;
 import static qiwi.util.enums.Language.ENGLISH;
 
 @Controller
@@ -19,12 +21,12 @@ public class FinishedBookEnglishController extends FinishedBookController {
 
     @PostMapping("/add")
     public String add(@ModelAttribute("finishedEnglishInput") Input input, BindingResult result, Model model) {
-        return getRedirectionAddress(input, result, model, language);
+        return getRedirectionAddress(input, result, model, language, ADD, "finishedbooks");
     }
 
     @PostMapping("/edit/{id}")
     public String edit(@ModelAttribute("finishedEnglishInput") Input input, BindingResult result, Model model) {
-        return getRedirectionAddress(input, result, model, language, "finishedbooks");
+        return getRedirectionAddress(input, result, model, language, EDIT, "finishedbooks");
     }
 
     @GetMapping("/delete/{id}")
