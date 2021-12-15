@@ -85,70 +85,29 @@ public abstract class FinishedBookController extends BookController {
     }
 
     protected String getRedirectionAddress(Input input, Model model, Language language, Action action) {
-        String redirectTo = "redirect:/finishedbooks/" + language.toLowerCase() + "/";
-
-        FinishedBook book = new FinishedBook();
-        AdditionalDates additionalDates = new AdditionalDates();
-
         switch (action) {
             case ADD:
-                setBookAttributesFromInput(book, input, ADD, language);
-
-                if (input.getStart().equals(Date.valueOf("1970-01-01"))
-                        || input.getEnd().equals(Date.valueOf("1970-01-01"))) {
-                    model.addAttribute("emptyDatesMessage", "");
-                    return showTable(model, language);
-                }
-
-                if (service.exists(book)) {
-                    book = service.get(book);
-
-                    additionalDates.setFinishedBookId(book.getId());
-                    additionalDates.setStart(input.getStart());
-                    additionalDates.setEnd(input.getEnd());
-
-                    if (!book.hasDates(additionalDates)) {
-                        service.addDates(additionalDates);
-                        return redirectTo;
-                    } else {
-                        model.addAttribute("alreadyExistsMessage", "");
-                        return showTable(model, language);
-                    }
-
-                } else {
-                    if (input.getFound().equals(Date.valueOf("1970-01-01"))) {
-                        model.addAttribute("emptyDatesMessage", "");
-                        return showTable(model, language);
-                    } else {
-                        service.addBook(book);
-                        return redirectTo;
-                    }
-                }
+                add(input, model, language);
             case EDIT:
-                if (input.getId() != null) {
-                    book = service.getBookById(input.getId());
-                    if (book.getLanguage().equals(language.firstLetterToUpperCase())) {
-                        setBookAttributesFromInput(book, input, EDIT, language);
-                    } else {
-                        model.addAttribute("nonExistentMessageEdit", "");
-                        return showTable(model, language);
-                    }
-
-                    return edit(input, model, language) ? redirectTo : showTable(model, language);
-                } else {
-                    model.addAttribute("nonExistentMessageEdit", "");
-                    return showTable(model, language);
-                }
+                edit(input, model, language);
         }
 
         return showTable(model, language);
     }
 
-    protected boolean add(Input input, Model model, Language language) {
+    protected String add(Input input, Model model, Language language) {
+        String redirectTo = "redirect:/finishedbooks/" + language.toLowerCase() + "/";
+
         FinishedBook book = new FinishedBook();
         AdditionalDates additionalDates = new AdditionalDates();
 
         setBookAttributesFromInput(book, input, ADD, language);
+
+        if (input.getStart().equals(Date.valueOf("1970-01-01"))
+                || input.getEnd().equals(Date.valueOf("1970-01-01"))) {
+            model.addAttribute("emptyDatesMessage", "");
+            return showTable(model, language);
+        }
 
         if (service.exists(book)) {
             book = service.get(book);
@@ -159,27 +118,45 @@ public abstract class FinishedBookController extends BookController {
 
             if (!book.hasDates(additionalDates)) {
                 service.addDates(additionalDates);
-                return true;
+                return redirectTo;
+            } else {
+                model.addAttribute("alreadyExistsMessage", "");
+                return showTable(model, language);
             }
 
-            model.addAttribute("alreadyExistsMessage", "");
-            return false;
         } else {
-            service.addBook(book);
-            return true;
+            if (input.getFound().equals(Date.valueOf("1970-01-01"))) {
+                model.addAttribute("emptyDatesMessage", "");
+                return showTable(model, language);
+            } else {
+                service.addBook(book);
+                return redirectTo;
+            }
         }
     }
 
-    protected boolean edit(Input input, Model model, Language language) {
-        FinishedBook book = service.getBookById(input.getId());
+    protected String edit(Input input, Model model, Language language) {
+        String redirectTo = "redirect:/finishedbooks/" + language.toLowerCase() + "/";
 
-        if (book != null) {
-            setBookAttributesFromInput(book, input, EDIT, language);
-            service.addBook(book);
-            return true;
+        if (input.getId() != null) {
+            FinishedBook book = service.getBookById(input.getId());
+
+            if (book != null) {
+                if (book.getLanguage().equals(language.firstLetterToUpperCase())) {
+                    setBookAttributesFromInput(book, input, EDIT, language);
+                    service.addBook(book);
+                    return redirectTo;
+                } else {
+                    model.addAttribute("nonExistentMessageEdit", "");
+                    return showTable(model, language);
+                }
+            } else {
+                model.addAttribute("nonExistentMessageEdit", "");
+                return showTable(model, language);
+            }
         } else {
             model.addAttribute("nonExistentMessageEdit", "");
-            return false;
+            return showTable(model, language);
         }
     }
 
