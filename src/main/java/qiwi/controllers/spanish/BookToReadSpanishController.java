@@ -5,7 +5,6 @@ import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import qiwi.controllers.common.BookToReadController;
-import qiwi.model.book.FinishedBook;
 import qiwi.model.input.Input;
 import qiwi.model.input.PathInput;
 import qiwi.util.enums.SortBy;
@@ -40,7 +39,7 @@ public class BookToReadSpanishController extends BookToReadController {
             return showTable(model, SPANISH);
         }
 
-        if (super.finish(input, model, new FinishedBook())) {
+        if (super.finish(input, model)) {
             return "redirect:/bookstoread/spanish/";
         } else {
             return showTable(model, SPANISH);

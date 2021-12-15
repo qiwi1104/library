@@ -63,75 +63,62 @@ public abstract class BookToReadController extends BookController {
     }
 
     protected String getRedirectionAddress(Input input, Model model, Language language, Action action) {
-        String redirectTo = "redirect:/bookstoread/" + language.toLowerCase() + "/";
-
-        BookToRead book = new BookToRead();
-
         switch (action) {
             case ADD:
-                setBookAttributesFromInput(book, input, ADD, language);
-
-                if (!service.exists(book)) {
-                    if (!input.getFound().equals(Date.valueOf("1970-01-01"))) {
-                        service.addBook(book);
-                        return redirectTo;
-                    } else {
-                        model.addAttribute("emptyDatesMessage", "");
-                        return showTable(model, language);
-                    }
-                } else {
-                    model.addAttribute("alreadyExistsMessage", "");
-                    return showTable(model, language);
-                }
+                return add(input, model, language);
             case EDIT:
-                if (input.getId() != null) {
-                    book = service.getBookById(input.getId());
-
-                    if (book.getLanguage().equals(language.firstLetterToUpperCase())) {
-                        setBookAttributesFromInput(book, input, EDIT, language);
-                    } else {
-                        model.addAttribute("nonExistentMessageEdit", "");
-                        return showTable(model, language);
-                    }
-                } else {
-                    model.addAttribute("nonExistentMessageEdit", "");
-                    return showTable(model, language);
-                }
+                return edit(input, model, language);
         }
 
         return showTable(model, language);
     }
 
-    protected boolean add(Input input, Model model, Language language) {
+    protected String add(Input input, Model model, Language language) {
+        String redirectTo = "redirect:/bookstoread/" + language.toLowerCase() + "/";
+
         BookToRead book = new BookToRead();
         setBookAttributesFromInput(book, input, ADD, language);
 
         if (!service.exists(book)) {
-            service.addBook(book);
-            return true;
+            if (!input.getFound().equals(Date.valueOf("1970-01-01"))) {
+                service.addBook(book);
+                return redirectTo;
+            } else {
+                model.addAttribute("emptyDatesMessage", "");
+                return showTable(model, language);
+            }
         } else {
             model.addAttribute("alreadyExistsMessage", "");
-            return false;
+            return showTable(model, language);
         }
     }
 
-    protected boolean edit(Input input, Model model, Language language) {
-        BookToRead book = service.getBookById(input.getId());
+    protected String edit(Input input, Model model, Language language) {
+        String redirectTo = "redirect:/bookstoread/" + language.toLowerCase() + "/";
 
-        if (book != null) {
-            setBookAttributesFromInput(book, input, EDIT, language);
-            service.addBook(book);
-            return true;
+        if (input.getId() != null) {
+            BookToRead book = service.getBookById(input.getId());
+
+            if (book.getLanguage().equals(language.firstLetterToUpperCase())) {
+                setBookAttributesFromInput(book, input, EDIT, language);
+                service.addBook(book);
+                return redirectTo;
+            } else {
+                model.addAttribute("nonExistentMessageEdit", "");
+                return showTable(model, language);
+            }
         } else {
             model.addAttribute("nonExistentMessageEdit", "");
-            return false;
+            return showTable(model, language);
         }
     }
 
-    protected boolean finish(Input input, Model model, FinishedBook finishedBook) {
+    protected boolean finish(Input input, Model model) {
         BookToRead bookToRead = service.getBookById(input.getId());
 
         if (bookToRead != null) {
+            FinishedBook finishedBook = new FinishedBook();
+
             finishedBook.setAuthor(bookToRead.getAuthor());
             finishedBook.setName(bookToRead.getName());
             finishedBook.setStart(input.getStart());
