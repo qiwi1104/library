@@ -160,8 +160,6 @@ public abstract class BookToReadController extends BookController {
 
         if (books.size() != 0) {
             service.addAll(books);
-        } else {
-            System.out.println("The list is empty :(");
         }
     }
 
@@ -171,11 +169,11 @@ public abstract class BookToReadController extends BookController {
     }
 
     protected void setUpView(Model model, Language language) {
-        List<BookToRead> bookList = service.findAllByOrderByIdAsc(language);
+        List<BookToRead> books = service.findAllByOrderByIdAsc(language);
 
-        bookList = sortList(bookList);
+        books = sortList(books);
 
         model.addAttribute("booksToRead" + language.firstLetterToUpperCase() + "Input", new Input());
-        model.addAttribute("booksToRead", bookList);
+        model.addAttribute("booksToRead", books);
     }
 }

@@ -41,46 +41,46 @@ public abstract class FinishedBookController extends BookController {
                 .collect(Collectors.toList());
     }
 
-    protected List<FinishedBook> sortList(List<FinishedBook> list) {
+    protected List<FinishedBook> sortList(List<FinishedBook> books) {
         switch (sortDateMethod) {
             case ASC:
                 switch (sortProperty) {
                     case ID:
-                        list.sort(Comparator.comparing(FinishedBook::getId));
+                        books.sort(Comparator.comparing(FinishedBook::getId));
                         break;
                     case START:
-                        list.sort(Comparator.comparing(FinishedBook::getStart).thenComparing(FinishedBook::getId));
+                        books.sort(Comparator.comparing(FinishedBook::getStart).thenComparing(FinishedBook::getId));
                         break;
                     case END:
-                        list.sort(Comparator.comparing(FinishedBook::getEnd).thenComparing(FinishedBook::getId));
+                        books.sort(Comparator.comparing(FinishedBook::getEnd).thenComparing(FinishedBook::getId));
                         break;
                     case FOUND:
-                        list.sort(Comparator.comparing(FinishedBook::getFound).thenComparing(FinishedBook::getId));
+                        books.sort(Comparator.comparing(FinishedBook::getFound).thenComparing(FinishedBook::getId));
                         break;
                 }
                 break;
             case DESC:
                 switch (sortProperty) {
                     case ID:
-                        list.sort(Comparator.comparing(FinishedBook::getId));
-                        Collections.reverse(list);
+                        books.sort(Comparator.comparing(FinishedBook::getId));
+                        Collections.reverse(books);
                         break;
                     case START:
-                        list.sort(Comparator.comparing(FinishedBook::getStart).thenComparing(FinishedBook::getId));
-                        Collections.reverse(list);
+                        books.sort(Comparator.comparing(FinishedBook::getStart).thenComparing(FinishedBook::getId));
+                        Collections.reverse(books);
                         break;
                     case END:
-                        list.sort(Comparator.comparing(FinishedBook::getEnd).thenComparing(FinishedBook::getId));
-                        Collections.reverse(list);
+                        books.sort(Comparator.comparing(FinishedBook::getEnd).thenComparing(FinishedBook::getId));
+                        Collections.reverse(books);
                         break;
                     case FOUND:
-                        list.sort(Comparator.comparing(FinishedBook::getFound).thenComparing(FinishedBook::getId));
-                        Collections.reverse(list);
+                        books.sort(Comparator.comparing(FinishedBook::getFound).thenComparing(FinishedBook::getId));
+                        Collections.reverse(books);
                         break;
                 }
                 break;
         }
-        return list;
+        return books;
     }
 
     protected String add(Input input, Model model, Language language) {
@@ -162,22 +162,22 @@ public abstract class FinishedBookController extends BookController {
     }
 
     protected void load(PathInput input, Language language) {
-        List<FinishedBook> finishedBooks = JSONHandler.IO.readJSONFile(input.getPath(), FINISHED, language);
+        List<FinishedBook> books = JSONHandler.IO.readJSONFile(input.getPath(), FINISHED, language);
 
-        if (finishedBooks.size() != 0) {
+        if (books.size() != 0) {
             service.clearLanguage(language);
 
             Map<FinishedBook, AdditionalDates> additionalDates = new HashMap<>();
 
-            for (FinishedBook book : finishedBooks) {
+            for (FinishedBook book : books) {
                 if (book.getAdditionalDates().size() != 0) {
-                    book.getAdditionalDates().forEach(d -> additionalDates.put(book, d));
+                    book.getAdditionalDates().forEach(dates -> additionalDates.put(book, dates));
                     book.setAdditionalDates(new ArrayList<>());
                 }
                 book.setId(null);
             }
 
-            service.addAll(finishedBooks);
+            service.addAll(books);
             additionalDates.forEach((book, date) -> {
                 date.setFinishedBookId(book.getId());
                 service.addDates(date);
