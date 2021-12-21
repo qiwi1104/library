@@ -87,16 +87,18 @@ public abstract class FinishedBookController extends BookController {
     protected String getRedirectionAddress(Input input, Model model, Language language, Action action) {
         switch (action) {
             case ADD:
-                add(input, model, language);
+                return add(input, model, language);
             case EDIT:
-                edit(input, model, language);
+                return edit(input, model, language);
+            default:
+                return "redirect:/finishedbooks/" + language.toLowerCase() + "/";
         }
 
-        return showTable(model, language);
     }
 
     protected String add(Input input, Model model, Language language) {
         String redirectTo = "redirect:/finishedbooks/" + language.toLowerCase() + "/";
+        String viewName = "finishedBooks" + language.firstLetterToUpperCase();
 
         FinishedBook book = new FinishedBook();
         AdditionalDates additionalDates = new AdditionalDates();
@@ -106,7 +108,8 @@ public abstract class FinishedBookController extends BookController {
         if (input.getStart().equals(Date.valueOf("1970-01-01"))
                 || input.getEnd().equals(Date.valueOf("1970-01-01"))) {
             model.addAttribute("emptyDatesMessage", "");
-            return showTable(model, language);
+            setUpView(model, language);
+            return viewName;
         }
 
         if (service.exists(book)) {
@@ -121,13 +124,15 @@ public abstract class FinishedBookController extends BookController {
                 return redirectTo;
             } else {
                 model.addAttribute("alreadyExistsMessage", "");
-                return showTable(model, language);
+                setUpView(model, language);
+                return viewName;
             }
 
         } else {
             if (input.getFound().equals(Date.valueOf("1970-01-01"))) {
                 model.addAttribute("emptyDatesMessage", "");
-                return showTable(model, language);
+                setUpView(model, language);
+                return viewName;
             } else {
                 service.addBook(book);
                 return redirectTo;
@@ -137,6 +142,7 @@ public abstract class FinishedBookController extends BookController {
 
     protected String edit(Input input, Model model, Language language) {
         String redirectTo = "redirect:/finishedbooks/" + language.toLowerCase() + "/";
+        String viewName = "finishedBooks" + language.firstLetterToUpperCase();
 
         if (input.getId() != null) {
             FinishedBook book = service.getBookById(input.getId());
@@ -148,15 +154,18 @@ public abstract class FinishedBookController extends BookController {
                     return redirectTo;
                 } else {
                     model.addAttribute("nonExistentMessageEdit", "");
-                    return showTable(model, language);
+                    setUpView(model, language);
+                    return viewName;
                 }
             } else {
                 model.addAttribute("nonExistentMessageEdit", "");
-                return showTable(model, language);
+                setUpView(model, language);
+                return viewName;
             }
         } else {
             model.addAttribute("nonExistentMessageEdit", "");
-            return showTable(model, language);
+            setUpView(model, language);
+            return viewName;
         }
     }
 
@@ -194,7 +203,7 @@ public abstract class FinishedBookController extends BookController {
         JSONHandler.IO.saveTableToJSON(books, input.getPath(), language, FINISHED);
     }
 
-    protected String showTable(Model model, Language language) {
+    protected void setUpView(Model model, Language language) {
         List<FinishedBook> books = service.findAllByOrderByIdAsc(language);
 
         // Sorts according to current settings
@@ -203,7 +212,5 @@ public abstract class FinishedBookController extends BookController {
         model.addAttribute("books", books);
         model.addAttribute("additionalDates", getAllAdditionalDates(books));
         model.addAttribute("finished" + language.firstLetterToUpperCase() + "Input", new Input());
-
-        return "finishedBooks" + language.firstLetterToUpperCase();
     }
 }

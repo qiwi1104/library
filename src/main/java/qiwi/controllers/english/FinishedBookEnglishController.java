@@ -54,7 +54,8 @@ public class FinishedBookEnglishController extends FinishedBookController {
     }
 
     @GetMapping("/")
-    public String list(Model model) {
-        return showTable(model, language);
+    public String showAllBooks(Model model) {
+        setUpView(model, language);
+        return "finishedBooks" + language.firstLetterToUpperCase();
     }
 }
