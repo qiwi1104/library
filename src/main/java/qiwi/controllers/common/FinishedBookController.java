@@ -7,7 +7,6 @@ import qiwi.model.book.FinishedBook;
 import qiwi.model.input.Input;
 import qiwi.model.input.PathInput;
 import qiwi.service.impl.FinishedBookServiceImpl;
-import qiwi.util.enums.Action;
 import qiwi.util.enums.Language;
 import qiwi.util.enums.SortBy;
 import qiwi.util.enums.SortType;
@@ -82,18 +81,6 @@ public abstract class FinishedBookController extends BookController {
                 break;
         }
         return list;
-    }
-
-    protected String getRedirectionAddress(Input input, Model model, Language language, Action action) {
-        switch (action) {
-            case ADD:
-                return add(input, model, language);
-            case EDIT:
-                return edit(input, model, language);
-            default:
-                return "redirect:/finishedbooks/" + language.toLowerCase() + "/";
-        }
-
     }
 
     protected String add(Input input, Model model, Language language) {
