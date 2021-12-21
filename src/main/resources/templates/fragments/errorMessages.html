@@ -50,6 +50,16 @@
         </script>
     </div>
 </div>
+<div th:fragment="emptyDatesFinish" th:object="${emptyDatesFinishMessage}" hidden>
+    <div th:if="${emptyDatesFinishMessage}">
+        <script th:src="@{/js/src/actionsHandler.js}"></script>
+        <script>
+            actionsHandler("finish");
+            let table = document.body.getElementsByClassName("hiddenPanel").finish;
+            table.children[0].children[1].firstElementChild.append("Please enter the dates.");
+        </script>
+    </div>
+</div>
 <div th:fragment="nonExistent" th:object="${nonExistentMessage}" hidden>
     <div th:if="${nonExistentMessage}">
         <script th:src="@{/js/src/actionsHandler.js}"></script>

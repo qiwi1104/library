@@ -115,27 +115,35 @@ public abstract class BookToReadController extends BookController {
 
     protected String finish(Input input, Model model, Language language, boolean hasErrors) {
         if (!hasErrors) {
-            BookToRead bookToRead = service.getBookById(input.getId());
+            if (input.getId() != null) {
+                BookToRead bookToRead = service.getBookById(input.getId());
 
-            if (bookToRead != null) {
-                FinishedBook finishedBook = new FinishedBook();
+                if (bookToRead != null) {
+                    FinishedBook finishedBook = new FinishedBook();
 
-                finishedBook.setAuthor(bookToRead.getAuthor());
-                finishedBook.setName(bookToRead.getName());
-                finishedBook.setStart(input.getStart());
-                finishedBook.setEnd(input.getEnd());
-                finishedBook.setFound(bookToRead.getFound());
-                finishedBook.setDescription(bookToRead.getDescription());
-                finishedBook.setLanguage(bookToRead.getLanguage());
+                    finishedBook.setAuthor(bookToRead.getAuthor());
+                    finishedBook.setName(bookToRead.getName());
+                    finishedBook.setStart(input.getStart());
+                    finishedBook.setEnd(input.getEnd());
+                    finishedBook.setFound(bookToRead.getFound());
+                    finishedBook.setDescription(bookToRead.getDescription());
+                    finishedBook.setLanguage(bookToRead.getLanguage());
 
-                finishedBookService.addBook(finishedBook);
-                service.deleteBookById(bookToRead.getId());
-                return "redirect:/bookstoread/" + language.toLowerCase() + "/";
+                    finishedBookService.addBook(finishedBook);
+                    service.deleteBookById(bookToRead.getId());
+                    return "redirect:/bookstoread/" + language.toLowerCase() + "/";
+                } else {
+                    model.addAttribute("nonExistentMessage", "");
+                    setUpView(model, language);
+                    return "booksToRead" + language.firstLetterToUpperCase();
+                }
             } else {
                 model.addAttribute("nonExistentMessage", "");
+                setUpView(model, language);
                 return "booksToRead" + language.firstLetterToUpperCase();
             }
         } else {
+            model.addAttribute("emptyDatesFinishMessage", "");
             setUpView(model, language);
             return "booksToRead" + language.firstLetterToUpperCase();
         }

@@ -43,15 +43,10 @@
             <tr>
                 <td>
                     <input type="submit" value="finish book">
-                    <div th:replace="fragments/errorMessages :: nonExistent"></div>
+                    <div th:replace="fragments/errorMessages :: nonExistentMessage"></div>
                 </td>
-                <td th:if="${#fields.hasErrors('start') or #fields.hasErrors('end')}">
-                    <script th:src="@{/js/src/actionsHandler.js}"></script>
-                    <script>
-                        actionsHandler("finish");
-                        let table = document.body.getElementsByClassName("hiddenPanel").finish;
-                        table.children[0].children[1].firstElementChild.append("Please enter the dates.");
-                    </script>
+                <td>
+                    <div th:replace="fragments/errorMessages :: emptyDatesFinish"></div>
                 </td>
             </tr>
         </table>
