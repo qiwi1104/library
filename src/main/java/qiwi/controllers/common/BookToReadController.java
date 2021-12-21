@@ -8,7 +8,6 @@ import qiwi.model.input.Input;
 import qiwi.model.input.PathInput;
 import qiwi.service.impl.BookToReadServiceImpl;
 import qiwi.service.impl.FinishedBookServiceImpl;
-import qiwi.util.enums.Action;
 import qiwi.util.enums.Language;
 import qiwi.util.enums.SortBy;
 import qiwi.util.enums.SortType;
@@ -62,19 +61,9 @@ public abstract class BookToReadController extends BookController {
         return list;
     }
 
-    protected String getRedirectionAddress(Input input, Model model, Language language, Action action) {
-        switch (action) {
-            case ADD:
-                return add(input, model, language);
-            case EDIT:
-                return edit(input, model, language);
-        }
-
-        return showTable(model, language);
-    }
-
     protected String add(Input input, Model model, Language language) {
         String redirectTo = "redirect:/bookstoread/" + language.toLowerCase() + "/";
+        String viewName = "booksToRead" + language.firstLetterToUpperCase();
 
         BookToRead book = new BookToRead();
         setBookAttributesFromInput(book, input, ADD, language);
@@ -85,54 +74,70 @@ public abstract class BookToReadController extends BookController {
                 return redirectTo;
             } else {
                 model.addAttribute("emptyDatesMessage", "");
-                return showTable(model, language);
+                setUpView(model, language);
+                return viewName;
             }
         } else {
             model.addAttribute("alreadyExistsMessage", "");
-            return showTable(model, language);
+            setUpView(model, language);
+            return viewName;
         }
     }
 
     protected String edit(Input input, Model model, Language language) {
         String redirectTo = "redirect:/bookstoread/" + language.toLowerCase() + "/";
+        String viewName = "booksToRead" + language.firstLetterToUpperCase();
 
         if (input.getId() != null) {
             BookToRead book = service.getBookById(input.getId());
 
-            if (book.getLanguage().equals(language.firstLetterToUpperCase())) {
-                setBookAttributesFromInput(book, input, EDIT, language);
-                service.addBook(book);
-                return redirectTo;
+            if (book != null) {
+                if (book.getLanguage().equals(language.firstLetterToUpperCase())) {
+                    setBookAttributesFromInput(book, input, EDIT, language);
+                    service.addBook(book);
+                    return redirectTo;
+                } else {
+                    model.addAttribute("nonExistentMessageEdit", "");
+                    setUpView(model, language);
+                    return viewName;
+                }
             } else {
                 model.addAttribute("nonExistentMessageEdit", "");
-                return showTable(model, language);
+                setUpView(model, language);
+                return viewName;
             }
         } else {
             model.addAttribute("nonExistentMessageEdit", "");
-            return showTable(model, language);
+            setUpView(model, language);
+            return viewName;
         }
     }
 
-    protected boolean finish(Input input, Model model) {
-        BookToRead bookToRead = service.getBookById(input.getId());
+    protected String finish(Input input, Model model, Language language, boolean hasErrors) {
+        if (!hasErrors) {
+            BookToRead bookToRead = service.getBookById(input.getId());
 
-        if (bookToRead != null) {
-            FinishedBook finishedBook = new FinishedBook();
+            if (bookToRead != null) {
+                FinishedBook finishedBook = new FinishedBook();
 
-            finishedBook.setAuthor(bookToRead.getAuthor());
-            finishedBook.setName(bookToRead.getName());
-            finishedBook.setStart(input.getStart());
-            finishedBook.setEnd(input.getEnd());
-            finishedBook.setFound(bookToRead.getFound());
-            finishedBook.setDescription(bookToRead.getDescription());
-            finishedBook.setLanguage(bookToRead.getLanguage());
+                finishedBook.setAuthor(bookToRead.getAuthor());
+                finishedBook.setName(bookToRead.getName());
+                finishedBook.setStart(input.getStart());
+                finishedBook.setEnd(input.getEnd());
+                finishedBook.setFound(bookToRead.getFound());
+                finishedBook.setDescription(bookToRead.getDescription());
+                finishedBook.setLanguage(bookToRead.getLanguage());
 
-            finishedBookService.addBook(finishedBook);
-            service.deleteBookById(bookToRead.getId());
-            return true;
+                finishedBookService.addBook(finishedBook);
+                service.deleteBookById(bookToRead.getId());
+                return "redirect:/bookstoread/" + language.toLowerCase() + "/";
+            } else {
+                model.addAttribute("nonExistentMessage", "");
+                return "booksToRead" + language.firstLetterToUpperCase();
+            }
         } else {
-            model.addAttribute("nonExistentMessage", "");
-            return false;
+            setUpView(model, language);
+            return "booksToRead" + language.firstLetterToUpperCase();
         }
     }
 
@@ -165,14 +170,12 @@ public abstract class BookToReadController extends BookController {
         JSONHandler.IO.saveTableToJSON(bookToReadList, input.getPath(), language, TO_READ);
     }
 
-    protected String showTable(Model model, Language language) {
+    protected void setUpView(Model model, Language language) {
         List<BookToRead> bookList = service.findAllByOrderByIdAsc(language);
 
         bookList = sortList(bookList);
 
         model.addAttribute("booksToRead" + language.firstLetterToUpperCase() + "Input", new Input());
         model.addAttribute("booksToRead", bookList);
-
-        return "booksToRead" + language.firstLetterToUpperCase();
     }
 }
