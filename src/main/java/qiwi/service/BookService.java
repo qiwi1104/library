@@ -12,8 +12,6 @@ public interface BookService<T extends Book> {
 
     void deleteBookById(Integer id);
 
-    void clearAll();
-
     void clearLanguage(Language language);
 
     T getBookById(Integer id);

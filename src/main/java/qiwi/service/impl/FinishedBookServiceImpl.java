@@ -52,11 +52,6 @@ public class FinishedBookServiceImpl implements BookService<FinishedBook> {
         repository.deleteById(id);
     }
 
-    @Override
-    public void clearAll() {
-        repository.deleteAll();
-    }
-
     /*
      * Removes all the books relating to the specified language
      * */
