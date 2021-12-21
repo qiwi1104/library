@@ -11,6 +11,7 @@ import qiwi.service.BookService;
 import qiwi.util.enums.Language;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -69,7 +70,8 @@ public class FinishedBookServiceImpl implements BookService<FinishedBook> {
 
     @Override
     public FinishedBook getBookById(Integer id) {
-        return repository.getOne(id);
+        Optional<FinishedBook> book = repository.findById(id);
+        return book.orElse(null);
     }
 
     @Override
