@@ -139,21 +139,13 @@ public abstract class FinishedBookController extends BookController {
                     setBookAttributesFromInput(book, input, EDIT, language);
                     service.addBook(book);
                     return redirectTo;
-                } else {
-                    model.addAttribute("nonExistentMessageEdit", "");
-                    setUpView(model, language);
-                    return viewName;
                 }
-            } else {
-                model.addAttribute("nonExistentMessageEdit", "");
-                setUpView(model, language);
-                return viewName;
             }
-        } else {
-            model.addAttribute("nonExistentMessageEdit", "");
-            setUpView(model, language);
-            return viewName;
         }
+
+        model.addAttribute("nonExistentMessageEdit", "");
+        setUpView(model, language);
+        return viewName;
     }
 
     protected void sort(SortBy sortProperty) {

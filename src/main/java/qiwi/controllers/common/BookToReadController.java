@@ -96,21 +96,13 @@ public abstract class BookToReadController extends BookController {
                     setBookAttributesFromInput(book, input, EDIT, language);
                     service.addBook(book);
                     return redirectTo;
-                } else {
-                    model.addAttribute("nonExistentMessageEdit", "");
-                    setUpView(model, language);
-                    return viewName;
                 }
-            } else {
-                model.addAttribute("nonExistentMessageEdit", "");
-                setUpView(model, language);
-                return viewName;
             }
-        } else {
-            model.addAttribute("nonExistentMessageEdit", "");
-            setUpView(model, language);
-            return viewName;
         }
+
+        model.addAttribute("nonExistentMessageEdit", "");
+        setUpView(model, language);
+        return viewName;
     }
 
     protected String finish(Input input, Model model, Language language, boolean hasErrors) {
@@ -132,21 +124,16 @@ public abstract class BookToReadController extends BookController {
                     finishedBookService.addBook(finishedBook);
                     service.deleteBookById(bookToRead.getId());
                     return "redirect:/bookstoread/" + language.toLowerCase() + "/";
-                } else {
-                    model.addAttribute("nonExistentMessage", "");
-                    setUpView(model, language);
-                    return "booksToRead" + language.firstLetterToUpperCase();
                 }
-            } else {
-                model.addAttribute("nonExistentMessage", "");
-                setUpView(model, language);
-                return "booksToRead" + language.firstLetterToUpperCase();
             }
+
+            model.addAttribute("nonExistentMessage", "");
         } else {
             model.addAttribute("emptyDatesFinishMessage", "");
-            setUpView(model, language);
-            return "booksToRead" + language.firstLetterToUpperCase();
         }
+
+        setUpView(model, language);
+        return "booksToRead" + language.firstLetterToUpperCase();
     }
 
     protected void sort(SortBy sortProperty) {
