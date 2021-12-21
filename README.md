@@ -9,6 +9,7 @@ An application to manage books that I want to read/have already read.
 - Maven
 - MySQL
 - Thymeleaf
+- Jackson
 
 ### Usage
 
@@ -32,7 +33,3 @@ $ mvn spring-boot:run
 Go to `localhost:8080/bookstoread/english/`
 
 You can load sample files (from `sample` folder) using `load` button.
-#
-P.S.
-
-Front-end is obviously deficient, but I will get down to it sooner or later.
