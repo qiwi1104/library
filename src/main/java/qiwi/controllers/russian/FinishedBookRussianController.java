@@ -52,7 +52,7 @@ public class FinishedBookRussianController extends FinishedBookController {
     }
 
     @GetMapping("/")
-    public String list(Model model) {
+    public String showAllBooks(Model model) {
         setUpView(model, language);
         return "finishedBooks" + language.firstLetterToUpperCase();
     }
