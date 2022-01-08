@@ -67,7 +67,7 @@
                 <br/>
                 <a th:href="@{'/finishedbooks/spanish/sort/{property}' (property = 'end')}">End</a>
             </td>
-            <td th:each="additionalDate : ${additionalDates}">Additional<br/>Dates</td>
+            <td th:unless="${#lists.isEmpty(additionalDates)}">Additional<br/>Dates</td>
             <td class="hidden" hidden>
                 <a th:href="@{'/finishedbooks/spanish/sort/{property}' (property = 'found')}">Found</a>
             </td>
@@ -84,14 +84,17 @@
                 <span th:text="${#dates.format(book.end, 'M/d/yy')}"></span>
             </td>
 
-            <div th:each="additionalDate : ${additionalDates}">
-                <td th:if="${additionalDate.finishedBookId} == ${book.id}">
-                    <span th:text="${#dates.format(additionalDate.start, 'M/d/yy')}"></span>
-                    <br/>
-                    <span th:text="${#dates.format(additionalDate.end, 'M/d/yy')}"></span>
-                </td>
-                <td th:unless="${additionalDate.finishedBookId} == ${book.id}"></td>
-            </div>
+            <td th:unless="${#lists.isEmpty(additionalDates)}">
+                <div th:each="additionalDate : ${additionalDates}">
+                    <div th:if="${additionalDate.finishedBookId} == ${book.id}">
+                        <span th:text="${#dates.format(additionalDate.start, 'M/d/yy')}"></span>
+                        <br/>
+                        <span th:text="${#dates.format(additionalDate.end, 'M/d/yy')}"></span>
+                        <span><br/>---------</span>
+                    </div>
+                    <div th:unless="${additionalDate.finishedBookId} == ${book.id}"></div>
+                </div>
+            </td>
 
             <td th:text="${#dates.format(book.found, 'M/d/yy')}" class="hidden" hidden></td>
             <td th:text="${book.description}" class="hidden" hidden></td>
