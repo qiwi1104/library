@@ -74,12 +74,12 @@ public abstract class BookToReadController extends BookController {
                 return redirectTo;
             } else {
                 model.addAttribute("emptyDatesMessage", "");
-                setUpView(model, language);
+                setUpView(model, language, input);
                 return viewName;
             }
         } else {
             model.addAttribute("alreadyExistsMessage", "");
-            setUpView(model, language);
+            setUpView(model, language, input);
             return viewName;
         }
     }
@@ -101,7 +101,7 @@ public abstract class BookToReadController extends BookController {
         }
 
         model.addAttribute("nonExistentMessageEdit", "");
-        setUpView(model, language);
+        setUpView(model, language, input);
         return viewName;
     }
 
@@ -132,7 +132,7 @@ public abstract class BookToReadController extends BookController {
             model.addAttribute("emptyDatesFinishMessage", "");
         }
 
-        setUpView(model, language);
+        setUpView(model, language, input);
         return "booksToRead" + language.firstLetterToUpperCase();
     }
 
@@ -163,12 +163,12 @@ public abstract class BookToReadController extends BookController {
         JSONHandler.IO.saveTableToJSON(bookToReadList, input.getPath(), language, TO_READ);
     }
 
-    protected void setUpView(Model model, Language language) {
+    protected void setUpView(Model model, Language language, Input input) {
         List<BookToRead> books = service.findAllByOrderByIdAsc(language);
 
         books = sortList(books);
 
-        model.addAttribute("booksToRead" + language.firstLetterToUpperCase() + "Input", new Input());
+        model.addAttribute("booksToRead" + language.firstLetterToUpperCase() + "Input", input);
         model.addAttribute("booksToRead", books);
     }
 }

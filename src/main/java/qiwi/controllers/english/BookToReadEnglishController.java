@@ -64,7 +64,7 @@ public class BookToReadEnglishController extends BookToReadController {
 
     @GetMapping("/")
     public String showAllBooks(Model model) {
-        setUpView(model, language);
+        setUpView(model, language, new Input());
         return "booksToRead" + language.firstLetterToUpperCase();
     }
 }

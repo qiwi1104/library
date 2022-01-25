@@ -11,8 +11,28 @@
 <div>
     <form action="#" th:action="@{/bookstoread/spanish/add}" th:object="${booksToReadSpanishInput}" method="post">
         <table th:fragment="add" class="hiddenPanel" id="add">
-            <div th:replace="fragments/commonAttributes :: commonAttributesToRead">
-            </div>
+            <tr>
+                <td>
+                    <label>Author</label>
+                    <input type="text" field="*{author}" name="author" th:value="${booksToReadSpanishInput.author}">
+                </td>
+                <td>
+                    <label>Name</label>
+                    <input type="text" field="*{name}" name="name" th:value="${booksToReadSpanishInput.name}">
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <label>Found</label>
+                    <input type="date" field="*{found}" name="found">
+                </td>
+                <td>
+                    <label>Description</label>
+                    <input type="text" field="*{description}" name="description"
+                           th:value="${booksToReadSpanishInput.description}">
+                </td>
+            </tr>
+
             <tr>
                 <td>
                     <input type="submit" value="add book">
@@ -25,21 +45,22 @@
 
     <form action="#" th:action="@{'/bookstoread/spanish/finish/{id}'}" th:object="${booksToReadSpanishInput}"
           method="post">
-        <table th:fragment="finish" class="hiddenPanel"  hidden id="finish">
+        <table th:fragment="finish" class="hiddenPanel" hidden id="finish">
             <tr>
                 <td>
                     <label>#</label>
-                    <input type="number" field="*{id}" name="id">
+                    <input type="number" field="*{id}" name="id" th:value="${booksToReadSpanishInput.id}">
                 </td>
                 <td>
                     <label>Start</label>
-                    <input type="date" field="*{start}" name="start">
+                    <input type="date" field="*{start}" name="start" th:value="${booksToReadSpanishInput.start}">
                 </td>
                 <td>
                     <label>End</label>
-                    <input type="date" field="*{end}" name="end">
+                    <input type="date" field="*{end}" name="end" th:value="${booksToReadSpanishInput.end}">
                 </td>
             </tr>
+
             <tr>
                 <td>
                     <input type="submit" value="finish book">
@@ -56,10 +77,31 @@
             <tr>
                 <td>
                     <label>#</label>
-                    <input type="number" field="*{id}" name="id">
+                    <input type="number" field="*{id}" name="id" th:value="${booksToReadSpanishInput.id}">
                 </td>
             </tr>
-            <div th:replace="fragments/commonAttributes :: commonAttributesToRead"></div>
+            <tr>
+                <td>
+                    <label>Author</label>
+                    <input type="text" field="*{author}" name="author" th:value="${booksToReadSpanishInput.author}">
+                </td>
+                <td>
+                    <label>Name</label>
+                    <input type="text" field="*{name}" name="name" th:value="${booksToReadSpanishInput.name}">
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <label>Found</label>
+                    <input type="date" field="*{found}" name="found">
+                </td>
+                <td>
+                    <label>Description</label>
+                    <input type="text" field="*{description}" name="description"
+                           th:value="${booksToReadSpanishInput.description}">
+                </td>
+            </tr>
+
             <tr>
                 <td>
                     <input type="submit" value="edit book">
