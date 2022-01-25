@@ -10,7 +10,7 @@
 <br/>
 <div>
     <form action="#" th:action="@{/bookstoread/english/add}" th:object="${booksToReadEnglishInput}" method="post">
-        <table th:fragment="add" border="1px" class="hiddenPanel" id="add">
+        <table th:fragment="add" class="hiddenPanel" id="add">
             <div th:replace="fragments/commonAttributes :: commonAttributesToRead"></div>
             <tr>
                 <td>
@@ -24,7 +24,7 @@
 
     <form action="#" th:action="@{'/bookstoread/english/finish/{id}'}" th:object="${booksToReadEnglishInput}"
           method="post">
-        <table th:fragment="finish" border="1px" class="hiddenPanel" hidden id="finish">
+        <table th:fragment="finish" class="hiddenPanel" hidden id="finish">
             <tr>
                 <td>
                     <label>#</label>
@@ -43,8 +43,6 @@
                 <td>
                     <input type="submit" value="finish book">
                     <div th:replace="fragments/errorMessages :: nonExistent"></div>
-                </td>
-                <td>
                     <div th:replace="fragments/errorMessages :: emptyDatesFinish"></div>
                 </td>
             </tr>
@@ -53,7 +51,7 @@
 
     <form action="#" th:action="@{'/bookstoread/english/edit/{id}'}" th:object="${booksToReadEnglishInput}"
           method="post">
-        <table th:fragment="edit" border="1px" class="hiddenPanel" hidden id="edit">
+        <table th:fragment="edit" class="hiddenPanel" hidden id="edit">
             <tr>
                 <td>
                     <label>#</label>
@@ -92,6 +90,7 @@
             <td>Name</td>
             <td><a th:href="@{'/bookstoread/english/sort/{property}' (property = 'found')}">Found</a></td>
             <td class="hidden" hidden>Description</td>
+            <td></td>
         </tr>
 
         <tr th:each="book : ${booksToRead}" class="list">

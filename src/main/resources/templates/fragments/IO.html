@@ -5,38 +5,32 @@
     <link th:href="@{/css/scrollbar.css}" rel="stylesheet">
 </head>
 <body>
-<table border="1px" class="hiddenPanel" hidden th:fragment="load" id="load">
+<table class="hiddenPanel" hidden th:fragment="load" id="load">
     <tr>
         <td>
             <label>file</label>
             <input type="text" field="*{path}" name="path">
-        </td>
 
-        <td>
             <input type="submit" value="load table">
         </td>
     </tr>
 </table>
-<table border="1px" class="hiddenPanel" hidden th:fragment="loadBatch" id="loadBatch">
+<table class="hiddenPanel" hidden th:fragment="loadBatch" id="loadBatch">
     <tr>
         <td>
             <label>file</label>
             <input type="text" field="*{path}" name="path">
-        </td>
 
-        <td>
             <input type="submit" value="load batch">
         </td>
     </tr>
 </table>
-<table border="1px" class="hiddenPanel" hidden th:fragment="save" id="save">
+<table class="hiddenPanel" hidden th:fragment="save" id="save">
     <tr>
         <td>
             <label>file</label>
             <input type="text" field="*{path}" name="path">
-        </td>
 
-        <td>
             <input type="submit" value="save table">
         </td>
     </tr>
