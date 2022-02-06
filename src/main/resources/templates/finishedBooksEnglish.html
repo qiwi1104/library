@@ -41,9 +41,6 @@
                     <script>
                         let table = document.body.getElementsByClassName("hiddenPanel").add;
                         table.children[0].children[3].firstElementChild.append("Please enter the date.");
-
-
-
                     </script>
                 </td>
             </tr>
@@ -56,10 +53,6 @@
 
     <form action="#" th:action="@{'/finishedbooks/english/save'}" th:object="${finishedEnglishInput}" method="post">
         <table th:replace="fragments/IO :: save"></table>
-    </form>
-
-    <form action="#" th:action="@{'/finishedbooks/english/verify'}" th:object="${finishedEnglishInput}" method="post">
-        <button class="hiddenPanel" hidden th:fragment="verify" id="verify">Click me</button>
     </form>
 </div>
 <br/>
@@ -92,8 +85,8 @@
                 <span th:text="${#dates.format(book.end, 'M/d/yy')}"></span>
             </td>
 
-            <td>
-                <table th:unless="${#lists.isEmpty(additionalDates)}">
+            <td th:unless="${#lists.isEmpty(additionalDates)}">
+                <table>
                     <tr th:each="additionalDate : ${additionalDates}">
                         <td th:if="${additionalDate.finishedBookId} == ${book.id}">
                             <span th:text="${#dates.format(additionalDate.start, 'M/d/yy')}"></span>
@@ -103,7 +96,6 @@
                     </tr>
                 </table>
             </td>
-
 
             <td th:text="${#dates.format(book.found, 'M/d/yy')}" class="hidden" hidden></td>
             <td th:text="${book.description}" class="hidden" hidden></td>
