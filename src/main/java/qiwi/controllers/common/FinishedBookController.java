@@ -2,7 +2,7 @@ package qiwi.controllers.common;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.ui.Model;
-import qiwi.model.AdditionalDates;
+import qiwi.model.AdditionalDate;
 import qiwi.model.book.FinishedBook;
 import qiwi.model.input.Input;
 import qiwi.model.input.PathInput;
@@ -35,7 +35,7 @@ public abstract class FinishedBookController extends BookController {
     /*
      * Returns all the additional dates that books contain
      * */
-    private List<AdditionalDates> getAllAdditionalDates(List<FinishedBook> books) {
+    private List<AdditionalDate> getAllAdditionalDates(List<FinishedBook> books) {
         return books
                 .stream()
                 .filter(b -> b.getAdditionalDates().size() != 0)
@@ -91,7 +91,7 @@ public abstract class FinishedBookController extends BookController {
         String viewName = "finishedBooks" + language.firstLetterToUpperCase();
 
         FinishedBook book = new FinishedBook();
-        AdditionalDates additionalDates = new AdditionalDates();
+        AdditionalDate additionalDate = new AdditionalDate();
 
         setBookAttributesFromInput(book, input, ADD, language);
 
@@ -105,11 +105,11 @@ public abstract class FinishedBookController extends BookController {
         if (service.exists(book)) {
             book = service.get(book);
 
-            additionalDates.setStart(input.getStart());
-            additionalDates.setEnd(input.getEnd());
+            additionalDate.setStart(input.getStart());
+            additionalDate.setEnd(input.getEnd());
 
-            if (!book.hasDates(additionalDates)) {
-                book.addDate(additionalDates);
+            if (!book.hasDate(additionalDate)) {
+                book.addDate(additionalDate);
                 service.addBook(book);
                 return redirectTo;
             } else {

@@ -2,7 +2,7 @@ package qiwi.model.book;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import qiwi.model.AdditionalDates;
+import qiwi.model.AdditionalDate;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
@@ -20,7 +20,7 @@ public class FinishedBook extends Book implements Cloneable {
     private Date end;
     @JsonProperty("additional_dates")
     @OneToMany(mappedBy = "finishedBook", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<AdditionalDates> additionalDates;
+    private List<AdditionalDate> additionalDates;
 
     public Date getStart() {
         return start;
@@ -30,7 +30,7 @@ public class FinishedBook extends Book implements Cloneable {
         return end;
     }
 
-    public List<AdditionalDates> getAdditionalDates() {
+    public List<AdditionalDate> getAdditionalDates() {
         return additionalDates;
     }
 
@@ -42,17 +42,17 @@ public class FinishedBook extends Book implements Cloneable {
         this.end = end;
     }
 
-    public void setAdditionalDates(List<AdditionalDates> dates) {
+    public void setAdditionalDates(List<AdditionalDate> dates) {
         this.additionalDates = dates;
     }
 
-    public void addDate(AdditionalDates date) {
+    public void addDate(AdditionalDate date) {
         additionalDates.add(date);
         date.setFinishedBook(this);
     }
 
-    public boolean hasDates(AdditionalDates dates) {
-        return additionalDates.contains(dates) || (dates.getStart().equals(start) && dates.getEnd().equals(end));
+    public boolean hasDate(AdditionalDate date) {
+        return additionalDates.contains(date) || (date.getStart().equals(start) && date.getEnd().equals(end));
     }
 
     @Override

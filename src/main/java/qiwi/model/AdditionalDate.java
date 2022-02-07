@@ -10,7 +10,7 @@ import java.sql.Date;
 @Entity
 @Table(name = "`additional_dates`")
 @JsonIgnoreProperties({"id", "finishedBookId"})
-public class AdditionalDates {
+public class AdditionalDate {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
@@ -58,9 +58,9 @@ public class AdditionalDates {
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
-        if (!(o instanceof AdditionalDates)) return false;
+        if (!(o instanceof AdditionalDate)) return false;
 
-        AdditionalDates that = (AdditionalDates) o;
+        AdditionalDate that = (AdditionalDate) o;
 
         if (!start.equals(that.start)) return false;
         if (!end.equals(that.end)) return false;
