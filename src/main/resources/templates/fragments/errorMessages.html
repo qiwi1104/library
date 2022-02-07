@@ -14,7 +14,7 @@
 <div th:fragment="emptyDatesFinished" th:object="${emptyDatesMessage}" hidden>
     <div th:if="${emptyDatesMessage}">
         <script>
-            let table = document.body.getElementsByClassName("hiddenPanel").add;
+            table = document.body.getElementsByClassName("hiddenPanel").add;
             table.children[0].children[3].firstElementChild.append("Please enter the dates.");
         </script>
     </div>
@@ -45,7 +45,7 @@
 <div th:fragment="emptyDates" th:object="${emptyDatesMessage}" hidden>
     <div th:if="${emptyDatesMessage}">
         <script>
-            let table = document.body.getElementsByClassName("hiddenPanel").add;
+            table = document.body.getElementsByClassName("hiddenPanel").add;
             table.children[0].children[2].firstElementChild.append("Please enter the date.");
         </script>
     </div>
@@ -55,7 +55,7 @@
         <script th:src="@{/js/src/actionsHandler.js}"></script>
         <script>
             actionsHandler("finish");
-            let table = document.body.getElementsByClassName("hiddenPanel").finish;
+            table = document.body.getElementsByClassName("hiddenPanel").finish;
             table.children[0].children[1].firstElementChild.append("Please enter the dates.");
         </script>
     </div>
@@ -79,8 +79,6 @@
         actionsHandler("edit");
         table = document.body.getElementsByClassName("hiddenPanel").edit;
         table.children[0].children[3].firstElementChild.append("This book doesn't exist.");
-
-
         </script>
     </div>
 </div>
