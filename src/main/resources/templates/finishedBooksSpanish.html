@@ -11,7 +11,37 @@
 <div>
     <form action="#" th:action="@{/finishedbooks/spanish/add}" th:object="${finishedSpanishInput}" method="post">
         <table th:fragment="add" border="1px" class="hiddenPanel" id="add">
-            <div th:replace="fragments/commonAttributes :: commonAttributesFinished"></div>
+            <tr>
+                <td>
+                    <label>Author</label>
+                    <input type="text" field="*{author}" name="author" th:value="${finishedSpanishInput.author}">
+                </td>
+                <td>
+                    <label>Name</label>
+                    <input type="text" field="*{name}" name="name" th:value="${finishedSpanishInput.name}">
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <label>Start</label>
+                    <input type="date" field="*{start}" name="start">
+                </td>
+                <td>
+                    <label>End</label>
+                    <input type="date" field="*{end}" name="end">
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <label>Found</label>
+                    <input type="date" field="*{found}" name="found">
+                </td>
+                <td>
+                    <label>Description</label>
+                    <input type="text" field="*{description}" name="description" th:value="${finishedSpanishInput.description}">
+                </td>
+            </tr>
+
             <tr>
                 <td>
                     <input type="submit" value="add book">
@@ -28,10 +58,40 @@
             <tr>
                 <td>
                     <label>#</label>
-                    <input type="number" field="*{id}" name="id">
+                    <input type="number" field="*{id}" name="id" th:value="${finishedSpanishInput.id}">
                 </td>
             </tr>
-            <div th:replace="fragments/commonAttributes :: commonAttributesFinished"></div>
+            <tr>
+                <td>
+                    <label>Author</label>
+                    <input type="text" field="*{author}" name="author" th:value="${finishedSpanishInput.author}">
+                </td>
+                <td>
+                    <label>Name</label>
+                    <input type="text" field="*{name}" name="name" th:value="${finishedSpanishInput.name}">
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <label>Start</label>
+                    <input type="date" field="*{start}" name="start">
+                </td>
+                <td>
+                    <label>End</label>
+                    <input type="date" field="*{end}" name="end">
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <label>Found</label>
+                    <input type="date" field="*{found}" name="found">
+                </td>
+                <td>
+                    <label>Description</label>
+                    <input type="text" field="*{description}" name="description" th:value="${finishedSpanishInput.description}">
+                </td>
+            </tr>
+
             <tr>
                 <td>
                     <input type="submit" value="edit book">

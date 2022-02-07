@@ -98,7 +98,7 @@ public abstract class FinishedBookController extends BookController {
         if (input.getStart().equals(Date.valueOf("1970-01-01"))
                 || input.getEnd().equals(Date.valueOf("1970-01-01"))) {
             model.addAttribute("emptyDatesMessage", "");
-            setUpView(model, language);
+            setUpView(model, language, input);
             return viewName;
         }
 
@@ -114,14 +114,14 @@ public abstract class FinishedBookController extends BookController {
                 return redirectTo;
             } else {
                 model.addAttribute("alreadyExistsMessage", "");
-                setUpView(model, language);
+                setUpView(model, language, input);
                 return viewName;
             }
 
         } else {
             if (input.getFound().equals(Date.valueOf("1970-01-01"))) {
                 model.addAttribute("emptyDatesMessage", "");
-                setUpView(model, language);
+                setUpView(model, language, input);
                 return viewName;
             } else {
                 service.addBook(book);
@@ -147,7 +147,7 @@ public abstract class FinishedBookController extends BookController {
         }
 
         model.addAttribute("nonExistentMessageEdit", "");
-        setUpView(model, language);
+        setUpView(model, language, input);
         return viewName;
     }
 
@@ -170,7 +170,7 @@ public abstract class FinishedBookController extends BookController {
         JSONHandler.IO.saveTableToJSON(books, input.getPath(), language, FINISHED);
     }
 
-    protected void setUpView(Model model, Language language) {
+    protected void setUpView(Model model, Language language, Input input) {
         List<FinishedBook> books = service.findAllByOrderByIdAsc(language);
 
         // Sorts according to current settings
@@ -178,6 +178,6 @@ public abstract class FinishedBookController extends BookController {
 
         model.addAttribute("books", books);
         model.addAttribute("additionalDates", getAllAdditionalDates(books));
-        model.addAttribute("finished" + language.firstLetterToUpperCase() + "Input", new Input());
+        model.addAttribute("finished" + language.firstLetterToUpperCase() + "Input", input);
     }
 }
