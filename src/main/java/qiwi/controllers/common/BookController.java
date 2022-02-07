@@ -61,6 +61,16 @@ public abstract class BookController {
                     case FINISHED:
                         try {
                             books = (List<T>) Arrays.asList(mapper.readValue(Paths.get(path).toFile(), FinishedBook[].class));
+
+                            for (T book : books) {
+                                FinishedBook finishedBook = (FinishedBook) book;
+
+                                if (finishedBook.getAdditionalDates().size() != 0) {
+                                    finishedBook.getAdditionalDates().forEach(dates -> {
+                                        dates.setFinishedBook(finishedBook);
+                                    });
+                                }
+                            }
                         } catch (IOException e) {
                             e.printStackTrace();
                         }

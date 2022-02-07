@@ -3,9 +3,7 @@ package qiwi.service.impl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
-import qiwi.model.AdditionalDates;
 import qiwi.model.book.FinishedBook;
-import qiwi.repository.AdditionalDatesRepository;
 import qiwi.repository.FinishedBookRepository;
 import qiwi.service.BookService;
 import qiwi.util.enums.Language;
@@ -18,8 +16,6 @@ import java.util.stream.Collectors;
 public class FinishedBookServiceImpl implements BookService<FinishedBook> {
     @Autowired
     private FinishedBookRepository repository;
-    @Autowired
-    private AdditionalDatesRepository additionalDatesRepository;
 
     public List<FinishedBook> findAllByOrderByIdAsc(Language language) {
         return repository
@@ -34,17 +30,9 @@ public class FinishedBookServiceImpl implements BookService<FinishedBook> {
         repository.save(book);
     }
 
-    public void addDates(AdditionalDates additionalDates) {
-        additionalDatesRepository.save(additionalDates);
-    }
-
     @Override
     public void addAll(List<FinishedBook> bookList) {
-        try {
-            repository.saveAll(bookList);
-        } catch (Exception e) {
-            repository.saveAll(bookList);
-        }
+        repository.saveAll(bookList);
     }
 
     @Override

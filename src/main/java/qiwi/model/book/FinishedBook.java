@@ -4,7 +4,10 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import qiwi.model.AdditionalDates;
 
-import javax.persistence.*;
+import javax.persistence.CascadeType;
+import javax.persistence.Entity;
+import javax.persistence.OneToMany;
+import javax.persistence.Table;
 import java.sql.Date;
 import java.util.List;
 
@@ -41,6 +44,11 @@ public class FinishedBook extends Book implements Cloneable {
 
     public void setAdditionalDates(List<AdditionalDates> dates) {
         this.additionalDates = dates;
+    }
+
+    public void addDate(AdditionalDates date) {
+        additionalDates.add(date);
+        date.setFinishedBook(this);
     }
 
     public boolean hasDates(AdditionalDates dates) {

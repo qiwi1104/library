@@ -6,7 +6,6 @@ import qiwi.model.book.FinishedBook;
 
 import javax.persistence.*;
 import java.sql.Date;
-import java.util.Objects;
 
 @Entity
 @Table(name = "`additional_dates`")
@@ -15,23 +14,17 @@ public class AdditionalDates {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
-    @Column(name = "finished_book_id")
-    private Integer finishedBookId;
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "M/d/yy")
     private Date start;
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "M/d/yy")
     private Date end;
 
     @ManyToOne
-    @JoinColumn(name = "finished_book_id", insertable = false, updatable = false, nullable = false)
+    @JoinColumn(name = "finished_book_id")
     private FinishedBook finishedBook;
 
     public Integer getId() {
         return id;
-    }
-
-    public Integer getFinishedBookId() {
-        return finishedBookId;
     }
 
     public Date getStart() {
@@ -42,12 +35,12 @@ public class AdditionalDates {
         return end;
     }
 
-    public void setId(Integer id) {
-        this.id = id;
+    public FinishedBook getFinishedBook() {
+        return finishedBook;
     }
 
-    public void setFinishedBookId(Integer finishedBookId) {
-        this.finishedBookId = finishedBookId;
+    public void setId(Integer id) {
+        this.id = id;
     }
 
     public void setStart(Date start) {
@@ -58,18 +51,27 @@ public class AdditionalDates {
         this.end = end;
     }
 
+    public void setFinishedBook(FinishedBook book) {
+        this.finishedBook = book;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (!(o instanceof AdditionalDates)) return false;
-        AdditionalDates dates = (AdditionalDates) o;
-        return finishedBookId.equals(dates.finishedBookId) &&
-                start.equals(dates.start) &&
-                end.equals(dates.end);
+
+        AdditionalDates that = (AdditionalDates) o;
+
+        if (!start.equals(that.start)) return false;
+        if (!end.equals(that.end)) return false;
+        return finishedBook.equals(that.finishedBook);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(finishedBookId, start, end);
+        int result = start.hashCode();
+        result = 31 * result + end.hashCode();
+        result = 31 * result + finishedBook.hashCode();
+        return result;
     }
 }

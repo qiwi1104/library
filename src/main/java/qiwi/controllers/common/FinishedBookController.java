@@ -12,7 +12,10 @@ import qiwi.util.enums.SortBy;
 import qiwi.util.enums.SortType;
 
 import java.sql.Date;
-import java.util.*;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.List;
 import java.util.stream.Collectors;
 
 import static qiwi.util.enums.Action.ADD;
@@ -102,12 +105,12 @@ public abstract class FinishedBookController extends BookController {
         if (service.exists(book)) {
             book = service.get(book);
 
-            additionalDates.setFinishedBookId(book.getId());
             additionalDates.setStart(input.getStart());
             additionalDates.setEnd(input.getEnd());
 
             if (!book.hasDates(additionalDates)) {
-                service.addDates(additionalDates);
+                book.addDate(additionalDates);
+                service.addBook(book);
                 return redirectTo;
             } else {
                 model.addAttribute("alreadyExistsMessage", "");
@@ -158,22 +161,7 @@ public abstract class FinishedBookController extends BookController {
 
         if (books.size() != 0) {
             service.clearLanguage(language);
-
-            Map<FinishedBook, AdditionalDates> additionalDates = new HashMap<>();
-
-            for (FinishedBook book : books) {
-                if (book.getAdditionalDates().size() != 0) {
-                    book.getAdditionalDates().forEach(dates -> additionalDates.put(book, dates));
-                    book.setAdditionalDates(new ArrayList<>());
-                }
-                book.setId(null);
-            }
-
             service.addAll(books);
-            additionalDates.forEach((book, date) -> {
-                date.setFinishedBookId(book.getId());
-                service.addDates(date);
-            });
         }
     }
 

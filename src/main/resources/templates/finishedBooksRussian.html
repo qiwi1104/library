@@ -87,8 +87,8 @@
 
             <td th:unless="${#lists.isEmpty(additionalDates)}">
                 <table>
-                    <tr th:each="additionalDate : ${additionalDates}">
-                        <td th:if="${additionalDate.finishedBookId} == ${book.id}">
+                    <tr th:each="additionalDate : ${book.additionalDates}">
+                        <td th:if="${additionalDate.finishedBook.id} == ${book.id}">
                             <span th:text="${#dates.format(additionalDate.start, 'M/d/yy')}"></span>
                             <br/>
                             <span th:text="${#dates.format(additionalDate.end, 'M/d/yy')}"></span>
