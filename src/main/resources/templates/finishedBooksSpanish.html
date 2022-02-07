@@ -10,7 +10,7 @@
 <br/>
 <div>
     <form action="#" th:action="@{/finishedbooks/spanish/add}" th:object="${finishedSpanishInput}" method="post">
-        <table th:fragment="add" border="1px" class="hiddenPanel" id="add">
+        <table th:fragment="add" class="hiddenPanel" id="add">
             <tr>
                 <td>
                     <label>Author</label>
@@ -54,7 +54,7 @@
 
     <form action="#" th:action="@{'/finishedbooks/spanish/edit/{id}'}" th:object="${finishedSpanishInput}"
           method="post">
-        <table th:fragment="edit" border="1px" class="hiddenPanel" hidden id="edit">
+        <table th:fragment="edit" class="hiddenPanel" hidden id="edit">
             <tr>
                 <td>
                     <label>#</label>
