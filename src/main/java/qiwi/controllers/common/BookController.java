@@ -26,7 +26,8 @@ public abstract class BookController {
          * Handles writing to/reading from file
          * */
         protected static class IO {
-            protected static <T extends Book> void saveTableToJSON(List<T> booksList, String path, Language language, BookType type) {
+            protected static <T extends Book> void saveTableToJSON(
+                    List<T> booksList, String path, Language language, BookType type) {
                 try {
                     ObjectWriter writer = new ObjectMapper().setTimeZone(TimeZone.getDefault()).writer().withDefaultPrettyPrinter();
                     writer.writeValue(Paths.get(fixPathToBackupFile(path, language, type)).toFile(), booksList);
@@ -35,7 +36,8 @@ public abstract class BookController {
                 }
             }
 
-            public static <T extends Book> List<T> readJSONFile(String path, BookType bookType, Language language) {
+            public static <T extends Book> List<T> readJSONFile(
+                    String path, BookType bookType, Language language) {
                 // path to a folder/file has not been set, meaning the one from config.properties will be used
                 if (path.equals("")) {
                     path = getPathToBackupDirectory(bookType);
@@ -66,9 +68,8 @@ public abstract class BookController {
                                 FinishedBook finishedBook = (FinishedBook) book;
 
                                 if (finishedBook.getAdditionalDates().size() != 0) {
-                                    finishedBook.getAdditionalDates().forEach(dates -> {
-                                        dates.setFinishedBook(finishedBook);
-                                    });
+                                    finishedBook.getAdditionalDates()
+                                            .forEach(dates -> dates.setFinishedBook(finishedBook));
                                 }
                             }
                         } catch (IOException e) {
@@ -153,7 +154,8 @@ public abstract class BookController {
         }
     }
 
-    protected <T extends Book, S extends Input> void setBookAttributesFromInput(T book, S input, Action action, Language language) {
+    protected <T extends Book, S extends Input> void setBookAttributesFromInput(
+            T book, S input, Action action, Language language) {
         switch (action) {
             case EDIT:
                 if (book instanceof FinishedBook) {
