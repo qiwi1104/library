@@ -7,7 +7,6 @@ import org.springframework.web.bind.annotation.*;
 import qiwi.controllers.common.BookToReadController;
 import qiwi.model.book.BookToRead;
 import qiwi.model.book.FinishedBook;
-import qiwi.model.input.Input;
 import qiwi.model.input.PathInput;
 import qiwi.util.enums.Language;
 import qiwi.util.enums.SortBy;
@@ -18,6 +17,7 @@ import static qiwi.util.enums.Language.SPANISH;
 
 @Controller
 @RequestMapping("/bookstoread/spanish")
+@SessionAttributes(types = Integer.class, names = "id")
 public class BookToReadSpanishController extends BookToReadController {
     private final Language language = SPANISH;
 
@@ -33,13 +33,13 @@ public class BookToReadSpanishController extends BookToReadController {
         validator.validate(book, result);
 
         if (result.hasErrors()) {
-            setUpView(model, language, new Input());
+            setUpView(model, language);
 
             return "books-to-read/spanish/add-book";
         }
 
         if (service.exists(book)) {
-            setUpView(model, language, new Input());
+            setUpView(model, language);
 
             result.reject("alreadyExists", "This book already exists.");
 
@@ -63,13 +63,13 @@ public class BookToReadSpanishController extends BookToReadController {
         validator.validate(book, result);
 
         if (result.hasErrors()) {
-            setUpView(model, language, new Input());
+            setUpView(model, language);
 
             return "books-to-read/spanish/edit-book";
         }
 
         if (service.exists(book)) {
-            setUpView(model, language, new Input());
+            setUpView(model, language);
 
             result.reject("alreadyExists", "This book already exists.");
 
@@ -140,7 +140,7 @@ public class BookToReadSpanishController extends BookToReadController {
 
     @GetMapping("/")
     public String showAllBooks(Model model) {
-        setUpView(model, language, new Input());
+        setUpView(model, language);
         return "booksToRead" + language.firstLetterToUpperCase();
     }
 }
