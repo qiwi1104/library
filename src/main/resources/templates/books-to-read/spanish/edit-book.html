@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Library: Spanish</title>
+    <link th:replace="fragments/css :: css">
+</head>
+<body>
+<div th:replace="fragments/header :: header"></div>
+<br/>
+<div>
+    <form action="#" th:action="@{'/bookstoread/spanish/edit'}" th:object="${book}" method="post">
+        <table id="edit">
+            <tr>
+                <td hidden>
+                    <input th:field="*{id}" />
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <label>Author</label>
+                    <input type="text" field="*{author}" name="author" th:value="${book.author}">
+                </td>
+                <td>
+                    <label>Name</label>
+                    <input type="text" field="*{name}" name="name" th:value="${book.name}">
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <label>Found</label>
+                    <input type="date" field="*{found}" name="found" th:value="${book.found}">
+                </td>
+                <td>
+                    <label>Description</label>
+                    <input type="text" field="*{description}" name="description"
+                           th:value="${book.description}">
+                </td>
+            </tr>
+            <tr hidden>
+                <td>
+                    <input type="text" field="*{language}" name="language" th:value="${book.language}">
+                </td>
+            </tr>
+
+            <tr>
+                <td>
+                    <input type="submit" value="edit book">
+                    <div th:if="${#fields.hasErrors('global')}">
+                        <div th:each="err : ${#fields.errors('global')}" th:text="${err}"></div>
+                    </div>
+                </td>
+            </tr>
+        </table>
+    </form>
+</div>
+
+<div th:replace="fragments/scripts :: scripts"></div>
+</body>
+</html>

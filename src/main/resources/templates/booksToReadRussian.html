@@ -6,111 +6,31 @@
     <link th:replace="fragments/css :: css">
 </head>
 <body>
-<div th:replace="fragments/header :: header"></div>
+<div class="panel">
+        <span onclick="actionsHandler(this.id)" id="add" class="underline">
+           <a th:href="@{/bookstoread/russian/add}" th:method="post">add</a>
+        </span>
+    <span onclick="actionsHandler(this.id)" id="load" class="underline">load</span>
+    <span onclick="actionsHandler(this.id)" id="loadBatch" class="underline">load batch</span>
+    <span onclick="actionsHandler(this.id)" id="save" class="underline">save</span>
+</div>
+
+<div class="panel">
+    Finished Books:
+    <a th:href="@{/finishedbooks/english/}" id="finishedbooks-english" class="underline">English</a>
+    <a th:href="@{/finishedbooks/russian/}" id="finishedbooks-russian" class="underline">Russian</a>
+    <a th:href="@{/finishedbooks/spanish/}" id="finishedbooks-spanish" class="underline">Spanish</a>
+</div>
+
+<div class="panel">
+    Books To Read:
+    <a th:href="@{/bookstoread/english/}" id="bookstoread-english" class="underline">English</a>
+    <a th:href="@{/bookstoread/russian/}" id="bookstoread-russian" class="underline">Russian</a>
+    <a th:href="@{/bookstoread/spanish/}" id="bookstoread-spanish" class="underline">Spanish</a>
+</div>
+
 <br/>
 <div>
-    <form action="#" th:action="@{/bookstoread/russian/add}" th:object="${booksToReadRussianInput}" method="post">
-        <table th:fragment="add" class="hiddenPanel" id="add">
-            <tr>
-                <td>
-                    <label>Author</label>
-                    <input type="text" field="*{author}" name="author" th:value="${booksToReadRussianInput.author}">
-                </td>
-                <td>
-                    <label>Name</label>
-                    <input type="text" field="*{name}" name="name" th:value="${booksToReadRussianInput.name}">
-                </td>
-            </tr>
-            <tr>
-                <td>
-                    <label>Found</label>
-                    <input type="date" field="*{found}" name="found">
-                </td>
-                <td>
-                    <label>Description</label>
-                    <input type="text" field="*{description}" name="description"
-                           th:value="${booksToReadRussianInput.description}">
-                </td>
-            </tr>
-
-            <tr>
-                <td>
-                    <input type="submit" value="add book">
-                    <div th:replace="fragments/errorMessages :: alreadyExists"></div>
-                    <div th:replace="fragments/errorMessages :: emptyDates"></div>
-                </td>
-            </tr>
-        </table>
-    </form>
-
-    <form action="#" th:action="@{'/bookstoread/russian/finish/{id}'}" th:object="${booksToReadRussianInput}"
-          method="post">
-        <table th:fragment="finish" class="hiddenPanel" hidden id="finish">
-            <tr>
-                <td>
-                    <label>#</label>
-                    <input type="number" field="*{id}" name="id" th:value="${booksToReadRussianInput.id}">
-                </td>
-                <td>
-                    <label>Start</label>
-                    <input type="date" field="*{start}" name="start" th:value="${booksToReadRussianInput.start}">
-                </td>
-                <td>
-                    <label>End</label>
-                    <input type="date" field="*{end}" name="end" th:value="${booksToReadRussianInput.end}">
-                </td>
-            </tr>
-
-            <tr>
-                <td>
-                    <input type="submit" value="finish book">
-                    <div th:replace="fragments/errorMessages :: nonExistent"></div>
-                    <div th:replace="fragments/errorMessages :: emptyDatesFinish"></div>
-                </td>
-            </tr>
-        </table>
-    </form>
-
-    <form action="#" th:action="@{'/bookstoread/russian/edit/{id}'}" th:object="${booksToReadRussianInput}"
-          method="post">
-        <table th:fragment="edit" class="hiddenPanel" hidden id="edit">
-            <tr>
-                <td>
-                    <label>#</label>
-                    <input type="number" field="*{id}" name="id" th:value="${booksToReadRussianInput.id}">
-                </td>
-            </tr>
-            <tr>
-                <td>
-                    <label>Author</label>
-                    <input type="text" field="*{author}" name="author" th:value="${booksToReadRussianInput.author}">
-                </td>
-                <td>
-                    <label>Name</label>
-                    <input type="text" field="*{name}" name="name" th:value="${booksToReadRussianInput.name}">
-                </td>
-            </tr>
-            <tr>
-                <td>
-                    <label>Found</label>
-                    <input type="date" field="*{found}" name="found">
-                </td>
-                <td>
-                    <label>Description</label>
-                    <input type="text" field="*{description}" name="description"
-                           th:value="${booksToReadRussianInput.description}">
-                </td>
-            </tr>
-
-            <tr>
-                <td>
-                    <input type="submit" value="edit book">
-                    <div th:replace="fragments/errorMessages :: nonExistentEdit"></div>
-                </td>
-            </tr>
-        </table>
-    </form>
-
     <form action="#" th:action="@{'/bookstoread/russian/load'}" th:object="${booksToReadRussianInput}" method="post">
         <table th:replace="fragments/IO :: load"></table>
     </form>
@@ -134,6 +54,8 @@
             <td><a th:href="@{'/bookstoread/russian/sort/{property}' (property = 'found')}">Found</a></td>
             <td class="hidden" hidden>Description</td>
             <td></td>
+            <td></td>
+            <td></td>
         </tr>
 
         <tr th:each="book : ${booksToRead}" class="list">
@@ -144,6 +66,12 @@
 
             <td th:text="${book.description}" class="hidden" hidden></td>
 
+            <td>
+                <a th:href="@{'/bookstoread/russian/edit/{id}'(id=${book.id})}">edit</a>
+            </td>
+            <td>
+                <a th:href="@{'/bookstoread/russian/finish/{id}'(id=${book.id})}">finish</a>
+            </td>
             <td>
                 <a th:href="@{'/bookstoread/russian/delete/{id}'(id=${book.id})}">delete</a>
             </td>
