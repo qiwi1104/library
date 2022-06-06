@@ -5,7 +5,8 @@ import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import qiwi.controllers.common.FinishedBookController;
-import qiwi.model.input.Input;
+import qiwi.model.AdditionalDate;
+import qiwi.model.book.FinishedBook;
 import qiwi.model.input.PathInput;
 import qiwi.util.enums.Language;
 import qiwi.util.enums.SortBy;
@@ -17,14 +18,88 @@ import static qiwi.util.enums.Language.ENGLISH;
 public class FinishedBookEnglishController extends FinishedBookController {
     private final Language language = ENGLISH;
 
-    @PostMapping("/add")
-    public String add(@ModelAttribute("finishedEnglishInput") Input input, BindingResult result, Model model) {
-        return super.add(input, model, language);
+    @GetMapping("/add")
+    public String add(Model model) {
+        model.addAttribute("book", new FinishedBook());
+
+        return "finished-books/english/add-book";
     }
 
-    @PostMapping("/edit/{id}")
-    public String edit(@ModelAttribute("finishedEnglishInput") Input input, BindingResult result, Model model) {
-        return super.edit(input, model, language);
+    @PostMapping("/add")
+    public String add(@ModelAttribute("book") FinishedBook book, BindingResult result, Model model) {
+        validator.validate(book, result);
+
+        if (result.hasErrors()) {
+            setUpView(model, language);
+
+            return "finished-books/english/add-book";
+        }
+
+        if (service.exists(book)) {
+            FinishedBook bookFromLibrary = service.get(book);
+            AdditionalDate additionalDate = new AdditionalDate();
+
+            additionalDate.setStart(bookFromLibrary.getStart());
+            additionalDate.setEnd(bookFromLibrary.getEnd());
+
+            if (!book.hasDate(additionalDate)) {
+                book.addDate(additionalDate);
+                service.addBook(book);
+
+                return "redirect:/finishedbooks/english/";
+            } else {
+                setUpView(model, language);
+                result.reject("alreadyExists", "This book already exists.");
+
+                return "finished-books/english/add-book";
+            }
+        }
+
+        service.addBook(book);
+
+        return "redirect:/finishedbooks/english/";
+    }
+
+    @GetMapping("/edit/{id}")
+    public String edit(@PathVariable Integer id, Model model) {
+        model.addAttribute("book", service.getBookById(id));
+
+        return "finished-books/english/edit-book";
+    }
+
+    @PostMapping("/edit")
+    public String edit(@ModelAttribute("book") FinishedBook book, BindingResult result, Model model) {
+        validator.validate(book, result);
+
+        if (result.hasErrors()) {
+            setUpView(model, language);
+
+            return "finished-books/english/edit-book";
+        }
+
+        if (service.exists(book)) {
+            FinishedBook bookFromLibrary = service.get(book);
+            AdditionalDate additionalDate = new AdditionalDate();
+
+            additionalDate.setStart(book.getStart());
+            additionalDate.setEnd(book.getEnd());
+
+            if (!bookFromLibrary.hasDate(additionalDate)) {
+                bookFromLibrary.addDate(additionalDate);
+                service.addBook(bookFromLibrary);
+
+                return "redirect:/finishedbooks/english/";
+            } else {
+                setUpView(model, language);
+                result.reject("alreadyExists", "This book already exists.");
+
+                return "finished-books/english/edit-book";
+            }
+        }
+
+        service.addBook(book);
+
+        return "redirect:/finishedbooks/english/";
     }
 
     @GetMapping("/delete/{id}")
@@ -53,7 +128,7 @@ public class FinishedBookEnglishController extends FinishedBookController {
 
     @GetMapping("/")
     public String showAllBooks(Model model) {
-        setUpView(model, language, new Input());
-        return "finishedBooks" + language.firstLetterToUpperCase();
+        setUpView(model, language);
+        return "finished-books/" + language.firstLetterToUpperCase() + "/index";
     }
 }

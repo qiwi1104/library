@@ -1,14 +1,14 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
-    <meta charset="UTF-8">
-    <title>Library: Russian</title>
+    <title>Library: English</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
     <link th:replace="fragments/css :: css">
 </head>
 <body>
 <div class="panel">
-        <span onclick="actionsHandler(this.id)" class="underline">
-           <a th:href="@{/bookstoread/english/add}" th:method="get">add</a>
+        <span onclick="actionsHandler(this.id)" id="add" class="underline">
+           <a th:href="@{/finishedbooks/english/add}" th:method="get">add</a>
         </span>
     <span onclick="actionsHandler(this.id)" id="load" class="underline">load</span>
     <span onclick="actionsHandler(this.id)" id="loadBatch" class="underline">load batch</span>
@@ -30,8 +30,8 @@
 </div>
 <br/>
 <div>
-    <form action="#" th:action="@{/bookstoread/russian/add}" th:object="${book}" method="post">
-        <table id="add">
+    <form action="#" th:action="@{'/finishedbooks/english/edit'}" th:object="${book}" method="post">
+        <table id="edit">
             <tr>
                 <td>
                     <label>Author</label>
@@ -44,24 +44,36 @@
             </tr>
             <tr>
                 <td>
+                    <label>Start</label>
+                    <input type="date" field="*{start}" name="start">
+                </td>
+                <td>
+                    <label>End</label>
+                    <input type="date" field="*{end}" name="end">
+                </td>
+            </tr>
+            <tr>
+                <td>
                     <label>Found</label>
                     <input type="date" field="*{found}" name="found">
                 </td>
                 <td>
                     <label>Description</label>
-                    <input type="text" field="*{description}" name="description"
-                           th:value="${book.description}">
+                    <input type="text" field="*{description}" name="description" th:value="${book.description}">
                 </td>
             </tr>
             <tr hidden>
                 <td>
-                    <input type="text" field="*{language}" name="language" th:value="Russian">
+                    <input th:field="*{additionalDates}">
+                </td>
+                <td>
+                    <input type="text" field="*{language}" name="language" th:value="English">
                 </td>
             </tr>
 
             <tr>
                 <td>
-                    <input type="submit" value="add book">
+                    <input type="submit" value="edit book">
                     <div th:if="${#fields.hasErrors('global')}">
                         <div th:each="err : ${#fields.errors('global')}" th:text="${err}"></div>
                     </div>

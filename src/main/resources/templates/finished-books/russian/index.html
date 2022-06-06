@@ -1,0 +1,100 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Library: Russian</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+    <link th:replace="fragments/css :: css">
+</head>
+<body>
+<div class="panel">
+        <span onclick="actionsHandler(this.id)" id="add" class="underline">
+           <a th:href="@{/finishedbooks/russian/add}" th:method="get">add</a>
+        </span>
+    <span onclick="actionsHandler(this.id)" id="load" class="underline">load</span>
+    <span onclick="actionsHandler(this.id)" id="loadBatch" class="underline">load batch</span>
+    <span onclick="actionsHandler(this.id)" id="save" class="underline">save</span>
+</div>
+
+<div class="panel">
+    Finished Books:
+    <a th:href="@{/finishedbooks/english/}" id="finishedbooks-english" class="underline">English</a>
+    <a th:href="@{/finishedbooks/russian/}" id="finishedbooks-russian" class="underline">Russian</a>
+    <a th:href="@{/finishedbooks/spanish/}" id="finishedbooks-spanish" class="underline">Spanish</a>
+</div>
+
+<div class="panel">
+    Books To Read:
+    <a th:href="@{/bookstoread/english/}" id="bookstoread-english" class="underline">English</a>
+    <a th:href="@{/bookstoread/russian/}" id="bookstoread-russian" class="underline">Russian</a>
+    <a th:href="@{/bookstoread/spanish/}" id="bookstoread-spanish" class="underline">Spanish</a>
+</div>
+<br/>
+<div>
+    <form action="#" th:action="@{'/finishedbooks/russian/load'}" th:object="${finishedRussianInput}" method="post">
+        <table th:replace="fragments/IO :: load"></table>
+    </form>
+
+    <form action="#" th:action="@{'/finishedbooks/russian/save'}" th:object="${finishedRussianInput}" method="post">
+        <table th:replace="fragments/IO :: save"></table>
+    </form>
+</div>
+<br/>
+<div>
+    <table align="center" border="1">
+        <tr bgcolor="#cccccc">
+            <td><a th:href="@{'/finishedbooks/russian/sort/{property}' (property = 'id')}">#</a></td>
+            <td>Author</td>
+            <td>Name</td>
+            <td>
+                <a th:href="@{'/finishedbooks/russian/sort/{property}' (property = 'start')}">Start</a>
+                <br/>
+                <a th:href="@{'/finishedbooks/russian/sort/{property}' (property = 'end')}">End</a>
+            </td>
+            <td th:unless="${#lists.isEmpty(additionalDates)}">Additional<br/>Dates</td>
+            <td class="hidden" hidden>
+                <a th:href="@{'/finishedbooks/russian/sort/{property}' (property = 'found')}">Found</a>
+            </td>
+            <td class="hidden" hidden>Description</td>
+            <td></td>
+            <td></td>
+        </tr>
+
+        <tr th:each="book : ${books}" class="list">
+            <td th:text="${book.id}"></td>
+            <td th:text="${book.author}"></td>
+            <td th:text="${book.name}"></td>
+            <td>
+                <span th:text="${#dates.format(book.start, 'M/d/yy')}"></span>
+                <br/>
+                <span th:text="${#dates.format(book.end, 'M/d/yy')}"></span>
+            </td>
+
+            <td th:unless="${#lists.isEmpty(additionalDates)}">
+                <table>
+                    <tr th:each="additionalDate : ${book.additionalDates}">
+                        <td th:if="${additionalDate.finishedBook.id} == ${book.id}">
+                            <span th:text="${#dates.format(additionalDate.start, 'M/d/yy')}"></span>
+                            <br/>
+                            <span th:text="${#dates.format(additionalDate.end, 'M/d/yy')}"></span>
+                        </td>
+                    </tr>
+                </table>
+            </td>
+
+            <td th:text="${#dates.format(book.found, 'M/d/yy')}" class="hidden" hidden></td>
+            <td th:text="${book.description}" class="hidden" hidden></td>
+
+            <td>
+                <a th:href="@{'/finishedbooks/russian/edit/{id}'(id=${book.id})}">edit</a>
+            </td>
+            <td>
+                <a th:href="@{'/finishedbooks/russian/delete/{id}'(id=${book.id})}">delete</a>
+            </td>
+        </tr>
+    </table>
+</div>
+
+<div th:replace="fragments/scripts :: scripts"></div>
+<script th:src="@{/js/src/hideAction.js}"></script>
+</body>
+</html>

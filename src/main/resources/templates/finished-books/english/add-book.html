@@ -1,36 +1,15 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
-    <meta charset="UTF-8">
     <title>Library: English</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
     <link th:replace="fragments/css :: css">
 </head>
 <body>
-<div class="panel">
-        <span onclick="actionsHandler(this.id)" class="underline">
-           <a th:href="@{/bookstoread/english/add}" th:method="get">add</a>
-        </span>
-    <span onclick="actionsHandler(this.id)" id="load" class="underline">load</span>
-    <span onclick="actionsHandler(this.id)" id="loadBatch" class="underline">load batch</span>
-    <span onclick="actionsHandler(this.id)" id="save" class="underline">save</span>
-</div>
-
-<div class="panel">
-    Finished Books:
-    <a th:href="@{/finishedbooks/english/}" id="finishedbooks-english" class="underline">English</a>
-    <a th:href="@{/finishedbooks/russian/}" id="finishedbooks-russian" class="underline">Russian</a>
-    <a th:href="@{/finishedbooks/spanish/}" id="finishedbooks-spanish" class="underline">Spanish</a>
-</div>
-
-<div class="panel">
-    Books To Read:
-    <a th:href="@{/bookstoread/english/}" id="bookstoread-english" class="underline">English</a>
-    <a th:href="@{/bookstoread/russian/}" id="bookstoread-russian" class="underline">Russian</a>
-    <a th:href="@{/bookstoread/spanish/}" id="bookstoread-spanish" class="underline">Spanish</a>
-</div>
+<div th:replace="fragments/header :: header"></div>
 <br/>
 <div>
-    <form action="#" th:action="@{/bookstoread/english/add}" th:object="${book}" method="post">
+    <form action="#" th:action="@{/finishedbooks/english/add}" th:object="${book}" method="post">
         <table id="add">
             <tr>
                 <td>
@@ -44,16 +23,28 @@
             </tr>
             <tr>
                 <td>
+                    <label>Start</label>
+                    <input type="date" field="*{start}" name="start">
+                </td>
+                <td>
+                    <label>End</label>
+                    <input type="date" field="*{end}" name="end">
+                </td>
+            </tr>
+            <tr>
+                <td>
                     <label>Found</label>
                     <input type="date" field="*{found}" name="found">
                 </td>
                 <td>
                     <label>Description</label>
-                    <input type="text" field="*{description}" name="description"
-                           th:value="${book.description}">
+                    <input type="text" field="*{description}" name="description" th:value="${book.description}">
                 </td>
             </tr>
             <tr hidden>
+                <td>
+                    <input th:field="*{additionalDates}">
+                </td>
                 <td>
                     <input type="text" field="*{language}" name="language" th:value="English">
                 </td>

@@ -5,10 +5,10 @@ import qiwi.model.book.FinishedBook;
 import qiwi.model.input.Input;
 import qiwi.util.enums.Action;
 import qiwi.util.enums.Language;
-import qiwi.validator.Validator;
+import qiwi.validator.BookValidator;
 
 public abstract class BookController {
-    protected final Validator validator = new Validator();
+    protected final BookValidator validator = new BookValidator();
 
     protected <T extends Book, S extends Input> void setBookAttributesFromInput(
             T book, S input, Action action, Language language) {

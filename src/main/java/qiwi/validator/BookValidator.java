@@ -3,7 +3,7 @@ package qiwi.validator;
 import org.springframework.validation.Errors;
 import qiwi.model.book.Book;
 
-public class Validator implements org.springframework.validation.Validator {
+public class BookValidator implements org.springframework.validation.Validator {
     @Override
     public boolean supports(Class<?> aClass) {
         return Book.class.equals(aClass);
