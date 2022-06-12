@@ -9,7 +9,7 @@ import java.sql.Date;
 
 @Entity
 @Table(name = "`additional_dates`")
-@JsonIgnoreProperties({"id", "finishedBookId"})
+@JsonIgnoreProperties({"id", "finishedBook"})
 public class AdditionalDate {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
