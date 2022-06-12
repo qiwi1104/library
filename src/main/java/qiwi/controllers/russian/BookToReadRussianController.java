@@ -120,20 +120,38 @@ public class BookToReadRussianController extends BookToReadController {
         return "redirect:/bookstoread/russian/";
     }
 
+    @GetMapping("/load")
+    public String load(Model model) {
+        model.addAttribute("path", new PathInput());
+        return "books-to-read/russian/load";
+    }
+
     @PostMapping("/load")
-    public String load(@ModelAttribute("booksToReadRussianInput") PathInput input) {
+    public String load(@ModelAttribute("path") PathInput input) {
         super.load(input, language);
         return "redirect:/bookstoread/russian/";
     }
 
+    @GetMapping("/loadBatch")
+    public String loadBatch(Model model) {
+        model.addAttribute("path", new PathInput());
+        return "books-to-read/russian/load-batch";
+    }
+
     @PostMapping("/loadBatch")
-    public String loadBatch(@ModelAttribute("booksToReadRussianInput") PathInput input) {
+    public String loadBatch(@ModelAttribute("path") PathInput input) {
         super.loadBatch(input, language);
         return "redirect:/bookstoread/russian/";
     }
 
+    @GetMapping("/save")
+    public String save(Model model) {
+        model.addAttribute("path", new PathInput());
+        return "books-to-read/russian/save";
+    }
+
     @PostMapping("/save")
-    public String save(@ModelAttribute("booksToReadRussianInput") PathInput input) {
+    public String save(@ModelAttribute("path") PathInput input) {
         super.save(input, language);
         return "redirect:/bookstoread/russian/";
     }
