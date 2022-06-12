@@ -69,37 +69,7 @@ public class FinishedBookRussianController extends FinishedBookController {
 
     @PostMapping("/edit")
     public String edit(@ModelAttribute("book") FinishedBook book, BindingResult result, Model model) {
-        validator.validate(book, result);
-
-        if (result.hasErrors()) {
-            setUpView(model, language);
-
-            return "finished-books/russian/edit-book";
-        }
-
-        if (service.exists(book)) {
-            FinishedBook bookFromLibrary = service.get(book);
-            AdditionalDate additionalDate = new AdditionalDate();
-
-            additionalDate.setStart(book.getStart());
-            additionalDate.setEnd(book.getEnd());
-
-            if (!bookFromLibrary.hasDate(additionalDate)) {
-                bookFromLibrary.addDate(additionalDate);
-                service.addBook(bookFromLibrary);
-
-                return "redirect:/finishedbooks/russian/";
-            } else {
-                setUpView(model, language);
-                result.reject("alreadyExists", "This book already exists.");
-
-                return "finished-books/russian/edit-book";
-            }
-        }
-
-        service.addBook(book);
-
-        return "redirect:/finishedbooks/russian/";
+        return super.edit(book, result, model, language);
     }
 
     @GetMapping("/delete/{id}")
@@ -114,14 +84,26 @@ public class FinishedBookRussianController extends FinishedBookController {
         return "redirect:/finishedbooks/russian/";
     }
 
+    @GetMapping("/load")
+    public String load(Model model) {
+        model.addAttribute("path", new PathInput());
+        return "finished-books/russian/load";
+    }
+
     @PostMapping("/load")
-    public String load(@ModelAttribute("finishedRussianInput") PathInput input) {
+    public String load(@ModelAttribute("path") PathInput input) {
         super.load(input, language);
         return "redirect:/finishedbooks/russian/";
     }
 
+    @GetMapping("/save")
+    public String save(Model model) {
+        model.addAttribute("path", new PathInput());
+        return "finished-books/russian/save";
+    }
+
     @PostMapping("/save")
-    public String save(@ModelAttribute("finishedRussianInput") PathInput input) {
+    public String save(@ModelAttribute("path") PathInput input) {
         super.save(input, language);
         return "redirect:/finishedbooks/russian/";
     }

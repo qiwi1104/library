@@ -7,18 +7,21 @@
 </head>
 <body>
 <div class="panel">
-        <span onclick="actionsHandler(this.id)" id="add" class="underline">
-           <a th:href="@{/finishedbooks/russian/add}" th:method="get">add</a>
-        </span>
-    <span onclick="actionsHandler(this.id)" id="load" class="underline">load</span>
-    <span onclick="actionsHandler(this.id)" id="loadBatch" class="underline">load batch</span>
-    <span onclick="actionsHandler(this.id)" id="save" class="underline">save</span>
+    <span onclick="actionsHandler(this.id)" class="underline">
+        <a th:href="@{/finishedbooks/russian/add}" th:method="get">add</a>
+    </span>
+    <span onclick="actionsHandler(this.id)" class="underline">
+        <a th:href="@{/finishedbooks/russian/load}" th:method="get">load</a>
+    </span>
+    <span onclick="actionsHandler(this.id)" class="underline">
+        <a th:href="@{/finishedbooks/russian/save}" th:method="get">save</a>
+    </span>
 </div>
 
 <div class="panel">
     Finished Books:
     <a th:href="@{/finishedbooks/english/}" id="finishedbooks-english" class="underline">English</a>
-    <a th:href="@{/finishedbooks/russian/}" id="finishedbooks-russian" class="underline">Russian</a>
+    <a th:href="@{/finishedbooks/russian/}" id="finishedbooks-russian" class="underlineSelected">Russian</a>
     <a th:href="@{/finishedbooks/spanish/}" id="finishedbooks-spanish" class="underline">Spanish</a>
 </div>
 
@@ -45,17 +48,17 @@
             <tr>
                 <td>
                     <label>Start</label>
-                    <input type="date" field="*{start}" name="start">
+                    <input type="date" field="*{start}" name="start" th:value="${book.start}">
                 </td>
                 <td>
                     <label>End</label>
-                    <input type="date" field="*{end}" name="end">
+                    <input type="date" field="*{end}" name="end" th:value="${book.end}">
                 </td>
             </tr>
             <tr>
                 <td>
                     <label>Found</label>
-                    <input type="date" field="*{found}" name="found">
+                    <input type="date" field="*{found}" name="found" th:value="${book.found}">
                 </td>
                 <td>
                     <label>Description</label>

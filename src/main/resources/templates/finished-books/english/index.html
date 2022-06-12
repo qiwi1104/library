@@ -7,17 +7,20 @@
 </head>
 <body>
 <div class="panel">
-        <span onclick="actionsHandler(this.id)" id="add" class="underline">
-           <a th:href="@{/finishedbooks/english/add}" th:method="get">add</a>
-        </span>
-    <span onclick="actionsHandler(this.id)" id="load" class="underline">load</span>
-    <span onclick="actionsHandler(this.id)" id="loadBatch" class="underline">load batch</span>
-    <span onclick="actionsHandler(this.id)" id="save" class="underline">save</span>
+    <span onclick="actionsHandler(this.id)" class="underline">
+        <a th:href="@{/finishedbooks/english/add}" th:method="get">add</a>
+    </span>
+    <span onclick="actionsHandler(this.id)" class="underline">
+        <a th:href="@{/finishedbooks/english/load}" th:method="get">load</a>
+    </span>
+    <span onclick="actionsHandler(this.id)" class="underline">
+        <a th:href="@{/finishedbooks/english/save}" th:method="get">save</a>
+    </span>
 </div>
 
 <div class="panel">
     Finished Books:
-    <a th:href="@{/finishedbooks/english/}" id="finishedbooks-english" class="underline">English</a>
+    <a th:href="@{/finishedbooks/english/}" id="finishedbooks-english" class="underlineSelected">English</a>
     <a th:href="@{/finishedbooks/russian/}" id="finishedbooks-russian" class="underline">Russian</a>
     <a th:href="@{/finishedbooks/spanish/}" id="finishedbooks-spanish" class="underline">Spanish</a>
 </div>
@@ -27,16 +30,6 @@
     <a th:href="@{/bookstoread/english/}" id="bookstoread-english" class="underline">English</a>
     <a th:href="@{/bookstoread/russian/}" id="bookstoread-russian" class="underline">Russian</a>
     <a th:href="@{/bookstoread/spanish/}" id="bookstoread-spanish" class="underline">Spanish</a>
-</div>
-<br/>
-<div>
-    <form action="#" th:action="@{'/finishedbooks/english/load'}" th:object="${finishedEnglishInput}" method="post">
-        <table th:replace="fragments/IO :: load"></table>
-    </form>
-
-    <form action="#" th:action="@{'/finishedbooks/english/save'}" th:object="${finishedEnglishInput}" method="post">
-        <table th:replace="fragments/IO :: save"></table>
-    </form>
 </div>
 <br/>
 <div>

@@ -6,7 +6,32 @@
     <link th:replace="fragments/css :: css">
 </head>
 <body>
-<div th:replace="fragments/header :: header"></div>
+
+<div class="panel">
+    <span onclick="actionsHandler(this.id)" class="underlineSelected">
+        <a th:href="@{/finishedbooks/russian/add}" th:method="get">add</a>
+    </span>
+    <span onclick="actionsHandler(this.id)" class="underline">
+        <a th:href="@{/finishedbooks/russian/load}" th:method="get">load</a>
+    </span>
+    <span onclick="actionsHandler(this.id)" class="underline">
+        <a th:href="@{/finishedbooks/russian/save}" th:method="get">save</a>
+    </span>
+</div>
+
+<div class="panel">
+    Finished Books:
+    <a th:href="@{/finishedbooks/english/}" id="finishedbooks-english" class="underline">English</a>
+    <a th:href="@{/finishedbooks/russian/}" id="finishedbooks-russian" class="underlineSelected">Russian</a>
+    <a th:href="@{/finishedbooks/spanish/}" id="finishedbooks-spanish" class="underline">Spanish</a>
+</div>
+
+<div class="panel">
+    Books To Read:
+    <a th:href="@{/bookstoread/english/}" id="bookstoread-english" class="underline">English</a>
+    <a th:href="@{/bookstoread/russian/}" id="bookstoread-russian" class="underline">Russian</a>
+    <a th:href="@{/bookstoread/spanish/}" id="bookstoread-spanish" class="underline">Spanish</a>
+</div>
 <br/>
 <div>
     <form action="#" th:action="@{/finishedbooks/russian/add}" th:object="${book}" method="post">

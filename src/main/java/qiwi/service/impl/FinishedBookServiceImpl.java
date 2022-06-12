@@ -3,11 +3,13 @@ package qiwi.service.impl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
+import qiwi.model.AdditionalDate;
 import qiwi.model.book.FinishedBook;
 import qiwi.repository.FinishedBookRepository;
 import qiwi.service.BookService;
 import qiwi.util.enums.Language;
 
+import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -64,6 +66,18 @@ public class FinishedBookServiceImpl implements BookService<FinishedBook> {
 
     public FinishedBook get(FinishedBook book) {
         return repository.findAll().contains(book) ? repository.findAll().get(repository.findAll().indexOf(book)) : null;
+    }
+
+    /*
+     * Returns all the additional dates that books contain
+     * */
+    public List<AdditionalDate> getAllAdditionalDates(List<FinishedBook> books) {
+        return books
+                .stream()
+                .filter(b -> b.getAdditionalDates().size() != 0)
+                .map(FinishedBook::getAdditionalDates)
+                .flatMap(Collection::stream)
+                .collect(Collectors.toList());
     }
 
     @Override

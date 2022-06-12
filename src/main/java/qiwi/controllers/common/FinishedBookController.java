@@ -2,6 +2,7 @@ package qiwi.controllers.common;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import qiwi.input.PathInput;
 import qiwi.model.AdditionalDate;
 import qiwi.model.book.FinishedBook;
@@ -12,11 +13,9 @@ import qiwi.util.enums.SortBy;
 import qiwi.util.enums.SortType;
 import qiwi.validator.FinishedBookValidator;
 
-import java.util.Collection;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
-import java.util.stream.Collectors;
 
 import static qiwi.util.enums.BookType.FINISHED;
 import static qiwi.util.enums.SortBy.START;
@@ -30,18 +29,6 @@ public abstract class FinishedBookController extends BookController {
 
     protected SortType sortDateMethod = ASC;
     protected SortBy sortProperty = START;
-
-    /*
-     * Returns all the additional dates that books contain
-     * */
-    private List<AdditionalDate> getAllAdditionalDates(List<FinishedBook> books) {
-        return books
-                .stream()
-                .filter(b -> b.getAdditionalDates().size() != 0)
-                .map(FinishedBook::getAdditionalDates)
-                .flatMap(Collection::stream)
-                .collect(Collectors.toList());
-    }
 
     protected List<FinishedBook> sortList(List<FinishedBook> books) {
         switch (sortDateMethod) {
@@ -85,6 +72,43 @@ public abstract class FinishedBookController extends BookController {
         return books;
     }
 
+    protected String edit(FinishedBook book, BindingResult result, Model model, Language language) {
+        validator.validate(book, result);
+
+        if (result.hasErrors()) {
+            setUpView(model, language);
+
+            return "finished-books/"+ language.toLowerCase() + "/edit-book";
+        }
+
+        if (service.exists(book)) {
+            FinishedBook bookFromLibrary = service.get(book);
+            AdditionalDate additionalDate = new AdditionalDate();
+
+            additionalDate.setStart(book.getStart());
+            additionalDate.setEnd(book.getEnd());
+
+            if (!bookFromLibrary.hasDate(additionalDate)) {
+                bookFromLibrary.setStart(book.getStart());
+                bookFromLibrary.setEnd(book.getEnd());
+                bookFromLibrary.setFound(book.getFound());
+
+                service.addBook(bookFromLibrary);
+
+                return "redirect:/finishedbooks/"+ language.toLowerCase() + "/";
+            } else {
+                setUpView(model, language);
+                result.reject("alreadyExists", "This book already exists.");
+
+                return "finished-books/"+ language.toLowerCase() + "/edit-book";
+            }
+        }
+
+        service.addBook(book);
+
+        return "redirect:/finishedbooks/" + language.toLowerCase() + "/";
+    }
+
     protected void sort(SortBy sortProperty) {
         sortDateMethod = sortDateMethod.equals(ASC) ? DESC : ASC;
         this.sortProperty = sortProperty;
@@ -111,6 +135,6 @@ public abstract class FinishedBookController extends BookController {
         books = sortList(books);
 
         model.addAttribute("books", books);
-        model.addAttribute("additionalDates", getAllAdditionalDates(books));
+        model.addAttribute("additionalDates", service.getAllAdditionalDates(books));
     }
 }
