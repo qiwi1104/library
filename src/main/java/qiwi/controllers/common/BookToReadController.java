@@ -2,6 +2,7 @@ package qiwi.controllers.common;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import qiwi.input.PathInput;
 import qiwi.model.book.BookToRead;
 import qiwi.service.impl.BookToReadServiceImpl;
@@ -55,6 +56,50 @@ public abstract class BookToReadController extends BookController {
                 break;
         }
         return list;
+    }
+
+    protected String add(BookToRead book, BindingResult result, Model model, Language language) {
+        validator.validate(book, result);
+
+        if (result.hasErrors()) {
+            setUpView(model, language);
+
+            return "books-to-read/" + language.toLowerCase() + "/add-book";
+        }
+
+        if (service.exists(book)) {
+            setUpView(model, language);
+
+            result.reject("alreadyExists", "This book already exists.");
+
+            return "books-to-read/" + language.toLowerCase() + "/add-book";
+        }
+
+        service.addBook(book);
+
+        return "redirect:/bookstoread/" + language.toLowerCase() + "/";
+    }
+
+    protected String edit(BookToRead book, BindingResult result, Model model, Language language) {
+        validator.validate(book, result);
+
+        if (result.hasErrors()) {
+            setUpView(model, language);
+
+            return "books-to-read/" + language.toLowerCase() + "/edit-book";
+        }
+
+        if (service.exists(book)) {
+            setUpView(model, language);
+
+            result.reject("alreadyExists", "This book already exists.");
+
+            return "books-to-read/" + language.toLowerCase() + "/edit-book";
+        }
+
+        service.addBook(book);
+
+        return "redirect:/bookstoread/" + language.toLowerCase() + "/";
     }
 
     protected void sort(SortBy sortProperty) {

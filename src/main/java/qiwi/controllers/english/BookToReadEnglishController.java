@@ -30,25 +30,7 @@ public class BookToReadEnglishController extends BookToReadController {
 
     @PostMapping("/add")
     public String add(@ModelAttribute("book") BookToRead book, BindingResult result, Model model) {
-        validator.validate(book, result);
-
-        if (result.hasErrors()) {
-            setUpView(model, language);
-
-            return "books-to-read/english/add-book";
-        }
-
-        if (service.exists(book)) {
-            setUpView(model, language);
-
-            result.reject("alreadyExists", "This book already exists.");
-
-            return "books-to-read/english/add-book";
-        }
-
-        service.addBook(book);
-
-        return "redirect:/bookstoread/english/";
+        return super.add(book, result, model, language);
     }
 
     @GetMapping("/edit/{id}")
@@ -60,25 +42,7 @@ public class BookToReadEnglishController extends BookToReadController {
 
     @PostMapping("/edit")
     public String edit(@ModelAttribute("book") BookToRead book, BindingResult result, Model model) {
-        validator.validate(book, result);
-
-        if (result.hasErrors()) {
-            setUpView(model, language);
-
-            return "books-to-read/english/edit-book";
-        }
-
-        if (service.exists(book)) {
-            setUpView(model, language);
-
-            result.reject("alreadyExists", "This book already exists.");
-
-            return "books-to-read/english/edit-book";
-        }
-
-        service.addBook(book);
-
-        return "redirect:/bookstoread/english/";
+        return super.edit(book, result, model, language);
     }
 
     @GetMapping("/delete/{id}")
