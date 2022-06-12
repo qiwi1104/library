@@ -6,13 +6,20 @@
     <link th:replace="fragments/css :: css">
 </head>
 <body>
+
 <div class="panel">
-        <span onclick="actionsHandler(this.id)" class="underline">
-           <a th:href="@{/bookstoread/english/add}" th:method="get">add</a>
-        </span>
-    <span onclick="actionsHandler(this.id)" id="load" class="underline">load</span>
-    <span onclick="actionsHandler(this.id)" id="loadBatch" class="underline">load batch</span>
-    <span onclick="actionsHandler(this.id)" id="save" class="underline">save</span>
+    <span onclick="actionsHandler(this.id)" class="underline">
+        <a th:href="@{/bookstoread/russian/add}" th:method="get">add</a>
+    </span>
+    <span onclick="actionsHandler(this.id)" class="underline">
+        <a th:href="@{/bookstoread/russian/load}" th:method="get">load</a>
+    </span>
+    <span onclick="actionsHandler(this.id)" class="underline">
+        <a th:href="@{/bookstoread/russian/loadBatch}" th:method="get">load batch</a>
+    </span>
+    <span onclick="actionsHandler(this.id)" class="underline">
+        <a th:href="@{/bookstoread/russian/save}" th:method="get">save</a>
+    </span>
 </div>
 
 <div class="panel">
@@ -25,7 +32,7 @@
 <div class="panel">
     Books To Read:
     <a th:href="@{/bookstoread/english/}" id="bookstoread-english" class="underline">English</a>
-    <a th:href="@{/bookstoread/russian/}" id="bookstoread-russian" class="underline">Russian</a>
+    <a th:href="@{/bookstoread/russian/}" id="bookstoread-russian" class="underlineSelected">Russian</a>
     <a th:href="@{/bookstoread/spanish/}" id="bookstoread-spanish" class="underline">Spanish</a>
 </div>
 <br/>

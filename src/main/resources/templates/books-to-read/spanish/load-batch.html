@@ -1,7 +1,7 @@
-<!DOCTYPE html>
+<!DOCTYPE HTML>
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
-    <title>Library: Spanish</title>
+    <title>Library: English</title>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
     <link th:replace="fragments/css :: css">
 </head>
@@ -14,7 +14,7 @@
     <span onclick="actionsHandler(this.id)" class="underline">
         <a th:href="@{/bookstoread/spanish/load}" th:method="get">load</a>
     </span>
-    <span onclick="actionsHandler(this.id)" class="underline">
+    <span onclick="actionsHandler(this.id)" class="underlineSelected">
         <a th:href="@{/bookstoread/spanish/loadBatch}" th:method="get">load batch</a>
     </span>
     <span onclick="actionsHandler(this.id)" class="underline">
@@ -35,55 +35,24 @@
     <a th:href="@{/bookstoread/russian/}" id="bookstoread-russian" class="underline">Russian</a>
     <a th:href="@{/bookstoread/spanish/}" id="bookstoread-spanish" class="underlineSelected">Spanish</a>
 </div>
+
 <br/>
 <div>
-    <form action="#" th:action="@{'/bookstoread/spanish/finish'}" th:object="${book}" method="post">
-        <table id="finish">
-            <tr hidden>
-                <td>
-                    <input th:field="*{id}"/>
-                </td>
-                <td>
-                    <input th:field="*{author}">
-                </td>
-                <td>
-                    <input th:field="*{name}">
-                </td>
-                <td>
-                    <input th:field="*{found}">
-                </td>
-                <td>
-                    <input th:field="*{description}">
-                </td>
-                <td>
-                    <input th:field="*{language}">
-                </td>
-                <td>
-                    <input th:field="*{additionalDates}">
-                </td>
-            </tr>
-
+    <form action="#" th:action="@{/bookstoread/spanish/loadBatch}" th:object="${path}" method="post">
+        <table>
             <tr>
                 <td>
-                    <label>Start</label>
-                    <input type="date" field="*{start}" name="start" th:value="${book.start}">
-                </td>
-                <td>
-                    <label>End</label>
-                    <input type="date" field="*{end}" name="end" th:value="${book.end}">
-                </td>
-            </tr>
+                    <label>file</label>
+                    <input type="text" field="*{path}" name="path">
 
-            <tr>
-                <td>
-                    <input type="submit" value="finish book">
-                    <div th:if="${#fields.hasErrors('global')}">
-                        <div th:each="err : ${#fields.errors('global')}" th:text="${err}"></div>
-                    </div>
+                    <input type="submit" value="load batch">
                 </td>
             </tr>
         </table>
     </form>
 </div>
+
+<div th:replace="fragments/scripts :: scripts"></div>
+<script th:src="@{/js/src/hideAction.js}"></script>
 </body>
 </html>
