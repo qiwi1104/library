@@ -2,8 +2,8 @@ package qiwi.controllers.common;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.ui.Model;
+import qiwi.input.PathInput;
 import qiwi.model.book.BookToRead;
-import qiwi.model.input.PathInput;
 import qiwi.service.impl.BookToReadServiceImpl;
 import qiwi.service.impl.FinishedBookServiceImpl;
 import qiwi.util.JSONHandler;

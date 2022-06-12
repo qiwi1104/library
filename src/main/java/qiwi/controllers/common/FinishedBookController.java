@@ -2,9 +2,9 @@ package qiwi.controllers.common;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.ui.Model;
+import qiwi.input.PathInput;
 import qiwi.model.AdditionalDate;
 import qiwi.model.book.FinishedBook;
-import qiwi.model.input.PathInput;
 import qiwi.service.impl.FinishedBookServiceImpl;
 import qiwi.util.JSONHandler;
 import qiwi.util.enums.Language;
