@@ -72,13 +72,47 @@ public abstract class FinishedBookController extends BookController {
         return books;
     }
 
+    protected String add(FinishedBook book, BindingResult result, Model model, Language language) {
+        validator.validate(book, result);
+
+        if (result.hasErrors()) {
+            setUpView(model, language);
+
+            return "finished-books/" + language.toLowerCase() + "/add-book";
+        }
+
+        if (service.exists(book)) {
+            FinishedBook bookFromLibrary = service.get(book);
+            AdditionalDate additionalDate = new AdditionalDate();
+
+            additionalDate.setStart(bookFromLibrary.getStart());
+            additionalDate.setEnd(bookFromLibrary.getEnd());
+
+            if (!book.hasDate(additionalDate)) {
+                book.addDate(additionalDate);
+                service.addBook(book);
+
+                return "redirect:/finishedbooks/" + language.toLowerCase() + "/";
+            } else {
+                setUpView(model, language);
+                result.reject("alreadyExists", "This book already exists.");
+
+                return "finished-books/" + language.toLowerCase() + "/add-book";
+            }
+        }
+
+        service.addBook(book);
+
+        return "redirect:/finishedbooks/" + language.toLowerCase() + "/";
+    }
+
     protected String edit(FinishedBook book, BindingResult result, Model model, Language language) {
         validator.validate(book, result);
 
         if (result.hasErrors()) {
             setUpView(model, language);
 
-            return "finished-books/"+ language.toLowerCase() + "/edit-book";
+            return "finished-books/" + language.toLowerCase() + "/edit-book";
         }
 
         if (service.exists(book)) {
@@ -95,12 +129,12 @@ public abstract class FinishedBookController extends BookController {
 
                 service.addBook(bookFromLibrary);
 
-                return "redirect:/finishedbooks/"+ language.toLowerCase() + "/";
+                return "redirect:/finishedbooks/" + language.toLowerCase() + "/";
             } else {
                 setUpView(model, language);
                 result.reject("alreadyExists", "This book already exists.");
 
-                return "finished-books/"+ language.toLowerCase() + "/edit-book";
+                return "finished-books/" + language.toLowerCase() + "/edit-book";
             }
         }
 

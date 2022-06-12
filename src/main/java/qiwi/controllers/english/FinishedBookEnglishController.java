@@ -6,7 +6,6 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import qiwi.controllers.common.FinishedBookController;
 import qiwi.input.PathInput;
-import qiwi.model.AdditionalDate;
 import qiwi.model.book.FinishedBook;
 import qiwi.util.enums.Language;
 import qiwi.util.enums.SortBy;
@@ -27,37 +26,7 @@ public class FinishedBookEnglishController extends FinishedBookController {
 
     @PostMapping("/add")
     public String add(@ModelAttribute("book") FinishedBook book, BindingResult result, Model model) {
-        validator.validate(book, result);
-
-        if (result.hasErrors()) {
-            setUpView(model, language);
-
-            return "finished-books/english/add-book";
-        }
-
-        if (service.exists(book)) {
-            FinishedBook bookFromLibrary = service.get(book);
-            AdditionalDate additionalDate = new AdditionalDate();
-
-            additionalDate.setStart(bookFromLibrary.getStart());
-            additionalDate.setEnd(bookFromLibrary.getEnd());
-
-            if (!book.hasDate(additionalDate)) {
-                book.addDate(additionalDate);
-                service.addBook(book);
-
-                return "redirect:/finishedbooks/english/";
-            } else {
-                setUpView(model, language);
-                result.reject("alreadyExists", "This book already exists.");
-
-                return "finished-books/english/add-book";
-            }
-        }
-
-        service.addBook(book);
-
-        return "redirect:/finishedbooks/english/";
+        return super.add(book, result, model, language);
     }
 
     @GetMapping("/edit/{id}")
