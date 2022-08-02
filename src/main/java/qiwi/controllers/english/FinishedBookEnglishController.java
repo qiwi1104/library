@@ -80,6 +80,6 @@ public class FinishedBookEnglishController extends FinishedBookController {
     @GetMapping("/")
     public String showAllBooks(Model model) {
         setUpView(model, language);
-        return "finished-books/" + language.firstLetterToUpperCase() + "/index";
+        return "finished-books/" + language.toLowerCase() + "/index";
     }
 }

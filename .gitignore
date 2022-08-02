@@ -8,4 +8,4 @@ sample/
 out/
 dependency-reduced-pom.xml
 /src/main/resources/config.properties
-/src/main/java/META-INF
+/META-INF

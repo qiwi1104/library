@@ -123,6 +123,6 @@ public class BookToReadRussianController extends BookToReadController {
     @GetMapping("/")
     public String showAllBooks(Model model) {
         setUpView(model, language);
-        return "books-to-read/" + language.firstLetterToUpperCase() + "/index";
+        return "books-to-read/" + language.toLowerCase() + "/index";
     }
 }
