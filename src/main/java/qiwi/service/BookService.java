@@ -1,7 +1,7 @@
 package qiwi.service;
 
 import qiwi.model.book.Book;
-import qiwi.util.enums.Language;
+import qiwi.model.enums.Language;
 
 import java.util.List;
 

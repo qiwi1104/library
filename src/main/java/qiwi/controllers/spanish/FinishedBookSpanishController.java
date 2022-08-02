@@ -5,12 +5,12 @@ import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import qiwi.controllers.common.FinishedBookController;
-import qiwi.input.PathInput;
+import qiwi.dto.PathDTO;
 import qiwi.model.book.FinishedBook;
-import qiwi.util.enums.Language;
-import qiwi.util.enums.SortBy;
+import qiwi.model.enums.Language;
+import qiwi.model.enums.SortBy;
 
-import static qiwi.util.enums.Language.SPANISH;
+import static qiwi.model.enums.Language.SPANISH;
 
 @Controller
 @RequestMapping("/finishedbooks/spanish")
@@ -26,7 +26,7 @@ public class FinishedBookSpanishController extends FinishedBookController {
 
     @PostMapping("/add")
     public String add(@ModelAttribute("book") FinishedBook book, BindingResult result, Model model) {
-        return super.add(book, result, model, language);
+        return service.addBook(book, result, model, language);
     }
 
     @GetMapping("/edit/{id}")
@@ -38,7 +38,7 @@ public class FinishedBookSpanishController extends FinishedBookController {
 
     @PostMapping("/edit")
     public String edit(@ModelAttribute("book") FinishedBook book, BindingResult result, Model model) {
-        return super.edit(book, result, model, language);
+        return service.editBook(book, result, model, language);
     }
 
     @GetMapping("/delete/{id}")
@@ -49,37 +49,37 @@ public class FinishedBookSpanishController extends FinishedBookController {
 
     @GetMapping("/sort/{property}")
     public String sort(@PathVariable String property) {
-        super.sort(SortBy.valueOf(property.toUpperCase()));
+        service.sort(SortBy.valueOf(property.toUpperCase()));
         return "redirect:/finishedbooks/spanish/";
     }
 
     @GetMapping("/load")
     public String load(Model model) {
-        model.addAttribute("path", new PathInput());
+        model.addAttribute("path", new PathDTO());
         return "finished-books/spanish/load";
     }
 
     @PostMapping("/load")
-    public String load(@ModelAttribute("path") PathInput input) {
-        super.load(input, language);
+    public String load(@ModelAttribute("path") PathDTO input) {
+        service.load(input, language);
         return "redirect:/finishedbooks/spanish/";
     }
 
     @GetMapping("/save")
     public String save(Model model) {
-        model.addAttribute("path", new PathInput());
+        model.addAttribute("path", new PathDTO());
         return "finished-books/spanish/save";
     }
 
     @PostMapping("/save")
-    public String save(@ModelAttribute("path") PathInput input) {
-        super.save(input, language);
+    public String save(@ModelAttribute("path") PathDTO input) {
+        service.save(input, language);
         return "redirect:/finishedbooks/spanish/";
     }
 
     @GetMapping("/")
     public String showAllBooks(Model model) {
-        setUpView(model, language);
+        service.setUpView(model, language);
         return "finished-books/" + language.firstLetterToUpperCase() + "/index";
     }
 }

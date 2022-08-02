@@ -1,4 +1,4 @@
-package qiwi.util.enums;
+package qiwi.model.enums;
 
 public enum Action {
     EDIT, ADD

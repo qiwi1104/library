@@ -1,6 +1,6 @@
-package qiwi.input;
+package qiwi.dto;
 
-public class PathInput {
+public class PathDTO {
     private String path = "";
 
     public String getPath() {
