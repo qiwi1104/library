@@ -9,6 +9,7 @@ import javax.persistence.Entity;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import java.sql.Date;
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -21,6 +22,18 @@ public class FinishedBook extends Book implements Cloneable {
     @JsonProperty("additional_dates")
     @OneToMany(mappedBy = "finishedBook", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<AdditionalDate> additionalDates;
+
+    public FinishedBook() {
+    }
+
+    public FinishedBook(BookToRead book) {
+        this.author = book.getAuthor();
+        this.name = book.getName();
+        this.found = book.getFound();
+        this.description = book.getDescription();
+        this.language = book.getLanguage();
+        this.additionalDates = new ArrayList<>();
+    }
 
     public Date getStart() {
         return start;

@@ -6,8 +6,8 @@ import qiwi.Application;
 import qiwi.model.book.Book;
 import qiwi.model.book.BookToRead;
 import qiwi.model.book.FinishedBook;
-import qiwi.util.enums.BookType;
-import qiwi.util.enums.Language;
+import qiwi.model.enums.BookType;
+import qiwi.model.enums.Language;
 
 import java.io.File;
 import java.io.IOException;
