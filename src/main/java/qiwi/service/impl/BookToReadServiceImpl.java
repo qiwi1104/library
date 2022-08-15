@@ -106,9 +106,11 @@ public class BookToReadServiceImpl implements BookService<BookToRead> {
     @Override
     public void clearLanguage(Language language) {
         for (BookToRead book : repository.findAll())
-            if (book.getLanguage().equals(language.firstLetterToUpperCase()))
-                if (repository.existsById(book.getId()))
+            if (book.getLanguage().equals(language.firstLetterToUpperCase())) {
+                if (repository.existsById(book.getId())) {
                     repository.deleteById(book.getId());
+                }
+            }
     }
 
     @Override
