@@ -26,30 +26,30 @@ public class FinishedBookSpanishController extends FinishedBookController {
 
     @PostMapping("/add")
     public String add(@ModelAttribute("book") FinishedBook book, BindingResult result, Model model) {
-        return service.addBook(book, result, model, language);
+        return finishedBookService.addBook(book, result, model, language);
     }
 
     @GetMapping("/edit/{id}")
     public String edit(@PathVariable Integer id, Model model) {
-        model.addAttribute("book", service.getBookById(id));
+        model.addAttribute("book", finishedBookDAO.getBookById(id));
 
         return "finished-books/spanish/edit-book";
     }
 
     @PostMapping("/edit")
     public String edit(@ModelAttribute("book") FinishedBook book, BindingResult result, Model model) {
-        return service.editBook(book, result, model, language);
+        return finishedBookService.editBook(book, result, model, language);
     }
 
     @GetMapping("/delete/{id}")
     public String delete(@PathVariable Integer id) {
-        service.deleteBookById(id);
+        finishedBookDAO.deleteBookById(id);
         return "redirect:/finishedbooks/spanish/";
     }
 
     @GetMapping("/sort/{property}")
     public String sort(@PathVariable String property) {
-        service.sort(SortBy.valueOf(property.toUpperCase()));
+        finishedBookService.sort(SortBy.valueOf(property.toUpperCase()));
         return "redirect:/finishedbooks/spanish/";
     }
 
@@ -61,7 +61,7 @@ public class FinishedBookSpanishController extends FinishedBookController {
 
     @PostMapping("/load")
     public String load(@ModelAttribute("path") PathDTO input) {
-        service.load(input, language);
+        finishedBookService.load(input, language);
         return "redirect:/finishedbooks/spanish/";
     }
 
@@ -73,13 +73,13 @@ public class FinishedBookSpanishController extends FinishedBookController {
 
     @PostMapping("/save")
     public String save(@ModelAttribute("path") PathDTO input) {
-        service.save(input, language);
+        finishedBookService.save(input, language);
         return "redirect:/finishedbooks/spanish/";
     }
 
     @GetMapping("/")
     public String showAllBooks(Model model) {
-        service.setUpView(model, language);
+        finishedBookService.setUpView(model, language);
         return "finished-books/" + language.firstLetterToUpperCase() + "/index";
     }
 }

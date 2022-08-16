@@ -1,4 +1,4 @@
-package qiwi.service.impl;
+package qiwi.service.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Sort;
@@ -11,12 +11,14 @@ import qiwi.model.book.FinishedBook;
 import qiwi.model.enums.Language;
 import qiwi.model.enums.SortBy;
 import qiwi.model.enums.SortType;
-import qiwi.repository.FinishedBookRepository;
-import qiwi.service.BookService;
+import qiwi.service.dao.FinishedBookDAO;
 import qiwi.util.JSONHandler;
 import qiwi.validator.FinishedBookValidator;
 
-import java.util.*;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.List;
 import java.util.stream.Collectors;
 
 import static qiwi.model.enums.BookType.FINISHED;
@@ -25,17 +27,16 @@ import static qiwi.model.enums.SortType.ASC;
 import static qiwi.model.enums.SortType.DESC;
 
 @Service
-public class FinishedBookServiceImpl implements BookService<FinishedBook> {
+public class FinishedBookService {
     @Autowired
-    private FinishedBookRepository repository;
-
+    private FinishedBookDAO finishedBookDAO;
     private final FinishedBookValidator validator = new FinishedBookValidator();
 
     private SortType sortDateMethod = ASC;
     private SortBy sortProperty = START;
 
     public List<FinishedBook> findAllByOrderByIdAsc(Language language) {
-        return repository
+        return finishedBookDAO
                 .findAll(Sort.by(Sort.Direction.ASC, "id"))
                 .stream()
                 .filter(b -> b.getLanguage().equals(language.firstLetterToUpperCase()))
@@ -51,7 +52,7 @@ public class FinishedBookServiceImpl implements BookService<FinishedBook> {
             return "finished-books/" + language.toLowerCase() + "/add-book";
         }
 
-        if (exists(book)) {
+        if (finishedBookDAO.exists(book)) {
             FinishedBook bookFromLibrary = get(book);
             AdditionalDate additionalDate = new AdditionalDate();
 
@@ -60,7 +61,7 @@ public class FinishedBookServiceImpl implements BookService<FinishedBook> {
 
             if (!book.hasDate(additionalDate)) {
                 book.addDate(additionalDate);
-                addBook(book);
+                finishedBookDAO.addBook(book);
 
                 return "redirect:/finishedbooks/" + language.toLowerCase() + "/";
             } else {
@@ -71,14 +72,9 @@ public class FinishedBookServiceImpl implements BookService<FinishedBook> {
             }
         }
 
-        addBook(book);
+        finishedBookDAO.addBook(book);
 
         return "redirect:/finishedbooks/" + language.toLowerCase() + "/";
-    }
-
-    @Override
-    public void addBook(FinishedBook book) {
-        repository.save(book);
     }
 
     public String editBook(FinishedBook book, BindingResult result, Model model, Language language) {
@@ -90,7 +86,7 @@ public class FinishedBookServiceImpl implements BookService<FinishedBook> {
             return "finished-books/" + language.toLowerCase() + "/edit-book";
         }
 
-        if (exists(book)) {
+        if (finishedBookDAO.exists(book)) {
             FinishedBook bookFromLibrary = get(book);
             AdditionalDate additionalDate = new AdditionalDate();
 
@@ -102,7 +98,7 @@ public class FinishedBookServiceImpl implements BookService<FinishedBook> {
                 bookFromLibrary.setEnd(book.getEnd());
                 bookFromLibrary.setFound(book.getFound());
 
-                addBook(bookFromLibrary);
+                finishedBookDAO.addBook(bookFromLibrary);
 
                 return "redirect:/finishedbooks/" + language.toLowerCase() + "/";
             } else {
@@ -113,47 +109,15 @@ public class FinishedBookServiceImpl implements BookService<FinishedBook> {
             }
         }
 
-        addBook(book);
+        finishedBookDAO.addBook(book);
 
         return "redirect:/finishedbooks/" + language.toLowerCase() + "/";
     }
 
-    @Override
-    public void addAll(List<FinishedBook> bookList) {
-        repository.saveAll(bookList);
-    }
-
-    @Override
-    public void deleteBookById(Integer id) {
-        repository.deleteById(id);
-    }
-
-    /*
-     * Removes all the books relating to the specified language
-     * */
-    @Override
-    public void clearLanguage(Language language) {
-        for (FinishedBook book : repository.findAll())
-            if (book.getLanguage().equals(language.firstLetterToUpperCase())) {
-                if (repository.existsById(book.getId())) {
-                    repository.deleteById(book.getId());
-                }
-            }
-    }
-
-    @Override
-    public FinishedBook getBookById(Integer id) {
-        Optional<FinishedBook> book = repository.findById(id);
-        return book.orElse(null);
-    }
-
-    @Override
-    public boolean exists(FinishedBook book) {
-        return repository.findAll().contains(book);
-    }
-
     public FinishedBook get(FinishedBook book) {
-        return repository.findAll().contains(book) ? repository.findAll().get(repository.findAll().indexOf(book)) : null;
+        return finishedBookDAO.findAll().contains(book)
+                ? finishedBookDAO.findAll().get(finishedBookDAO.findAll().indexOf(book))
+                : null;
     }
 
     /*
@@ -166,11 +130,6 @@ public class FinishedBookServiceImpl implements BookService<FinishedBook> {
                 .map(FinishedBook::getAdditionalDates)
                 .flatMap(Collection::stream)
                 .collect(Collectors.toList());
-    }
-
-    @Override
-    public List<FinishedBook> findAll() {
-        return repository.findAll();
     }
 
     public List<FinishedBook> sortList(List<FinishedBook> books) {
@@ -224,8 +183,8 @@ public class FinishedBookServiceImpl implements BookService<FinishedBook> {
         List<FinishedBook> books = JSONHandler.IO.readJSONFile(input.getPath(), FINISHED, language);
 
         if (books.size() != 0) {
-            clearLanguage(language);
-            addAll(books);
+            finishedBookDAO.clearLanguage(language);
+            finishedBookDAO.addAll(books);
         }
     }
 

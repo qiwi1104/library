@@ -23,96 +23,97 @@ public class BookToReadSpanishController extends BookToReadController {
     public String add(Model model) {
         model.addAttribute("book", new BookToRead());
 
-        return "books-to-read/spanish/add-book";
+        return "books-to-read/" + language.toLowerCase() + "/add-book";
     }
 
     @PostMapping("/add")
     public String add(@ModelAttribute("book") BookToRead book, BindingResult result, Model model) {
-        return service.addBook(book, result, model, language);
+        return bookToReadService.addBook(book, result, model, language)
+                ? "redirect:/bookstoread/" + language.toLowerCase() + "/"
+                : "books-to-read/" + language.toLowerCase() + "/add-book";
     }
 
     @GetMapping("/edit/{id}")
     public String edit(@PathVariable Integer id, Model model) {
-        model.addAttribute("book", service.getBookById(id));
+        model.addAttribute("book", bookToReadDAO.getBookById(id));
 
-        return "books-to-read/spanish/edit-book";
+        return "books-to-read/" + language.toLowerCase() + "/edit-book";
     }
 
     @PostMapping("/edit")
     public String edit(@ModelAttribute("book") BookToRead book, BindingResult result, Model model) {
-        return service.editBook(book, result, model, language);
+        return bookToReadService.editBook(book, result, model, language)
+                ? "redirect:/bookstoread/" + language.toLowerCase() + "/"
+                : "books-to-read/" + language.toLowerCase() + "/edit-book";
     }
 
     @GetMapping("/delete/{id}")
     public String delete(@PathVariable Integer id) {
-        service.deleteBookById(id);
-        return "redirect:/bookstoread/spanish/";
+        bookToReadDAO.deleteBookById(id);
+        return "redirect:/bookstoread/" + language.toLowerCase() + "/";
     }
 
     @GetMapping("/finish/{id}")
     public String finish(@PathVariable Integer id, Model model) {
-        BookToRead book = service.getBookById(id);
+        BookToRead book = bookToReadDAO.getBookById(id);
 
         model.addAttribute("book", new FinishedBook(book));
         model.addAttribute("id", book.getId());
 
-        return "books-to-read/spanish/finish-book";
+        return "books-to-read/" + language.toLowerCase() + "/finish-book";
     }
 
     @PostMapping("/finish")
     public String finish(@ModelAttribute("book") FinishedBook book, @SessionAttribute("id") Integer id) {
-        finishedBookService.addBook(book);
-
-        service.deleteBookById(id);
-
-        return "redirect:/bookstoread/spanish/";
+        bookToReadService.finishBook(book, id);
+        return "redirect:/bookstoread/" + language.toLowerCase() + "/";
     }
 
     @GetMapping("/sort/{property}")
     public String sort(@PathVariable String property) {
-        service.sort(SortBy.valueOf(property.toUpperCase()));
-        return "redirect:/bookstoread/spanish/";
+        bookToReadService.sort(SortBy.valueOf(property.toUpperCase()));
+        return "redirect:/bookstoread/" + language.toLowerCase() + "/";
     }
 
     @GetMapping("/load")
     public String load(Model model) {
         model.addAttribute("path", new PathDTO());
-        return "books-to-read/spanish/load";
+        return "books-to-read/" + language.toLowerCase() + "/load";
     }
 
     @PostMapping("/load")
     public String load(@ModelAttribute("path") PathDTO input) {
-        service.load(input, language);
-        return "redirect:/bookstoread/spanish/";
+        bookToReadService.load(input, language);
+        return "redirect:/bookstoread/" + language.toLowerCase() + "/";
     }
 
     @GetMapping("/loadBatch")
     public String loadBatch(Model model) {
         model.addAttribute("path", new PathDTO());
-        return "books-to-read/spanish/load-batch";
+        return "books-to-read/" + language.toLowerCase() + "/load-batch";
     }
 
     @PostMapping("/loadBatch")
     public String loadBatch(@ModelAttribute("path") PathDTO input) {
-        service.loadBatch(input, language);
-        return "redirect:/bookstoread/spanish/";
+        bookToReadService.loadBatch(input, language);
+        return "redirect:/bookstoread/" + language.toLowerCase() + "/";
     }
 
     @GetMapping("/save")
     public String save(Model model) {
         model.addAttribute("path", new PathDTO());
-        return "books-to-read/spanish/save";
+        return "books-to-read/" + language.toLowerCase() + "/save";
     }
 
     @PostMapping("/save")
     public String save(@ModelAttribute("path") PathDTO input) {
-        service.save(input, language);
-        return "redirect:/bookstoread/spanish/";
+        bookToReadService.save(input, language);
+        return "redirect:/bookstoread/" + language.toLowerCase() + "/";
     }
 
     @GetMapping("/")
     public String showAllBooks(Model model) {
-        service.setUpView(model, language);
-        return "books-to-read/" + language.firstLetterToUpperCase() + "/index";
+        bookToReadService.setUpView(model, language);
+        return "books-to-read/" + language.toLowerCase() + "/index";
     }
 }

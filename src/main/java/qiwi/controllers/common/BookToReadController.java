@@ -1,12 +1,12 @@
 package qiwi.controllers.common;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import qiwi.service.impl.BookToReadServiceImpl;
-import qiwi.service.impl.FinishedBookServiceImpl;
+import qiwi.service.dao.BookToReadDAO;
+import qiwi.service.service.BookToReadService;
 
 public abstract class BookToReadController extends BookController {
     @Autowired
-    protected BookToReadServiceImpl service;
+    protected BookToReadService bookToReadService;
     @Autowired
-    protected FinishedBookServiceImpl finishedBookService;
+    protected BookToReadDAO bookToReadDAO;
 }

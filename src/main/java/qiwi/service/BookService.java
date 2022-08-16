@@ -1,5 +1,6 @@
 package qiwi.service;
 
+import org.springframework.data.domain.Sort;
 import qiwi.model.book.Book;
 import qiwi.model.enums.Language;
 
@@ -19,4 +20,6 @@ public interface BookService<T extends Book> {
     boolean exists(T book);
 
     List<T> findAll();
+
+    List<T> findAll(Sort sort);
 }

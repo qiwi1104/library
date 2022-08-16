@@ -1,4 +1,4 @@
-package qiwi.service.impl;
+package qiwi.service.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Sort;
@@ -7,18 +7,18 @@ import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import qiwi.dto.PathDTO;
 import qiwi.model.book.BookToRead;
+import qiwi.model.book.FinishedBook;
 import qiwi.model.enums.Language;
 import qiwi.model.enums.SortBy;
 import qiwi.model.enums.SortType;
-import qiwi.repository.BookToReadRepository;
-import qiwi.service.BookService;
+import qiwi.service.dao.BookToReadDAO;
+import qiwi.service.dao.FinishedBookDAO;
 import qiwi.util.JSONHandler;
 import qiwi.validator.BookValidator;
 
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 import static qiwi.model.enums.BookType.TO_READ;
@@ -27,109 +27,72 @@ import static qiwi.model.enums.SortType.ASC;
 import static qiwi.model.enums.SortType.DESC;
 
 @Service
-public class BookToReadServiceImpl implements BookService<BookToRead> {
+public class BookToReadService {
     @Autowired
-    private BookToReadRepository repository;
+    private BookToReadDAO bookToReadDAO;
+    @Autowired
+    private FinishedBookDAO finishedBookDAO;
 
     private final BookValidator validator = new BookValidator();
 
     private SortType sortDateMethod = ASC;
     private SortBy sortProperty = FOUND;
 
-    public List<BookToRead> findAllByOrderByIdAsc(Language language) {
-        return repository
-                .findAll(Sort.by(Sort.Direction.ASC, "id"))
-                .stream()
-                .filter(b -> b.getLanguage().equals(language.firstLetterToUpperCase()))
-                .collect(Collectors.toList());
-    }
-
-    public String addBook(BookToRead book, BindingResult result, Model model, Language language) {
+    public boolean addBook(BookToRead book, BindingResult result, Model model, Language language) {
         validator.validate(book, result);
 
         if (result.hasErrors()) {
             setUpView(model, language);
 
-            return "books-to-read/" + language.toLowerCase() + "/add-book";
+            return false;
         }
 
-        if (exists(book)) {
+        if (bookToReadDAO.exists(book)) {
             setUpView(model, language);
 
             result.reject("alreadyExists", "This book already exists.");
 
-            return "books-to-read/" + language.toLowerCase() + "/add-book";
+            return false;
         }
 
-        repository.save(book);
+        bookToReadDAO.addBook(book);
 
-        return "redirect:/bookstoread/" + language.toLowerCase() + "/";
+        return true;
     }
 
-    @Override
-    public void addBook(BookToRead book) {
-        repository.save(book);
-    }
-
-    public String editBook(BookToRead book, BindingResult result, Model model, Language language) {
+    public boolean editBook(BookToRead book, BindingResult result, Model model, Language language) {
         validator.validate(book, result);
 
         if (result.hasErrors()) {
             setUpView(model, language);
 
-            return "books-to-read/" + language.toLowerCase() + "/edit-book";
+            return false;
         }
 
-        if (exists(book)) {
+        if (bookToReadDAO.exists(book)) {
             setUpView(model, language);
 
             result.reject("alreadyExists", "This book already exists.");
 
-            return "books-to-read/" + language.toLowerCase() + "/edit-book";
+            return false;
         }
 
-        addBook(book);
+        bookToReadDAO.addBook(book);
 
-        return "redirect:/bookstoread/" + language.toLowerCase() + "/";
+        return true;
     }
 
-    @Override
-    public void addAll(List<BookToRead> booksList) {
-        repository.saveAll(booksList);
-    }
-
-    @Override
-    public void deleteBookById(Integer id) {
-        repository.deleteById(id);
-    }
-
-    @Override
-    public void clearLanguage(Language language) {
-        for (BookToRead book : repository.findAll())
-            if (book.getLanguage().equals(language.firstLetterToUpperCase())) {
-                if (repository.existsById(book.getId())) {
-                    repository.deleteById(book.getId());
-                }
-            }
-    }
-
-    @Override
-    public BookToRead getBookById(Integer id) {
-        Optional<BookToRead> book = repository.findById(id);
-        return book.orElse(null);
-    }
-
-    @Override
-    public boolean exists(BookToRead book) {
-        return repository.findAll().contains(book);
+    public void finishBook(FinishedBook book, Integer id) {
+        finishedBookDAO.addBook(book);
+        bookToReadDAO.deleteBookById(id);
     }
 
     public void load(PathDTO input, Language language) {
         List<BookToRead> books = JSONHandler.IO.readJSONFile(input.getPath(), TO_READ, language);
 
         if (books.size() != 0) {
-            clearLanguage(language);
-            addAll(books);
+            bookToReadDAO.clearLanguage(language);
+            bookToReadDAO.addAll(books);
         }
     }
 
@@ -137,7 +100,7 @@ public class BookToReadServiceImpl implements BookService<BookToRead> {
         List<BookToRead> books = JSONHandler.IO.readJSONFile(input.getPath(), TO_READ, language);
 
         if (books.size() != 0) {
-            addAll(books);
+            bookToReadDAO.addAll(books);
         }
     }
 
@@ -179,16 +142,19 @@ public class BookToReadServiceImpl implements BookService<BookToRead> {
         return list;
     }
 
+    public List<BookToRead> findAllByOrderByIdAsc(Language language) {
+        return bookToReadDAO
+                .findAll(Sort.by(Sort.Direction.ASC, "id"))
+                .stream()
+                .filter(b -> b.getLanguage().equals(language.firstLetterToUpperCase()))
+                .collect(Collectors.toList());
+    }
+
     public void setUpView(Model model, Language language) {
         List<BookToRead> books = findAllByOrderByIdAsc(language);
 
         books = sortList(books);
 
         model.addAttribute("booksToRead", books);
-    }
-
-    @Override
-    public List<BookToRead> findAll() {
-        return repository.findAll();
     }
 }
