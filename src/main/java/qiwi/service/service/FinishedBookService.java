@@ -35,21 +35,13 @@ public class FinishedBookService {
     private SortType sortDateMethod = ASC;
     private SortBy sortProperty = START;
 
-    public List<FinishedBook> findAllByOrderByIdAsc(Language language) {
-        return finishedBookDAO
-                .findAll(Sort.by(Sort.Direction.ASC, "id"))
-                .stream()
-                .filter(b -> b.getLanguage().equals(language.firstLetterToUpperCase()))
-                .collect(Collectors.toList());
-    }
-
-    public String addBook(FinishedBook book, BindingResult result, Model model, Language language) {
+    public boolean addBook(FinishedBook book, BindingResult result, Model model, Language language) {
         validator.validate(book, result);
 
         if (result.hasErrors()) {
             setUpView(model, language);
 
-            return "finished-books/" + language.toLowerCase() + "/add-book";
+            return false;
         }
 
         if (finishedBookDAO.exists(book)) {
@@ -63,27 +55,27 @@ public class FinishedBookService {
                 book.addDate(additionalDate);
                 finishedBookDAO.addBook(book);
 
-                return "redirect:/finishedbooks/" + language.toLowerCase() + "/";
+                return true;
             } else {
                 setUpView(model, language);
                 result.reject("alreadyExists", "This book already exists.");
 
-                return "finished-books/" + language.toLowerCase() + "/add-book";
+                return false;
             }
         }
 
         finishedBookDAO.addBook(book);
 
-        return "redirect:/finishedbooks/" + language.toLowerCase() + "/";
+        return true;
     }
 
-    public String editBook(FinishedBook book, BindingResult result, Model model, Language language) {
+    public boolean editBook(FinishedBook book, BindingResult result, Model model, Language language) {
         validator.validate(book, result);
 
         if (result.hasErrors()) {
             setUpView(model, language);
 
-            return "finished-books/" + language.toLowerCase() + "/edit-book";
+            return false;
         }
 
         if (finishedBookDAO.exists(book)) {
@@ -100,18 +92,18 @@ public class FinishedBookService {
 
                 finishedBookDAO.addBook(bookFromLibrary);
 
-                return "redirect:/finishedbooks/" + language.toLowerCase() + "/";
+                return true;
             } else {
                 setUpView(model, language);
                 result.reject("alreadyExists", "This book already exists.");
 
-                return "finished-books/" + language.toLowerCase() + "/edit-book";
+                return false;
             }
         }
 
         finishedBookDAO.addBook(book);
 
-        return "redirect:/finishedbooks/" + language.toLowerCase() + "/";
+        return true;
     }
 
     public FinishedBook get(FinishedBook book) {
@@ -123,12 +115,21 @@ public class FinishedBookService {
     /*
      * Returns all the additional dates that books contain
      * */
+
     public List<AdditionalDate> getAllAdditionalDates(List<FinishedBook> books) {
         return books
                 .stream()
                 .filter(b -> b.getAdditionalDates().size() != 0)
                 .map(FinishedBook::getAdditionalDates)
                 .flatMap(Collection::stream)
+                .collect(Collectors.toList());
+    }
+
+    public List<FinishedBook> findAllByOrderByIdAsc(Language language) {
+        return finishedBookDAO
+                .findAll(Sort.by(Sort.Direction.ASC, "id"))
+                .stream()
+                .filter(b -> b.getLanguage().equals(language.firstLetterToUpperCase()))
                 .collect(Collectors.toList());
     }
 
