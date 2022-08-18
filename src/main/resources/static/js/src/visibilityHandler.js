@@ -4,18 +4,18 @@ function setVisibility(what, bool) {
         }
     }
 
-    document.getElementById('stat').onclick = function() {
+    document.getElementById('info').onclick = function() {
         show();
 
-        if(document.getElementById('stat').checked) {
-            localStorage.setItem('stat', "true");
+        if(document.getElementById('info').checked) {
+            localStorage.setItem('info', "true");
         } else {
-            localStorage.setItem('stat', "false");
+            localStorage.setItem('info', "false");
         }
     }
 
-    if (localStorage.getItem('stat') == "true") {
-        document.getElementById("stat").setAttribute('checked','checked');
+    if (localStorage.getItem('info') == "true") {
+        document.getElementById("info").setAttribute('checked','checked');
 
         let hidden = document.getElementsByClassName('hidden');
         setVisibility(hidden, false);
