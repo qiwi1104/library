@@ -39,28 +39,32 @@
 <div>
     <form action="#" th:action="@{'/bookstoread/russian/finish'}" th:object="${book}" method="post">
         <table id="finish">
-            <tr hidden>
-                <td>
-                    <input th:field="*{id}"/>
-                </td>
-                <td>
-                    <input th:field="*{author}">
-                </td>
-                <td>
-                    <input th:field="*{name}">
-                </td>
-                <td>
-                    <input th:field="*{found}">
-                </td>
-                <td>
-                    <input th:field="*{description}">
-                </td>
-                <td>
-                    <input th:field="*{language}">
-                </td>
-                <td>
-                    <input th:field="*{additionalDates}">
-                </td>
+            <table border="1">
+                <tr bgcolor="#cccccc">
+                    <td>Author</td>
+                    <td>Name</td>
+                    <td>Found</td>
+                    <td>Description</td>
+                </tr>
+                <tr>
+                    <td>
+                        <span th:text="*{author}"></span>
+                    </td>
+                    <td>
+                        <span th:text="*{name}"></span>
+                    </td>
+
+                    <td>
+                        <span th:text="*{found}"></span>
+                    </td>
+                    <td>
+                        <span th:text="*{description}"></span>
+                    </td>
+                </tr>
+            </table>
+
+            <tr>
+                <td><div><br/></div></td>
             </tr>
 
             <tr>
