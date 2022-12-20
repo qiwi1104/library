@@ -16,6 +16,7 @@ import qiwi.service.dao.FinishedBookDAO;
 import qiwi.util.JSONHandler;
 import qiwi.validator.BookValidator;
 
+import javax.transaction.Transactional;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
@@ -82,11 +83,13 @@ public class BookToReadService {
         return true;
     }
 
+    @Transactional
     public void finishBook(FinishedBook book, Integer id) {
         finishedBookDAO.addBook(book);
         bookToReadDAO.deleteBookById(id);
     }
 
+    @Transactional
     public void load(PathDTO input, Language language) {
         List<BookToRead> books = JSONHandler.IO.readJSONFile(input.getPath(), TO_READ, language);
 
@@ -96,6 +99,7 @@ public class BookToReadService {
         }
     }
 
+    @Transactional
     public void loadBatch(PathDTO input, Language language) {
         List<BookToRead> books = JSONHandler.IO.readJSONFile(input.getPath(), TO_READ, language);
 
@@ -104,6 +108,7 @@ public class BookToReadService {
         }
     }
 
+    @Transactional
     public void save(PathDTO input, Language language) {
         List<BookToRead> bookToReadList = findAllByOrderByIdAsc(language);
         JSONHandler.IO.saveTableToJSON(bookToReadList, input.getPath(), language, TO_READ);
