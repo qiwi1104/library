@@ -49,12 +49,14 @@ public class FinishedBookService {
             FinishedBook bookFromLibrary = get(book);
             AdditionalDate additionalDate = new AdditionalDate();
 
-            additionalDate.setStart(bookFromLibrary.getStart());
-            additionalDate.setEnd(bookFromLibrary.getEnd());
+            additionalDate.setStart(book.getStart());
+            additionalDate.setEnd(book.getEnd());
+            additionalDate.setFinishedBook(book);
 
-            if (!book.hasDate(additionalDate)) {
-                book.addDate(additionalDate);
-                finishedBookDAO.addBook(book);
+            if (!bookFromLibrary.hasDate(additionalDate)) {
+                bookFromLibrary.addDate(additionalDate);
+
+                finishedBookDAO.addBook(bookFromLibrary);
 
                 return true;
             } else {
