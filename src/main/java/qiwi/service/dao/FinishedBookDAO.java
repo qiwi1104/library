@@ -10,6 +10,7 @@ import qiwi.service.BookService;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 public class FinishedBookDAO implements BookService<FinishedBook> {
@@ -36,12 +37,13 @@ public class FinishedBookDAO implements BookService<FinishedBook> {
      * */
     @Override
     public void clearLanguage(Language language) {
-        for (FinishedBook book : repository.findAll())
+        for (FinishedBook book : repository.findAll()) {
             if (book.getLanguage().equals(language.firstLetterToUpperCase())) {
                 if (repository.existsById(book.getId())) {
                     repository.deleteById(book.getId());
                 }
             }
+        }
     }
 
     @Override
@@ -52,7 +54,10 @@ public class FinishedBookDAO implements BookService<FinishedBook> {
 
     @Override
     public boolean exists(FinishedBook book) {
-        return repository.findAll().contains(book);
+        return repository.findAll().stream()
+                .filter(b -> b.getLanguage().equals(book.getLanguage()))
+                .collect(Collectors.toList())
+                .contains(book);
     }
 
     @Override
