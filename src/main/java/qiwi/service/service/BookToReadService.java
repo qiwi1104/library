@@ -71,16 +71,27 @@ public class BookToReadService {
         }
 
         if (bookToReadDAO.exists(book)) {
-            setUpView(model, language);
+            BookToRead bookFromLibrary = bookToReadDAO.getBookById(book.getId());
 
-            result.reject("alreadyExists", "This book already exists.");
+            if (!bookFromLibrary.getAuthor().equals(book.getAuthor())) {
+                bookFromLibrary.setAuthor(book.getAuthor());
+            }
+            if (!bookFromLibrary.getName().equals(book.getName())) {
+                bookFromLibrary.setName(book.getName());
+            }
+            if (!bookFromLibrary.getFound().equals(book.getFound())) {
+                bookFromLibrary.setFound(book.getFound());
+            }
+            if (!bookFromLibrary.getDescription().equals(book.getDescription())) {
+                bookFromLibrary.setDescription(book.getDescription());
+            }
 
-            return false;
+            bookToReadDAO.addBook(bookFromLibrary);
+
+            return true;
         }
 
-        bookToReadDAO.addBook(book);
-
-        return true;
+        return false;
     }
 
     @Transactional
