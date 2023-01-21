@@ -81,7 +81,7 @@ public class FinishedBookService {
             return false;
         }
 
-        if (finishedBookDAO.exists(book)) {
+        if (!finishedBookDAO.exists(book)) {
             FinishedBook bookFromLibrary = get(book);
             AdditionalDate additionalDate = new AdditionalDate();
 
@@ -98,15 +98,18 @@ public class FinishedBookService {
                 return true;
             } else {
                 setUpView(model, language);
+
                 result.reject("alreadyExists", "This book already exists.");
 
                 return false;
             }
+        } else {
+            setUpView(model, language);
+
+            result.reject("alreadyExists", "This book already exists.");
+
+            return false;
         }
-
-        finishedBookDAO.addBook(book);
-
-        return true;
     }
 
     public FinishedBook get(FinishedBook book) {
