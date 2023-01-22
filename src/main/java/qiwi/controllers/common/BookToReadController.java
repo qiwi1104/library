@@ -9,14 +9,11 @@ import qiwi.model.book.BookToRead;
 import qiwi.model.book.FinishedBook;
 import qiwi.model.enums.Language;
 import qiwi.model.enums.SortBy;
-import qiwi.service.dao.BookToReadDAO;
 import qiwi.service.service.BookToReadService;
 
 public abstract class BookToReadController extends BookController {
     @Autowired
     private BookToReadService bookToReadService;
-    @Autowired
-    private BookToReadDAO bookToReadDAO;
 
     public String add(Model model, Language language) {
         model.addAttribute("book", new BookToRead());
@@ -32,7 +29,7 @@ public abstract class BookToReadController extends BookController {
     }
 
     public String edit(Integer id, Model model, Language language) {
-        model.addAttribute("book", bookToReadDAO.getBookById(id));
+        model.addAttribute("book", bookToReadService.getBookById(id));
 
         return "books-to-read/" + language.toLowerCase() + "/edit-book";
     }
@@ -45,12 +42,12 @@ public abstract class BookToReadController extends BookController {
     }
 
     public String delete(Integer id, Language language) {
-        bookToReadDAO.deleteBookById(id);
+        bookToReadService.deleteBookById(id);
         return "redirect:/bookstoread/" + language.toLowerCase() + "/";
     }
 
     public String finish(Integer id, Model model, Language language) {
-        BookToRead book = bookToReadDAO.getBookById(id);
+        BookToRead book = bookToReadService.getBookById(id);
 
         model.addAttribute("book", new FinishedBook(book));
         model.addAttribute("id", book.getId());

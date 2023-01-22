@@ -104,6 +104,14 @@ public class BookToReadService {
         bookToReadDAO.deleteBookById(id);
     }
 
+    public BookToRead getBookById(Integer id) {
+        return bookToReadDAO.getBookById(id);
+    }
+
+    public void deleteBookById(Integer id) {
+        bookToReadDAO.deleteBookById(id);
+    }
+
     @Transactional
     public void load(PathDTO input, Language language) {
         List<BookToRead> books = JSONHandler.IO.readJSONFile(input.getPath(), TO_READ, language);

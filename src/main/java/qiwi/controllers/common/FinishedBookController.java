@@ -7,14 +7,11 @@ import qiwi.dto.PathDTO;
 import qiwi.model.book.FinishedBook;
 import qiwi.model.enums.Language;
 import qiwi.model.enums.SortBy;
-import qiwi.service.dao.FinishedBookDAO;
 import qiwi.service.service.FinishedBookService;
 
 public abstract class FinishedBookController extends BookController {
     @Autowired
     private FinishedBookService finishedBookService;
-    @Autowired
-    private FinishedBookDAO finishedBookDAO;
 
     public String add(Model model, Language language) {
         model.addAttribute("book", new FinishedBook());
@@ -30,7 +27,7 @@ public abstract class FinishedBookController extends BookController {
     }
 
     public String edit(Integer id, Model model, Language language) {
-        model.addAttribute("book", finishedBookDAO.getBookById(id));
+        model.addAttribute("book", finishedBookService.getBookById(id));
 
         return "finished-books/" + language.toLowerCase() + "/edit-book";
     }
@@ -43,7 +40,7 @@ public abstract class FinishedBookController extends BookController {
     }
 
     public String delete(Integer id, Language language) {
-        finishedBookDAO.deleteBookById(id);
+        finishedBookService.deleteBookById(id);
         return "redirect:/finishedbooks/" + language.toLowerCase() + "/";
     }
 

@@ -118,6 +118,14 @@ public class FinishedBookService {
                 : null;
     }
 
+    public FinishedBook getBookById(Integer id) {
+        return finishedBookDAO.getBookById(id);
+    }
+
+    public void deleteBookById(Integer id) {
+        finishedBookDAO.deleteBookById(id);
+    }
+
     /*
      * Returns all the additional dates that books contain
      * */
