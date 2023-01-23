@@ -51,6 +51,8 @@ public abstract class JSONHandler {
                     if (!path.endsWith("\\")) { // path to a folder containing the file to create table from
                         path += "\\";
                     }
+
+                    path+= getLatestFileName(path, language);
                 }
             }
 
