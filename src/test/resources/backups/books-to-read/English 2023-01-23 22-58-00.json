@@ -1,0 +1,451 @@
+[ {
+  "author" : "Kate Chopin",
+  "name" : "Désirée's Baby",
+  "found" : "11/10/21",
+  "description" : "It is about miscegenation in Creole Louisiana during the antebellum period.",
+  "language" : "English"
+}, {
+  "author" : "Kate Chopin",
+  "name" : "The Story of an Hour",
+  "found" : "11/10/21",
+  "description" : "The title of the short story refers to the time elapsed between the moments at which the protagonist, Louise Mallard, hears that her husband, Brently Mallard, is dead, then discovers that he is alive after all. Featuring a female protagonist who feels liberation at the news of her husband's death, \"The Story of an Hour\" was controversial by American standards in the 1890s.",
+  "language" : "English"
+}, {
+  "author" : "Kate Chopin",
+  "name" : "At the 'Cadian Ball",
+  "found" : "11/10/21",
+  "description" : "",
+  "language" : "English"
+}, {
+  "author" : "Kate Chopin",
+  "name" : "The Storm",
+  "found" : "11/10/21",
+  "description" : "This story is the sequel to Chopin's \"At the 'Cadian Ball.\"",
+  "language" : "English"
+}, {
+  "author" : "Kate Chopin",
+  "name" : "The Awakening",
+  "found" : "11/10/21",
+  "description" : "Set in New Orleans and on the Louisiana Gulf coast at the end of the 19th century, the plot centers on Edna Pontellier and her struggle between her increasingly unorthodox views on femininity and motherhood with the prevailing social attitudes of the turn-of-the-century American South. It is one of the earliest American novels that focuses on women's issues without condescension. It is also widely seen as a landmark work of early feminism, generating a mixed reaction from contemporary readers and critics.",
+  "language" : "English"
+}, {
+  "author" : "Kate Chopin",
+  "name" : "The Kiss",
+  "found" : "11/10/21",
+  "description" : "",
+  "language" : "English"
+}, {
+  "author" : "Kate Chopin",
+  "name" : "Miss McEnders",
+  "found" : "11/10/21",
+  "description" : "",
+  "language" : "English"
+}, {
+  "author" : "Kate Chopin",
+  "name" : "Her Letters",
+  "found" : "11/10/21",
+  "description" : "",
+  "language" : "English"
+}, {
+  "author" : "Kate Chopin",
+  "name" : "Doctor Chevalier's Lie",
+  "found" : "11/10/21",
+  "description" : "",
+  "language" : "English"
+}, {
+  "author" : "Kate Chopin",
+  "name" : "A Shameful Affair",
+  "found" : "11/10/21",
+  "description" : "",
+  "language" : "English"
+}, {
+  "author" : "Kate Chopin",
+  "name" : "A Morning Walk",
+  "found" : "11/10/21",
+  "description" : "",
+  "language" : "English"
+}, {
+  "author" : "Kate Chopin",
+  "name" : "A Little Country Girl",
+  "found" : "11/10/21",
+  "description" : "",
+  "language" : "English"
+}, {
+  "author" : "Kate Chopin",
+  "name" : "The Night Came Slowly",
+  "found" : "11/10/21",
+  "description" : "",
+  "language" : "English"
+}, {
+  "author" : "Kate Chopin",
+  "name" : "A Family Affair",
+  "found" : "11/10/21",
+  "description" : "",
+  "language" : "English"
+}, {
+  "author" : "Kate Chopin",
+  "name" : "Lilacs",
+  "found" : "11/10/21",
+  "description" : "",
+  "language" : "English"
+}, {
+  "author" : "F. Scott Fitzgerald",
+  "name" : "The Curious Case of Benjamin Button",
+  "found" : "11/10/21",
+  "description" : "",
+  "language" : "English"
+}, {
+  "author" : "F. Scott Fitzgerald",
+  "name" : "The Beautiful and Damned",
+  "found" : "11/10/21",
+  "description" : "It explores and portrays New York café society and the American Eastern elite during the Jazz Age before and after the Great War in the early 1920s. As in his other novels, Fitzgerald's characters in this novel are complex, materialistic and experience significant disruptions in respect to classism, marriage, and intimacy. The work generally is considered to be based on Fitzgerald's relationship and marriage with his wife Zelda Fitzgerald.",
+  "language" : "English"
+}, {
+  "author" : "F. Scott Fitzgerald",
+  "name" : "Winter Dreams",
+  "found" : "11/10/21",
+  "description" : "The plot concerns the attempts by a young man to win the affections of an upper-class woman. The story, frequently anthologized, is regarded as one of Fitzgerald's finest works \"for poignantly portraying the loss of youthful illusions.\"",
+  "language" : "English"
+}, {
+  "author" : "F. Scott Fitzgerald",
+  "name" : "Babylon Revisited",
+  "found" : "11/10/21",
+  "description" : "The story is set in the year after the stock market crash of 1929, just after what Fitzgerald called the Jazz Age. Brief flashbacks take place in the Jazz Age. Also it shows several references to the Great Depression and how the character had to adapt his life to it. Much of it is based on the author's own experiences.",
+  "language" : "English"
+}, {
+  "author" : "James Fenimore Cooper",
+  "name" : "The Deerslayer",
+  "found" : "10/5/21",
+  "description" : "",
+  "language" : "English"
+}, {
+  "author" : "James Fenimore Cooper",
+  "name" : "The Pathfinder",
+  "found" : "10/5/21",
+  "description" : "",
+  "language" : "English"
+}, {
+  "author" : "James Fenimore Cooper",
+  "name" : "The Pioneers",
+  "found" : "10/5/21",
+  "description" : "",
+  "language" : "English"
+}, {
+  "author" : "James Fenimore Cooper",
+  "name" : "The Prairie",
+  "found" : "10/5/21",
+  "description" : "",
+  "language" : "English"
+}, {
+  "author" : "Herman Melville",
+  "name" : "Bartleby, the Scrivener",
+  "found" : "12/15/21",
+  "description" : "",
+  "language" : "English"
+}, {
+  "author" : "Sarah Orne Jewett",
+  "name" : "A Lost Lover",
+  "found" : "12/15/21",
+  "description" : "Old Friends and New",
+  "language" : "English"
+}, {
+  "author" : "Sarah Orne Jewett",
+  "name" : "A Sorrowful Guest",
+  "found" : "12/15/21",
+  "description" : "Old Friends and New",
+  "language" : "English"
+}, {
+  "author" : "Sarah Orne Jewett",
+  "name" : "A Late Supper",
+  "found" : "12/15/21",
+  "description" : "Old Friends and New",
+  "language" : "English"
+}, {
+  "author" : "Sarah Orne Jewett",
+  "name" : "Mr. Bruce",
+  "found" : "12/15/21",
+  "description" : "Old Friends and New",
+  "language" : "English"
+}, {
+  "author" : "Sarah Orne Jewett",
+  "name" : "Miss Sydney’s Flowers",
+  "found" : "12/15/21",
+  "description" : "Old Friends and New",
+  "language" : "English"
+}, {
+  "author" : "Sarah Orne Jewett",
+  "name" : "Lady Ferry",
+  "found" : "12/15/21",
+  "description" : "Old Friends and New",
+  "language" : "English"
+}, {
+  "author" : "Sarah Orne Jewett",
+  "name" : "A Bit of Shore Life",
+  "found" : "12/15/21",
+  "description" : "Old Friends and New",
+  "language" : "English"
+}, {
+  "author" : "Sarah Orne Jewett",
+  "name" : "Martha's Lady",
+  "found" : "12/15/21",
+  "description" : "",
+  "language" : "English"
+}, {
+  "author" : "Sarah Orne Jewett",
+  "name" : "Deephaven",
+  "found" : "12/15/21",
+  "description" : "",
+  "language" : "English"
+}, {
+  "author" : "Sarah Orne Jewett",
+  "name" : "The Country of the Pointed Firs",
+  "found" : "12/15/21",
+  "description" : "",
+  "language" : "English"
+}, {
+  "author" : "Sarah Orne Jewett",
+  "name" : "A Country Doctor",
+  "found" : "12/15/21",
+  "description" : "The main character of A Country Doctor, Nan, is a young woman that encounters much strife when she decides to go against the traditional values of the day and become a doctor.",
+  "language" : "English"
+}, {
+  "author" : "Sarah Orne Jewett",
+  "name" : "A White Heron",
+  "found" : "12/15/21",
+  "description" : "It follows a young city girl named Sylvia who came to live with her grandmother in the country. She meets a young ornithologist hunter seeking to find a rare bird that he recently spotted in the area. As the story progresses, Sylvia is challenged with whether or not she should tell the hunter she saw the bird. She also discovers her passion for country life and her love and values for the animals that inhabit it.",
+  "language" : "English"
+}, {
+  "author" : "Sarah Orne Jewett",
+  "name" : "The Life of Nancy",
+  "found" : "12/15/21",
+  "description" : "The Life of Nancy",
+  "language" : "English"
+}, {
+  "author" : "Sarah Orne Jewett",
+  "name" : "Fame’s Little Day",
+  "found" : "12/15/21",
+  "description" : "The Life of Nancy",
+  "language" : "English"
+}, {
+  "author" : "Sarah Orne Jewett",
+  "name" : "A War Debt",
+  "found" : "12/15/21",
+  "description" : "The Life of Nancy",
+  "language" : "English"
+}, {
+  "author" : "Sarah Orne Jewett",
+  "name" : "The Hiltons Holiday",
+  "found" : "12/15/21",
+  "description" : "The Life of Nancy",
+  "language" : "English"
+}, {
+  "author" : "Sarah Orne Jewett",
+  "name" : "The Only Rose",
+  "found" : "12/15/21",
+  "description" : "The Life of Nancy",
+  "language" : "English"
+}, {
+  "author" : "Sarah Orne Jewett",
+  "name" : "A Second Spring",
+  "found" : "12/15/21",
+  "description" : "The Life of Nancy",
+  "language" : "English"
+}, {
+  "author" : "Sarah Orne Jewett",
+  "name" : "Little French Mary",
+  "found" : "12/15/21",
+  "description" : "The Life of Nancy",
+  "language" : "English"
+}, {
+  "author" : "Sarah Orne Jewett",
+  "name" : "The Guests of Mrs. Timms",
+  "found" : "12/15/21",
+  "description" : "The Life of Nancy",
+  "language" : "English"
+}, {
+  "author" : "Sarah Orne Jewett",
+  "name" : "Neighbor’s Landmark",
+  "found" : "12/15/21",
+  "description" : "The Life of Nancy",
+  "language" : "English"
+}, {
+  "author" : "Sarah Orne Jewett",
+  "name" : "My Sad Captains",
+  "found" : "12/15/21",
+  "description" : "The Life of Nancy",
+  "language" : "English"
+}, {
+  "author" : "Sarah Orne Jewett",
+  "name" : "A Winter Courtship",
+  "found" : "12/15/21",
+  "description" : "The Life of Nancy",
+  "language" : "English"
+}, {
+  "author" : "Charles W. Chesnutt",
+  "name" : "The House Behind the Cedars",
+  "found" : "12/15/21",
+  "description" : "he story occurs in the southern American states of North and South Carolina a few years following the American Civil War. Rena Walden, a young woman of mixed white and black ancestry, leaves home to join her brother, who has migrated to a new city, where he lives as a white man. Following her brother's lead, Rena begins living as a white woman. The secret of her identity leads to conflict when she falls in love with a white aristocrat who learns the truth of her heredity. The ensuing drama emphasizes themes of interracial relations and depicted the intricacies of racial identity in the American south.",
+  "language" : "English"
+}, {
+  "author" : "Charles W. Chesnutt",
+  "name" : "The Colonel's Dream",
+  "found" : "12/15/21",
+  "description" : "The Colonel's Dream portrays the continuing oppression and racial violence prominent in the Southern United States after the American Civil War. The Colonel's Dream concerns Colonel Henry French and his attempt to refine Clarendon, North Carolina, the southern city in which he grew up, into a racially and socially equal society from the strictly segregationist ways of its past.",
+  "language" : "English"
+}, {
+  "author" : "Charles W. Chesnutt",
+  "name" : "The Marrow of Tradition",
+  "found" : "12/15/21",
+  "description" : "A historical novel set at the time and portraying a fictional account of the Wilmington Insurrection of 1898 in Wilmington, North Carolina.",
+  "language" : "English"
+}, {
+  "author" : "Charles W. Chesnutt",
+  "name" : "The Goophered Grapevine",
+  "found" : "12/15/21",
+  "description" : "The Conjure Woman",
+  "language" : "English"
+}, {
+  "author" : "Charles W. Chesnutt",
+  "name" : "Po' Sandy",
+  "found" : "12/15/21",
+  "description" : "The Conjure Woman",
+  "language" : "English"
+}, {
+  "author" : "Charles W. Chesnutt",
+  "name" : "Mars Jeems's Nightmare",
+  "found" : "12/15/21",
+  "description" : "The Conjure Woman",
+  "language" : "English"
+}, {
+  "author" : "Charles W. Chesnutt",
+  "name" : "The Conjurer's Revenge",
+  "found" : "12/15/21",
+  "description" : "The Conjure Woman",
+  "language" : "English"
+}, {
+  "author" : "Charles W. Chesnutt",
+  "name" : "Sis' Becky's Pickaninny",
+  "found" : "12/15/21",
+  "description" : "The Conjure Woman",
+  "language" : "English"
+}, {
+  "author" : "Charles W. Chesnutt",
+  "name" : "The Grey Wolf's Ha'nt",
+  "found" : "12/15/21",
+  "description" : "The Conjure Woman",
+  "language" : "English"
+}, {
+  "author" : "Charles W. Chesnutt",
+  "name" : "Hot-Foot Hannibal",
+  "found" : "12/15/21",
+  "description" : "The Conjure Woman",
+  "language" : "English"
+}, {
+  "author" : "Charles W. Chesnutt",
+  "name" : "The Wife of His Youth",
+  "found" : "12/15/21",
+  "description" : "The story has been read as an analysis of race relations, not between black and white but within the black community, exploring its own color and class prejudices. The main character dreams of becoming white but ultimately seems to accept being black and the full history of African Americans in the United States. The ending of the story, however, has been called ambiguous and leaves several questions unanswered.",
+  "language" : "English"
+}, {
+  "author" : "Mary E. Wilkins Freeman",
+  "name" : "Pembroke",
+  "found" : "12/16/21",
+  "description" : "It is set in the small town of Pembroke, Massachusetts in the 1830s and 40s. The novel tells the story of a romance gone awry and the dramatic events that follow, which entertain the residents of the small town for years after.",
+  "language" : "English"
+}, {
+  "author" : "Mary E. Wilkins Freeman",
+  "name" : "A New England Nun",
+  "found" : "12/16/21",
+  "description" : "",
+  "language" : "English"
+}, {
+  "author" : "Charlotte Perkins Gilman",
+  "name" : "The Yellow Wallpaper",
+  "found" : "12/16/21",
+  "description" : "It is regarded as an important early work of American feminist literature for its illustration of the attitudes towards mental and physical health of women in the 19th century.",
+  "language" : "English"
+}, {
+  "author" : "Henry James",
+  "name" : "A Tragedy of Error",
+  "found" : "12/16/21",
+  "description" : "",
+  "language" : "English"
+}, {
+  "author" : "Henry James",
+  "name" : "The Wings of the Dove",
+  "found" : "12/16/21",
+  "description" : "It tells the story of Milly Theale, an American heiress stricken with a serious disease, and her effect on the people around her. Some of these people befriend Milly with honourable motives, while others are more self-interested.",
+  "language" : "English"
+}, {
+  "author" : "Henry James",
+  "name" : "The American",
+  "found" : "12/16/21",
+  "description" : "The novel is an uneasy combination of social comedy and melodrama concerning the adventures and misadventures of Christopher Newman, an essentially good-hearted but rather gauche American businessman on his first tour of Europe. Newman is looking for a world different from the simple, harsh realities of 19th-century American business. He encounters both the beauty and the ugliness of Europe, and learns not to take either for granted. The core of the novel concerns Newman's courtship of a young widow from an aristocratic Parisian family.",
+  "language" : "English"
+}, {
+  "author" : "Henry James",
+  "name" : "Daisy Miller",
+  "found" : "12/16/21",
+  "description" : "It portrays the courtship of the beautiful American girl Daisy Miller by Winterbourne, a sophisticated compatriot of hers. His pursuit of her is hampered by her own flirtatiousness, which is frowned upon by the other expatriates when they meet in Switzerland and Italy.",
+  "language" : "English"
+}, {
+  "author" : "Henry James",
+  "name" : "The Bostonians",
+  "found" : "12/16/21",
+  "description" : "",
+  "language" : "English"
+}, {
+  "author" : "Henry James",
+  "name" : "Washington Square",
+  "found" : "12/16/21",
+  "description" : "It is a structurally simple tragicomedy that recounts the conflict between a dull but sweet daughter and her brilliant, unemotional father.",
+  "language" : "English"
+}, {
+  "author" : "Henry James",
+  "name" : "The Aspern Papers",
+  "found" : "12/16/21",
+  "description" : "",
+  "language" : "English"
+}, {
+  "author" : "Henry James",
+  "name" : "The Altar of the Dead",
+  "found" : "12/16/21",
+  "description" : "A fable of literally life and death significance, the story explores how the protagonist tries to keep the remembrance of his dead friends, to save them from being forgotten entirely in the rush of everyday events. He meets a woman who shares his ideals, only to find that the past places what seems to be an impassable barrier between them. Although James was not religious in any conventional sense, the story shows a deep spirituality in its treatment of mortality and the transcendent power of unselfish love.",
+  "language" : "English"
+}, {
+  "author" : "Henry James",
+  "name" : "The Beast in the Jungle",
+  "found" : "12/16/21",
+  "description" : "Almost universally considered one of James' finest short narratives, this story treats appropriately universal themes: loneliness, fate, love and death.",
+  "language" : "English"
+}, {
+  "author" : "Henry James",
+  "name" : "The Sacred Fount",
+  "found" : "12/16/21",
+  "description" : "This strange, often baffling book concerns an unnamed narrator who attempts to discover the truth about the love lives of his fellow guests at a weekend party in the English countryside. He spurns the \"detective and keyhole\" methods as ignoble, and instead tries to decipher these relationships purely from the behavior and appearance of each guest. He expends huge resources of energy and ingenuity on his theories, much to the bemusement of some people at the party.",
+  "language" : "English"
+}, {
+  "author" : "Henry James",
+  "name" : "The Golden Bowl",
+  "found" : "12/16/21",
+  "description" : "Set in England, this complex, intense study of marriage and adultery completes what some critics have called the \"major phase\" of James's career. The Golden Bowl explores the tangle of interrelationships between a father and daughter and their respective spouses. The novel focuses deeply and almost exclusively on the consciousness of the central characters, with sometimes obsessive detail but also with powerful insight.",
+  "language" : "English"
+}, {
+  "author" : "Henry James",
+  "name" : "The Pupil",
+  "found" : "12/16/21",
+  "description" : "It is the emotional story of a precocious young boy growing up in a mendacious and dishonorable family. He befriends his tutor, who is the only adult in his life that he can trust. James presents their relationship with sympathy and insight, and the story reaches what some would consider the status of classical tragedy.",
+  "language" : "English"
+}, {
+  "author" : "Henry James",
+  "name" : "In the Cage",
+  "found" : "12/16/21",
+  "description" : "This long story centers on an unnamed London telegraphist. She deciphers clues to her clients' personal lives from the often cryptic telegrams they submit to her as she sits in the \"cage\" at the post office. Sensitive and intelligent, the telegraphist eventually finds out more than she may want to know.",
+  "language" : "English"
+}, {
+  "author" : "Ambrose Bierce",
+  "name" : "An Occurrence at Owl Creek Bridge",
+  "found" : "12/21/21",
+  "description" : "",
+  "language" : "English"
+} ]

@@ -9,3 +9,6 @@ out/
 dependency-reduced-pom.xml
 /src/main/resources/config.properties
 /META-INF
+/src/test/resources/backups/books-to-read/saveTest.json
+/src/test/resources/backups/finished-books/saveTest.json
+/src/test/resources/config.properties
