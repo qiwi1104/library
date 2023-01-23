@@ -36,6 +36,11 @@
     <form action="#" th:action="@{'/finishedbooks/spanish/edit'}" th:object="${book}" method="post">
         <table id="edit">
             <tr>
+                <td hidden>
+                    <input th:field="*{id}" />
+                </td>
+            </tr>
+            <tr>
                 <td>
                     <label>Author</label>
                     <input type="text" field="*{author}" name="author" th:value="${book.author}">

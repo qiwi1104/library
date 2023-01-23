@@ -4,10 +4,7 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import qiwi.model.AdditionalDate;
 
-import javax.persistence.CascadeType;
-import javax.persistence.Entity;
-import javax.persistence.OneToMany;
-import javax.persistence.Table;
+import javax.persistence.*;
 import java.sql.Date;
 import java.util.ArrayList;
 import java.util.List;
@@ -20,7 +17,7 @@ public class FinishedBook extends Book implements Cloneable {
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "M/d/yy")
     private Date end;
     @JsonProperty("additional_dates")
-    @OneToMany(mappedBy = "finishedBook", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "finishedBook", fetch = FetchType.EAGER, cascade = CascadeType.ALL, orphanRemoval = true)
     private List<AdditionalDate> additionalDates;
 
     public FinishedBook() {
