@@ -70,7 +70,7 @@ public class BookToReadService {
             return false;
         }
 
-        if (!bookToReadDAO.exists(book)) {
+        if (bookToReadDAO.exists(book)) {
             BookToRead bookFromLibrary = bookToReadDAO.getBookById(book.getId());
 
             if (!bookFromLibrary.getAuthor().equals(book.getAuthor())) {
@@ -89,13 +89,9 @@ public class BookToReadService {
             bookToReadDAO.addBook(bookFromLibrary);
 
             return true;
-        } else {
-            setUpView(model, language);
-
-            result.reject("alreadyExists", "This book already exists.");
-
-            return false;
         }
+
+        return false;
     }
 
     @Transactional

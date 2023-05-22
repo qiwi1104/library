@@ -101,8 +101,8 @@ class BookToReadServiceTest {
 
         BookToRead book2 = new BookToRead();
         book2.setId(book.getId());
-        book2.setAuthor("a");
-        book2.setName("c");
+        book2.setAuthor(book.getAuthor());
+        book2.setName(book.getName());
         book2.setFound(Date.valueOf("2023-01-21"));
         book2.setDescription("");
         book2.setLanguage(LANGUAGE.firstLetterToUpperCase());
